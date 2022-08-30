@@ -18,6 +18,11 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     where: { userId: req.params.userId },
   })
 
+  // IF PASSWORD IS NEEDED TO BE RETURNED THEN THIS CAN BE UNCOMMENTED
+  // const user = await Users.scope('withPassword').findOne({
+  //   where: { userId: req.params.userId },
+  // })
+
   if (!user) {
     return next(
       new ErrorResponse(
@@ -33,9 +38,9 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @desc Create user
 // @route GET /api/v1/auth/users
 // access Public
-exports.createUser = asyncHandler(async (req, res, next) => {
+exports.registerUser = asyncHandler(async (req, res, next) => {
   const user = await Users.create(req.body)
-
+  console.log(user.password)
   res.status(201).json({ success: true, data: user })
 })
 

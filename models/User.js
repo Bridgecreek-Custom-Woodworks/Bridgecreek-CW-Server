@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/db')
+const bcrypt = require('bcryptjs')
 
 const User = sequelize.define(
   'Users',
@@ -128,7 +129,9 @@ const User = sequelize.define(
     },
   },
   {
-    // This is one way to remove to password from the return. It gives you control in that you can still return the password within the route function using scope('withPassword'). See users_controller getUser function. There is an example commented out on about line 16
+    // This is one way to remove to password from the return. It gives you control in that you can still return the password within the route function using scope('withPassword'). EXAMPLE: const user = await User.scope('withPassword').findOne({
+    //   where: { id: req.params.id },
+    // });
     defaultScope: {
       attributes: { exclude: ['password'] },
     },
@@ -154,6 +157,13 @@ User.sync({ alter: true })
 //   },
 // },
 
-// User.beforeCreate()
+const saltAndHashPassword = async (user) => {
+  if (user.changed('password')) {
+    const salt = await bcrypt.genSalt(10)
+    user.password = await bcrypt.hash(user.dataValues.password, salt)
+  }
+}
+
+User.beforeCreate(saltAndHashPassword)
 
 module.exports = User

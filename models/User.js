@@ -154,4 +154,6 @@ User.sync({ alter: true })
 //   },
 // },
 
+// User.beforeCreate()
+
 module.exports = User

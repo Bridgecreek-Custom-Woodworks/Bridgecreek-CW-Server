@@ -9,12 +9,14 @@ require('./config/db')
 const PORT = process.env.PORT || 5000
 
 const users = require('./routes/users_routes')
+const auth = require('./routes/auth_routes')
 
 const app = express()
 
 app.use(express.json())
 
 app.use('/api/v1/users', users)
+app.use('/api/v1/auth', auth)
 
 app.use(errorHandler)
 

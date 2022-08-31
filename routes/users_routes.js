@@ -8,11 +8,13 @@ const {
   deleteUser,
 } = require('../controllers/user_controller')
 
+const { protect } = require('../middleware/auth_middleware')
+
 // Route prefix /api/v1/users
 
 router.get('/', getAllUsers)
-router.get('/:userId', getUser)
+router.get('/getMe', protect, getUser)
 router.post('/', registerUser)
-router.put('/:userId', updateUser)
-router.delete('/:userId', deleteUser)
+router.put('/updateMe', protect, updateUser)
+router.delete('/deleteMe', protect, deleteUser)
 module.exports = router

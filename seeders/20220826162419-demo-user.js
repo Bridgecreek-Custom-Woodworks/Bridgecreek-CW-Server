@@ -1,6 +1,9 @@
 'use strict'
 const { v4: uuidv4 } = require('uuid')
+const bcrypt = require('bcryptjs')
+const salt = bcrypt.genSaltSync(10)
 
+const password = bcrypt.hashSync('admin1234', salt)
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Users', [
@@ -13,7 +16,7 @@ module.exports = {
         state: 'SC',
         homePhone: '555-342-9236',
         cellPhone: '555-420-1583',
-        password: 'admin1234',
+        password: password,
         zipCode: '29226',
         email: 'ottojones@gmail.com',
         createdAt: new Date(),
@@ -28,7 +31,7 @@ module.exports = {
         state: 'NC',
         homePhone: '555-980-2589',
         cellPhone: '555-409-2947',
-        password: 'admin1234',
+        password: password,
         zipCode: '29226',
         email: 'mikestrange@gmail.com',
         createdAt: new Date(),
@@ -43,7 +46,7 @@ module.exports = {
         state: 'NC',
         homePhone: '555-798-4321',
         cellPhone: '555-420-1583',
-        password: 'admin1234',
+        password: password,
         zipCode: '28078',
         email: 'debrahjohnson@gmail.com',
         createdAt: new Date(),
@@ -58,7 +61,7 @@ module.exports = {
         state: 'MD',
         homePhone: '555-342-9236',
         cellPhone: '555-420-1583',
-        password: 'admin1234',
+        password: password,
         zipCode: '20772',
         email: 'jordanpeters@gmail.com',
         createdAt: new Date(),
@@ -73,7 +76,7 @@ module.exports = {
         state: 'NC',
         homePhone: '555-342-9236',
         cellPhone: '555-420-1583',
-        password: 'admin1234',
+        password: password,
         zipCode: '28217',
         email: 'somebody@gmail.com',
         createdAt: new Date(),

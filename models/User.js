@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/db')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const User = sequelize.define(
   'Users',
@@ -162,6 +163,16 @@ const saltAndHashPassword = async (user) => {
     const salt = await bcrypt.genSalt(10)
     user.password = await bcrypt.hash(user.dataValues.password, salt)
   }
+}
+
+User.prototype.getSignedToken = async function () {
+  return jwt.sign({ userId: this.userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  })
+}
+
+User.prototype.matchPassword = async function (password) {
+  return await bcrypt.compare(password, this.password)
 }
 
 User.beforeCreate(saltAndHashPassword)

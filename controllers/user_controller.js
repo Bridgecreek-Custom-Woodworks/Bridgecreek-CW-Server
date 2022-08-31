@@ -1,6 +1,7 @@
 const Users = require('../models/User')
 const ErrorResponse = require('../utils/errorResponse')
-const asyncHandler = require('../middleware/async')
+const asyncHandler = require('../middleware/async_middleware')
+const { sendTokenResponse } = require('../utils/tokenResponse')
 
 // @desc Get all users
 // @route GET /api/v1/auth/users
@@ -15,7 +16,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 // access Private
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await Users.findOne({
-    where: { userId: req.params.userId },
+    where: { userId: req.user.userId },
   })
 
   // IF PASSWORD IS NEEDED TO BE RETURNED THEN THIS CAN BE UNCOMMENTED
@@ -40,8 +41,9 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const user = await Users.create(req.body)
-  console.log(user.password)
-  res.status(201).json({ success: true, data: user })
+
+  // res.status(201).json({ success: true, data: user })
+  sendTokenResponse(user, 201, res)
 })
 
 // @desc Update user
@@ -50,15 +52,12 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await Users.update(req.body, {
     where: {
-      userId: req.params.userId,
+      userId: req.user.userId,
     },
   })
   if (!user) {
     return next(
-      new ErrorResponse(
-        `User not found with the id of ${req.params.userId}`,
-        404
-      )
+      new ErrorResponse(`User not found with the id of ${req.user.userId}`, 404)
     )
   }
   res.status(200).json({
@@ -73,7 +72,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const user = await Users.destroy({
     where: {
-      userId: req.params.userId,
+      userId: req.user.userId,
     },
   })
 
@@ -87,6 +86,6 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({
     success: true,
-    msg: `User with the id ${req.params.userId} was deleted`,
+    msg: `User with the id ${req.user.userId} was deleted`,
   })
 })

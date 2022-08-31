@@ -1,6 +1,7 @@
 const Users = require('../models/User')
 const ErrorResponse = require('../utils/errorResponse')
-const asyncHandler = require('../middleware/async')
+const asyncHandler = require('../middleware/async_middleware')
+const { sendTokenResponse } = require('../utils/tokenResponse')
 const jwt = require('jsonwebtoken')
 
 exports.login = asyncHandler(async (req, res, next) => {
@@ -11,10 +12,8 @@ exports.login = asyncHandler(async (req, res, next) => {
     )
   }
 
-  const user = await Users.findOne({
-    where: {
-      email: email,
-    },
+  const user = await Users.scope('withPassword').findOne({
+    where: { email: email },
   })
 
   if (!user) {
@@ -23,7 +22,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     )
   }
 
-  const isMatch = await user.mathcPassword(password)
+  const isMatch = await user.matchPassword(password)
 
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials'))
@@ -31,18 +30,3 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   sendTokenResponse(user, 200, res)
 })
-
-const sendTokenResponse = async (user, statusCode, res) => {
-  const token = await user.getSignedToken()
-
-  const options = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  }
-  res
-    .status(statusCode)
-    //   .cookie('token', token, options)
-    .json({ success: true, token, data: user })
-}

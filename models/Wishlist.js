@@ -1,8 +1,9 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/db')
+const Products = require('../models/Product')
 
 const Wishlist = sequelize.define(
-  'Wishlist',
+  'Wishlists',
   {
     wishlistId: {
       type: Sequelize.UUID,
@@ -11,20 +12,20 @@ const Wishlist = sequelize.define(
       allowNull: false,
       unique: true,
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-    },
     userId: {
       type: Sequelize.UUID,
+      allowNull: false,
       references: {
         model: 'Users',
         key: 'userId',
       },
     },
     productId: {
+      type: Sequelize.UUID,
+      allowNull: false,
+      unique: true,
       references: {
-        model: 'Product',
+        model: 'Products',
         key: 'productId',
       },
     },
@@ -32,9 +33,26 @@ const Wishlist = sequelize.define(
       allowNull: false,
       type: Sequelize.DATE,
     },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
   },
   {
     sequelize,
-    modelName: 'Wishlist',
+    modelName: 'Wishlists',
   }
 )
+
+Wishlist.hasMany(Products, {
+  foreignKey: {
+    type: Sequelize.DataTypes.UUID,
+    allowNull: false,
+  },
+})
+
+Products.belongsTo(Wishlist)
+
+Wishlist.sync({ alter: true })
+
+module.exports = Wishlist

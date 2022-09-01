@@ -7,19 +7,14 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         type: Sequelize.UUID,
+        unique: true,
       },
       userId: {
         type: Sequelize.UUID,
+        allowNull: false,
         references: {
           model: 'Users',
           key: 'userId',
-        },
-      },
-      productId: {
-        type: Sequelize.UUID,
-        references: {
-          model: 'Product',
-          key: 'productId',
         },
       },
       createdAt: {

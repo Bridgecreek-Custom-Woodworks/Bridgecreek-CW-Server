@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const sequelize = require('../config/db')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Wishlist = require('../models/Wishlist')
 
 const User = sequelize.define(
   'Users',
@@ -147,6 +148,14 @@ const User = sequelize.define(
     modelName: 'User',
   }
 )
+
+User.hasOne(Wishlist, {
+  foreignKey: {
+    type: Sequelize.DataTypes.UUID,
+    allowNull: false,
+  },
+})
+Wishlist.belongsTo(User)
 
 User.sync({ alter: true })
 

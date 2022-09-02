@@ -8,7 +8,8 @@ const { sendTokenResponse } = require('../utils/tokenResponse')
 // access Private/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await Users.findAll()
-  res.status(200).json({ success: true, data: users })
+  const count = users.length
+  res.status(200).json({ success: true, count, data: users })
 })
 
 // @desc Get single user
@@ -42,7 +43,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const user = await Users.create(req.body)
 
-  // res.status(201).json({ success: true, data: user })
   sendTokenResponse(user, 201, res)
 })
 

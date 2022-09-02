@@ -3,6 +3,7 @@ const sequelize = require('../config/db')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Wishlist = require('../models/Wishlist')
+const Products = require('../models/Product')
 
 const User = sequelize.define(
   'Users',
@@ -149,15 +150,11 @@ const User = sequelize.define(
   }
 )
 
-User.hasOne(Wishlist, {
-  foreignKey: {
-    type: Sequelize.DataTypes.UUID,
-    allowNull: false,
-  },
-})
-Wishlist.belongsTo(User)
+User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' })
+Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' })
 
-User.sync({ alter: true })
+// sequelize.sync({ alter: true })
+// sequelize.sync({ force: true })
 
 // REMEMBER TO VALIDATE THE PASSWORD BEFORE IT IS SAVED. MAYBE USE THE HOOK BEFORCREATE BUT REMEMBER THAT I NEED TO VALIDATE IT BEFORE IT IS HASHED AND SALTED.
 // validate: {

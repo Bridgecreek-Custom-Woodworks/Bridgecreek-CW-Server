@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/db')
+const User = require('../models/User')
 
 const Product = sequelize.define(
   'Products',
@@ -58,10 +59,8 @@ const Product = sequelize.define(
   },
   {
     sequelize,
-    modelName: 'Product',
+    modelName: 'Products',
   }
 )
-
-Product.sync({ alter: true })
 
 module.exports = Product

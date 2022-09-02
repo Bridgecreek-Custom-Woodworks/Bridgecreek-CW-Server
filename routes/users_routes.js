@@ -17,4 +17,5 @@ router.get('/getMe', protect, getUser)
 router.post('/', registerUser)
 router.put('/updateMe', protect, updateUser)
 router.delete('/deleteMe', protect, deleteUser)
+
 module.exports = router

@@ -1,14 +1,14 @@
 const Products = require('../models/Product')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async_middleware')
-const { RowDescriptionMessage } = require('pg-protocol/dist/messages')
 
 // @desc Get all products
 // @route GET /api/v1/products
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
   const products = await Products.findAll()
-  res.status(200).json({ success: true, data: products })
+  const count = products.length
+  res.status(200).json({ success: true, count: count, data: products })
 })
 
 // @desc Get single product
@@ -28,6 +28,79 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
     )
   }
 
+  res.status(200).json({
+    success: true,
+    data: product,
+  })
+})
+
+// WILL NEED TO MOVE THIS ROUTE AND CHANGE ACCESS TO ADMIN. MOVE TO ADMIN CONTROLLER
+// @desc Create product
+// @route POST /api/v1/products <=== CHANGE TO ADMIN ONCE MOVED
+// access Admin
+exports.createProducts = asyncHandler(async (req, res, next) => {
+  //
+  //   if (req.user.role !== 'admin') {
+  //     return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
+  //   }
+
+  const product = await Products.create(req.body)
+
+  res.status(201).json({ success: true, data: product })
+})
+
+// WILL NEED TO MOVE THIS ROUTE AND CHANGE ACCESS TO ADMIN. MOVE TO ADMIN CONTROLLER
+// @desc Update product
+// @route PUT /api/v1/products <=== CHANGE TO ADMIN ONCE MOVED
+// access Admin
+exports.updateProduct = asyncHandler(async (req, res, next) => {
+  //
+  //   if (req.user.role !== 'admin') {
+  //     return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
+  //   }
+
+  const product = await Products.update(req.body, {
+    where: {
+      productId: req.params.productId,
+    },
+  })
+
+  if (!product) {
+    return next(
+      new ErrorResponse(
+        `Product not found with the id of ${req.product.productId}`,
+        404
+      )
+    )
+  }
+
+  res.status(200).json({
+    success: true,
+    data: product,
+  })
+})
+
+// @desc Delete product
+// @route DELETE /api/v1/products <=== CHANGE TO ADMIN ONCE MOVED
+// access Admin
+exports.deleteProduct = asyncHandler(async (req, res, next) => {
+  //
+  //   if (req.user.role !== 'admin') {
+  //     return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
+  //   }
+  const product = await Products.destroy({
+    where: {
+      productId: req.params.productId,
+    },
+  })
+  if (!product) {
+    return next(
+      new ErrorResponse(
+        `Product not found with the id of ${req.product.productId}`,
+        404
+      )
+    )
+  }
   res.status(200).json({
     success: true,
     data: product,

@@ -2,8 +2,8 @@
 const { v4: uuidv4 } = require('uuid')
 const bcrypt = require('bcryptjs')
 const salt = bcrypt.genSaltSync(10)
-
 const password = bcrypt.hashSync('admin1234', salt)
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Users', [

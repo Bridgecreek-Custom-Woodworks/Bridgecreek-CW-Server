@@ -13,6 +13,7 @@ const users = require('./routes/users_routes')
 const auth = require('./routes/auth_routes')
 const products = require('./routes/products_routes')
 const wishlist = require('./routes/wishlist_routes')
+const admin = require('./routes/admin_routes')
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use('/api/v1/users', users)
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/products', products)
 app.use('/api/v1/wishlist', wishlist)
+app.use('/api/v1/admin', admin)
 
 app.use(errorHandler)
 

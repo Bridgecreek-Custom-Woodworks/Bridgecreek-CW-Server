@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Wishlist = require('../models/Wishlist')
 const Products = require('../models/Product')
+const ErrorResponse = require('../utils/errorResponse')
+const crypto = require('crypto')
 
 const User = sequelize.define(
   'Users',
@@ -156,14 +158,6 @@ Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' })
 // sequelize.sync({ alter: true })
 // sequelize.sync({ force: true })
 
-// REMEMBER TO VALIDATE THE PASSWORD BEFORE IT IS SAVED. MAYBE USE THE HOOK BEFORCREATE BUT REMEMBER THAT I NEED TO VALIDATE IT BEFORE IT IS HASHED AND SALTED.
-// validate: {
-//   is: {
-//     args: '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,10}$',
-//     msg: 'Password must be a minimum of 8 and maximum of 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character',
-//   },
-// },
-
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {
     const salt = await bcrypt.genSalt(10)
@@ -179,6 +173,23 @@ User.prototype.getSignedToken = async function () {
 
 User.prototype.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
+}
+
+// Generate and hash password token
+User.prototype.getResetPasswordToken = function () {
+  // Generate token
+  const resetToken = crypto.randomBytes(20).toString('hex')
+
+  // Hash token and set to resetPasswordToken field
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex')
+
+  // Set expire
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
+
+  return resetToken
 }
 
 User.beforeCreate(saltAndHashPassword)

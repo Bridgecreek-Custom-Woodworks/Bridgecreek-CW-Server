@@ -2,6 +2,7 @@ const Users = require('../models/User')
 const ErrorResponse = require('../utils/errorResponse')
 const asyncHandler = require('../middleware/async_middleware')
 const { sendTokenResponse } = require('../utils/tokenResponse')
+const { verifyPassword } = require('../utils/functions')
 
 // @desc Get all users
 // @route GET /api/v1/auth/users
@@ -41,8 +42,21 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/auth/users
 // access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  const user = await Users.create(req.body)
+  const user = await Users.build(req.body)
+  let password = user.password
 
+  if (
+    verifyPassword(password) === null &&
+    process.env.NODE_ENV === 'production'
+  ) {
+    return next(
+      new ErrorResponse(
+        `Password must be 8 to 10 characters long with one uppercase one lower case one number and one special character`,
+        400
+      )
+    )
+  }
+  user.save()
   sendTokenResponse(user, 201, res)
 })
 
@@ -66,7 +80,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   })
 })
 
-// @desc Update user
+// @desc Delete user
 // @route DELETE /api/v1/auth/users/:userId
 // access Private
 exports.deleteUser = asyncHandler(async (req, res, next) => {

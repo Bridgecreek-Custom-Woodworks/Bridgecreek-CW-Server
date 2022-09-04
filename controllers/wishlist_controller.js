@@ -9,14 +9,12 @@ const { Op } = require('sequelize')
 // @route GET /api/v1/wishlist/admin/allwishlist
 // access Private/Admin
 exports.getAllWishlist = asyncHandler(async (req, res, next) => {
-  if (req.user.role !== 'admin' && process.env.NODE_ENV === 'production') {
-    return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
-  }
-
   const wishlist = await User.findAll({
     include: [
       {
         model: Product,
+        through: { attributes: ['updatedAt', 'createdAt'] },
+        attributes: ['productId', 'productName', 'price'],
         required: true,
       },
     ],

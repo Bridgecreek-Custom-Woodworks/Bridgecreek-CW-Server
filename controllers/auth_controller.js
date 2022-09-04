@@ -4,6 +4,9 @@ const asyncHandler = require('../middleware/async_middleware')
 const { sendTokenResponse } = require('../utils/tokenResponse')
 const jwt = require('jsonwebtoken')
 
+// @desc Login User
+// @route PUT /api/v1/auth/login
+// access Private
 exports.login = asyncHandler(async (req, res, next) => {
   const { password, email } = req.body
   if (!email || !password) {
@@ -29,4 +32,19 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   sendTokenResponse(user, 200, res)
+})
+
+// @desc Logout User / Clear cookie
+// @route Post /api/v1/auth/logout
+// access Private
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expiresa: new Date(Date.now() + 10 + 1000),
+    httpOnly: true,
+  })
+
+  res.status(200).json({
+    success: true,
+    msg: `User with the id of ${req.user.userId} was logged out`,
+  })
 })

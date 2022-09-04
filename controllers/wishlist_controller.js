@@ -5,27 +5,13 @@ const User = require('../models/User')
 const Product = require('../models/Product')
 const { Op } = require('sequelize')
 
-exports.getWishlist = asyncHandler(async (req, res, next) => {
-  const wishlist = await User.findAll({
-    include: [
-      {
-        model: Product,
-        required: true,
-      },
-    ],
-  })
-
-  const count = wishlist.length
-
-  res.status(200).json({
-    success: true,
-    count,
-    data: wishlist,
-  })
-})
-
+// @desc Get all wishlist
+// @route GET /api/v1/wishlist
+// access Private
 exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
   const data = await User.findAll({
+    attributes: ['firstName', 'lastName'],
+    require: true,
     where: { userId: req.user.userId },
     include: Product,
   })
@@ -33,6 +19,7 @@ exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
   if (data[0].Products.length === 0) {
     return next(new ErrorResponse(`Your wishlist is currently empty`))
   }
+
   const count = data[0].Products.length
   res.status(200).json({
     success: true,
@@ -41,6 +28,9 @@ exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
   })
 })
 
+// @desc Add product to wishlist
+// @route POST /api/v1/wishlist
+// access Private
 exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user.userId
 
@@ -51,6 +41,9 @@ exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, count, data: wishlist })
 })
 
+// @desc Remove item from wishlist
+// @route DELETE /api/v1/wishlist
+// access Private
 exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
   const product = await Wishlist.destroy({
     where: {

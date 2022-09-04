@@ -1,7 +1,5 @@
 const express = require('express')
-const router = express.Router()
 const {
-  getAllUsers,
   getUser,
   registerUser,
   updateUser,
@@ -10,9 +8,14 @@ const {
 
 const { protect } = require('../middleware/auth_middleware')
 
-// Route prefix /api/v1/users
+const userRouter = require('./admin_routes')
 
-router.get('/', getAllUsers)
+const router = express.Router()
+
+// Re-route into other resource routers (routes/admin_route)
+router.use('/admin', userRouter)
+
+// Route = /api/v1/users
 router.get('/getMe', protect, getUser)
 router.post('/', registerUser)
 router.put('/updateMe', protect, updateUser)

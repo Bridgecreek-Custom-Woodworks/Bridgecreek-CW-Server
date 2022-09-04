@@ -1,9 +1,20 @@
 const express = require('express')
-const router = express.Router()
-const { getWishlist } = require('../controllers/admin_controllers')
-const { protect } = require('../middleware/auth_middleware')
+const { getAllWishlist } = require('../controllers/wishlist_controller')
+const {
+  createProducts,
+  updateProduct,
+  deleteProduct,
+} = require('../controllers/product_controllers')
+const { getAllUsers } = require('../controllers/user_controller')
 
-// Route Prefix = /api/v1/admin
+const { protect, authorize } = require('../middleware/auth_middleware')
 
-router.get('/', protect, getWishlist)
+const router = express.Router({ mergeParams: true })
+
+// Route  = /api/v1/admin
+router.get('/allwishlist', protect, authorize('admin'), getAllWishlist)
+router.get('/allusers', protect, authorize('admin'), getAllUsers)
+router.post('/', protect, authorize('admin'), createProducts)
+router.put('/', protect, authorize('admin'), updateProduct)
+router.delete('/', protect, authorize('admin'), deleteProduct)
 module.exports = router

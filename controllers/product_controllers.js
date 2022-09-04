@@ -35,26 +35,18 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 })
 
 // @desc Create product
-// @route POST /api/v1/products
+// @route POST /api/v1/products/admin
 // access  Private/Admin
 exports.createProducts = asyncHandler(async (req, res, next) => {
-  if (req.user.role !== 'admin' && process.env.NODE_ENV === 'production') {
-    return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
-  }
-
   const product = await Products.create(req.body)
 
   res.status(201).json({ success: true, data: product })
 })
 
 // @desc Update product
-// @route PUT /api/v1/products
+// @route PUT /api/v1/products/:productId/admin
 // access Private/Admin
 exports.updateProduct = asyncHandler(async (req, res, next) => {
-  if (req.user.role !== 'admin' && process.env.NODE_ENV === 'production') {
-    return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
-  }
-
   const product = await Products.update(req.body, {
     where: {
       productId: req.params.productId,
@@ -77,12 +69,9 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 })
 
 // @desc Delete product
-// @route DELETE /api/v1/products
+// @route DELETE /api/v1/products/:productId/admin
 // access  Private/Admin
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
-  if (req.user.role !== 'admin' && process.env.NODE_ENV === 'production') {
-    return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
-  }
   const product = await Products.destroy({
     where: {
       productId: req.params.productId,

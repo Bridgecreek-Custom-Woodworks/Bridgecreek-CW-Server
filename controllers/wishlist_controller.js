@@ -6,6 +6,32 @@ const Product = require('../models/Product')
 const { Op } = require('sequelize')
 
 // @desc Get all wishlist
+// @route GET /api/v1/wishlist/admin/allwishlist
+// access Private/Admin
+exports.getAllWishlist = asyncHandler(async (req, res, next) => {
+  if (req.user.role !== 'admin' && process.env.NODE_ENV === 'production') {
+    return next(new ErrorResponse(`User ${req.user.userId} not authorized`))
+  }
+
+  const wishlist = await User.findAll({
+    include: [
+      {
+        model: Product,
+        required: true,
+      },
+    ],
+  })
+
+  const count = wishlist.length
+
+  res.status(200).json({
+    success: true,
+    count,
+    data: wishlist,
+  })
+})
+
+// @desc Get single user wishlist
 // @route GET /api/v1/wishlist
 // access Private
 exports.getUsersWishlist = asyncHandler(async (req, res, next) => {

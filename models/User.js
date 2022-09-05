@@ -1,11 +1,11 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../config/db')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const Wishlist = require('../models/Wishlist')
-const Products = require('../models/Product')
-const ErrorResponse = require('../utils/errorResponse')
-const crypto = require('crypto')
+const Sequelize = require('sequelize');
+const sequelize = require('../config/db');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Wishlist = require('../models/Wishlist');
+const Products = require('../models/Product');
+const ErrorResponse = require('../utils/errorResponse');
+const crypto = require('crypto');
 
 const User = sequelize.define(
   'Users',
@@ -109,7 +109,7 @@ const User = sequelize.define(
       allowNull: true,
     },
     resetPasswordExpire: {
-      type: Sequelize.STRING,
+      type: Sequelize.DATE,
       unique: false,
       allowNull: true,
     },
@@ -150,48 +150,49 @@ const User = sequelize.define(
     sequelize,
     modelName: 'User',
   }
-)
+);
 
-User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' })
-Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' })
+User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' });
+Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' });
 
-// sequelize.sync({ alter: true })
+// sequelize.sync({ alter: true });
 // sequelize.sync({ force: true })
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {
-    const salt = await bcrypt.genSalt(10)
-    user.password = await bcrypt.hash(user.dataValues.password, salt)
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.dataValues.password, salt);
   }
-}
+};
 
 User.prototype.getSignedToken = async function () {
   return jwt.sign({ userId: this.userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
-  })
-}
+  });
+};
 
 User.prototype.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password)
-}
+  return await bcrypt.compare(password, this.password);
+};
 
 // Generate and hash password token
 User.prototype.getResetPasswordToken = function () {
   // Generate token
-  const resetToken = crypto.randomBytes(20).toString('hex')
+  const resetToken = crypto.randomBytes(20).toString('hex');
 
   // Hash token and set to resetPasswordToken field
   this.resetPasswordToken = crypto
     .createHash('sha256')
     .update(resetToken)
-    .digest('hex')
+    .digest('hex');
 
   // Set expire
-  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-  return resetToken
-}
+  return resetToken;
+};
 
-User.beforeCreate(saltAndHashPassword)
+User.beforeCreate(saltAndHashPassword);
+User.beforeUpdate(saltAndHashPassword);
 
-module.exports = User
+module.exports = User;

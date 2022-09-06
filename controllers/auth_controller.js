@@ -57,7 +57,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
 // @desc Forgot password
 // @route POST /api/v1/auth/forgotpassword
-// access Private
+// access Public
 exports.forgotPassword = asyncHandler(async (req, res, next) => {
   let { email } = req.body;
   const user = await Users.findOne({ where: { email: email } });
@@ -122,6 +122,29 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordToken = null;
   user.resetPasswordExpire = null;
   await user.save({ validate: true });
+
+  sendTokenResponse(user, 200, res);
+});
+
+// @desc Update password
+// @route PUT /api/v1/auth/updatepassword
+// access Private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await Users.scope('withPassword').findOne({
+    where: { userId: req.user.userId },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Please log in to update password', 400));
+  }
+
+  // Check current password
+  if (!(await user.matchPassword(req.body.currentPassword))) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
 
   sendTokenResponse(user, 200, res);
 });

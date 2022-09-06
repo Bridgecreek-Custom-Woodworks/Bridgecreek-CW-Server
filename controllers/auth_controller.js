@@ -45,7 +45,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 // access Private
 exports.logout = asyncHandler(async (req, res, next) => {
   res.cookie('token', 'none', {
-    expiresa: new Date(Date.now() + 10 + 1000),
+    expires: new Date(Date.now() + 10 + 1000),
     httpOnly: true,
   });
 
@@ -133,6 +133,10 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await Users.scope('withPassword').findOne({
     where: { userId: req.user.userId },
   });
+
+  if (req.body.newPassword !== req.body.newPassword2) {
+    return next(new ErrorResponse('Passwords must match', 400));
+  }
 
   if (!user) {
     return next(new ErrorResponse('Please log in to update password', 400));

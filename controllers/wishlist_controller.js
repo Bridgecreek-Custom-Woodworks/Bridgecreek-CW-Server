@@ -1,9 +1,9 @@
 const Wishlist = require('../models/Wishlist')
 const ErrorResponse = require('../utils/errorResponse')
-const asyncHandler = require('../middleware/async_middleware')
 const User = require('../models/User')
 const Product = require('../models/Product')
 const { Op } = require('sequelize')
+const asyncHandler = require('../middleware/async_middleware')
 
 // @desc Get all wishlist
 // @route GET /api/v1/wishlist/admin/allwishlist

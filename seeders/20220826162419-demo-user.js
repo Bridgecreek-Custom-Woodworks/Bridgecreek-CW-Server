@@ -1,8 +1,8 @@
-'use strict'
-const { v4: uuidv4 } = require('uuid')
-const bcrypt = require('bcryptjs')
-const salt = bcrypt.genSaltSync(10)
-const password = bcrypt.hashSync('admin1234', salt)
+'use strict';
+const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
+const password = bcrypt.hashSync('admin1234', salt);
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -35,6 +35,7 @@ module.exports = {
         password: password,
         zipCode: '29226',
         email: 'mikestrange@gmail.com',
+        role: 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -50,6 +51,7 @@ module.exports = {
         password: password,
         zipCode: '28078',
         email: 'debrahjohnson@gmail.com',
+        role: 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -65,6 +67,7 @@ module.exports = {
         password: password,
         zipCode: '20772',
         email: 'jordanpeters@gmail.com',
+        role: 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -80,13 +83,14 @@ module.exports = {
         password: password,
         zipCode: '28217',
         email: 'somebody@gmail.com',
+        role: 'user',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    ])
+    ]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Users', null, {})
+    await queryInterface.bulkDelete('Users', null, {});
   },
-}
+};

@@ -155,8 +155,11 @@ const User = sequelize.define(
 User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' });
 Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' });
 
+User.belongsToMany(Products, { through: 'Reviews', foreignKey: 'userId' });
+Products.belongsToMany(User, { through: 'Reviews', foreignKey: 'productId' });
+
 // sequelize.sync({ alter: true });
-// sequelize.sync({ force: true })
+// sequelize.sync({ force: true });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

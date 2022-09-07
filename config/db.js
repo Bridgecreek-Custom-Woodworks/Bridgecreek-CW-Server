@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize')
+const { Sequelize } = require('sequelize');
 
 // SEQUELIZE CONNECTION
 const sequelize = new Sequelize(
@@ -11,17 +11,17 @@ const sequelize = new Sequelize(
     port: 5432,
     logging: false,
   }
-)
+);
 
 const connectDB = async () => {
   try {
-    await sequelize.authenticate()
-    console.log(`Conneted to Sequelize`.cyan.underline.bold)
+    await sequelize.authenticate();
+    console.log(`Conneted to Sequelize`.cyan.underline.bold);
   } catch (error) {
-    console.log(`Unable to connect to PG ${error}`)
+    console.log(`Unable to connect to PG ${error}`);
   }
-}
+};
 
-connectDB()
+connectDB();
 
-module.exports = sequelize
+module.exports = sequelize;

@@ -134,9 +134,9 @@ const User = sequelize.define(
     },
   },
   {
-    // This is one way to remove to password from the return. It gives you control in that you can still return the password within the route function using scope('withPassword'). EXAMPLE: const user = await User.scope('withPassword').findOne({
-    //   where: { id: req.params.id },
-    // });
+    // RETURN PASSWORD EXAMPLE: const user = await User.scope('withPassword').findOne({
+    //   where: { id: req.params.id }, });
+    //
     defaultScope: {
       attributes: { exclude: ['password'] },
     },

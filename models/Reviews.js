@@ -37,6 +37,7 @@ const Reviews = sequelize.define(
     rating: {
       type: Sequelize.DECIMAL,
       allowNull: false,
+      defaultValue: 0.0,
       validate: {
         min: {
           args: [0],
@@ -48,6 +49,7 @@ const Reviews = sequelize.define(
         },
       },
     },
+
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -58,14 +60,22 @@ const Reviews = sequelize.define(
     },
   },
   {
+    indexes: [
+      {
+        unique: true,
+        fields: ['userId', 'productId'],
+      },
+    ],
+  },
+  {
     sequelize,
     modelName: 'Reviews',
   }
 );
 
+// sequelize.sync({ alter: true });
+
 const getAverageRating = async (review) => {
-  // if (review.changed('productId')) {
-  console.log('Product Id ==> ', review.dataValues.productId);
   const avg = await Reviews.findAll({
     attributes: [
       'productId',
@@ -76,12 +86,12 @@ const getAverageRating = async (review) => {
 
     raw: true,
   });
-  // }
-  console.log(avg[0].avgRating);
 
   try {
+    let avgRating =
+      (await avg.length) === 0 ? review.dataValues.rating : avg[0].avgRating;
     await Product.update(
-      { avgRating: avg[0].avgRating },
+      { avgRating: avgRating },
       {
         where: { productId: review.dataValues.productId },
       }
@@ -91,7 +101,8 @@ const getAverageRating = async (review) => {
   }
 };
 
-Reviews.beforeCreate(getAverageRating);
+// Reviews.beforeCreate(getAverageRating);
+Reviews.afterCreate(getAverageRating);
 Reviews.beforeUpdate(getAverageRating);
 
 module.exports = Reviews;

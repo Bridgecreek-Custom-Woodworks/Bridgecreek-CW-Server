@@ -110,11 +110,9 @@ exports.getMyReviews = asyncHandler(async (req, res, next) => {
 exports.addReview = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user.userId;
 
-  const review = await Reviews.build(req.body);
-  //  Need to lazy load so that I can verify that user does not create multiple reviews for single product.
-  const count = review.length;
+  const review = await Reviews.create(req.body);
 
-  review.save();
+  const count = review.length;
 
   res.status(200).json({ success: true, count, data: review });
 });

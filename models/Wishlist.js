@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../config/db')
+const Sequelize = require('sequelize');
+const sequelize = require('../config/db');
 
 const Wishlist = sequelize.define(
   'Wishlists',
@@ -29,6 +29,7 @@ const Wishlist = sequelize.define(
         key: 'productId',
       },
     },
+
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -41,7 +42,17 @@ const Wishlist = sequelize.define(
   {
     sequelize,
     modelName: 'Wishlists',
+  },
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ['productId', 'userId'],
+      },
+    ],
   }
-)
+);
 
-module.exports = Wishlist
+// sequelize.sync({ alter: true });
+
+module.exports = Wishlist;

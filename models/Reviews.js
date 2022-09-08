@@ -101,8 +101,8 @@ const getAverageRating = async (review) => {
   }
 };
 
-// Reviews.beforeCreate(getAverageRating);
+Reviews.afterDestroy(getAverageRating);
 Reviews.afterCreate(getAverageRating);
-Reviews.beforeUpdate(getAverageRating);
+Reviews.afterUpdate(getAverageRating);
 
 module.exports = Reviews;

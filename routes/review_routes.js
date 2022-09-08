@@ -3,6 +3,7 @@ const {
   getReview,
   getMyReviews,
   addReview,
+  updateReview,
   removeReview,
 } = require('../controllers/review_controller');
 const { protect } = require('../middleware/auth_middleware');
@@ -18,6 +19,7 @@ router.use('/admin', review);
 router.get('/product/review/:productId', getReview);
 router.get('/product/myreviews', protect, getMyReviews);
 router.post('/', protect, addReview);
-router.delete('/', protect, removeReview);
+router.put('/:productId', protect, updateReview);
+router.delete('/:productId', protect, removeReview);
 
 module.exports = router;

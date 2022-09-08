@@ -2,6 +2,7 @@ const Reviews = require('../models/Reviews');
 const ErrorResponse = require('../utils/errorResponse');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const Wishlist = require('../models/Wishlist');
 const { Op } = require('sequelize');
 const asyncHandler = require('../middleware/async_middleware');
 const sequelize = require('sequelize');
@@ -74,6 +75,10 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/product/myreviews
 // access Private
 exports.getMyReviews = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Please login to remove your review', 400));
+  }
+
   const data = await User.findAll({
     attributes: ['firstName', 'lastName'],
     where: {
@@ -118,32 +123,79 @@ exports.addReview = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update review
-// @route PUT /api/v1/review
+// @route PUT /api/v1/review/:productId
 // access Private
 exports.updateReview = asyncHandler(async (req, res, next) => {
-  // NEED TO ADD LOGIC TO THIS ROUTE ************
+  if (!req.user) {
+    return next(new ErrorResponse('Please login to update your review', 401));
+  }
+
+  const review = await Reviews.update(req.body, {
+    where: {
+      [Op.and]: { productId: req.params.productId },
+      userId: req.user.userId,
+    },
+    individualHooks: true,
+  });
+
+  if (!review) {
+    return next(
+      new ErrorResponse(
+        `The review with id ${req.params.productId} was not found`,
+        400
+      )
+    );
+  }
+
+  const count = await Reviews.count({
+    where: {
+      userId: req.user.userId,
+    },
+  });
+
+  res.status(200).json({
+    success: true,
+    count,
+    data: review,
+    review: 'Your review has been updated',
+  });
 });
 
 // @desc Remove review from product
 // @route DELETE /api/v1/review
 // access Private
 exports.removeReview = asyncHandler(async (req, res, next) => {
-  const product = await Wishlist.destroy({
+  if (!req.user) {
+    return next(new ErrorResponse('Please login to remove your review', 401));
+  }
+
+  const review = await Reviews.destroy({
     where: {
       [Op.and]: { productId: req.params.productId },
       userId: req.user.userId,
     },
+    individualHooks: true,
   });
 
-  if (!product) {
-    return next(new ErrorResponse(`User not authorized`));
+  if (!review) {
+    return next(
+      new ErrorResponse(
+        `The review with id ${req.params.productId} has already been removed`,
+        400
+      )
+    );
   }
 
-  const count = await Wishlist.count({
+  const count = await Reviews.count({
     where: {
       userId: req.user.userId,
     },
   });
 
-  res.status(200).json({ success: true, count, data: product });
+  res.status(200).json({
+    success: true,
+    count,
+    data: review,
+    review: 'Your review has been deleted',
+  });
 });

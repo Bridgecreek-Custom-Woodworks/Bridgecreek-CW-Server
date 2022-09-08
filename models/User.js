@@ -134,9 +134,9 @@ const User = sequelize.define(
     },
   },
   {
-    // This is one way to remove to password from the return. It gives you control in that you can still return the password within the route function using scope('withPassword'). EXAMPLE: const user = await User.scope('withPassword').findOne({
-    //   where: { id: req.params.id },
-    // });
+    // RETURN PASSWORD EXAMPLE: const user = await User.scope('withPassword').findOne({
+    //   where: { id: req.params.id }, });
+    //
     defaultScope: {
       attributes: { exclude: ['password'] },
     },
@@ -155,8 +155,11 @@ const User = sequelize.define(
 User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' });
 Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' });
 
+User.belongsToMany(Products, { through: 'Reviews', foreignKey: 'userId' });
+Products.belongsToMany(User, { through: 'Reviews', foreignKey: 'productId' });
+
 // sequelize.sync({ alter: true });
-// sequelize.sync({ force: true })
+// sequelize.sync({ force: true });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

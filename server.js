@@ -1,38 +1,40 @@
-const express = require('express')
-const dotenv = require('dotenv')
-const colors = require('colors')
-const cookieParser = require('cookie-parser')
-const errorHandler = require('./middleware/error_middleware')
-dotenv.config({ path: './config/config.env' })
-require('./config/db')
+const express = require('express');
+const dotenv = require('dotenv');
+const colors = require('colors');
+const cookieParser = require('cookie-parser');
+const errorHandler = require('./middleware/error_middleware');
+dotenv.config({ path: './config/config.env' });
+require('./config/db');
 
 // Load env vars
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
-const users = require('./routes/users_routes')
-const auth = require('./routes/auth_routes')
-const products = require('./routes/products_routes')
-const wishlist = require('./routes/wishlist_routes')
-const admin = require('./routes/admin_routes')
+const users = require('./routes/users_routes');
+const auth = require('./routes/auth_routes');
+const products = require('./routes/products_routes');
+const wishlist = require('./routes/wishlist_routes');
+const admin = require('./routes/admin_routes');
+const reviews = require('./routes/review_routes');
 
-const app = express()
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
 // Cookie parser
-app.use(cookieParser())
+app.use(cookieParser());
 
-app.use('/api/v1/users', users)
-app.use('/api/v1/auth', auth)
-app.use('/api/v1/products', products)
-app.use('/api/v1/wishlist', wishlist)
-app.use('/api/v1/admin', admin)
+app.use('/api/v1/users', users);
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/products', products);
+app.use('/api/v1/wishlist', wishlist);
+app.use('/api/v1/admin', admin);
+app.use('/api/v1/reviews', reviews);
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 app.listen(PORT, () =>
   console.log(
     `Server is running on ${process.env.NODE_ENV} mode on port ${PORT}`.gray
       .underline
   )
-)
+);

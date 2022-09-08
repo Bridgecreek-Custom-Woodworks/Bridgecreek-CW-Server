@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../config/db')
-const User = require('../models/User')
+const Sequelize = require('sequelize');
+const sequelize = require('../config/db');
+const User = require('../models/User');
 
 const Product = sequelize.define(
   'Products',
@@ -48,6 +48,12 @@ const Product = sequelize.define(
         isUrl: true,
       },
     },
+    avgRating: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0.0,
+      allowNull: true,
+      unique: false,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -61,6 +67,6 @@ const Product = sequelize.define(
     sequelize,
     modelName: 'Products',
   }
-)
+);
 
-module.exports = Product
+module.exports = Product;

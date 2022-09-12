@@ -75,7 +75,7 @@ const Reviews = sequelize.define(
 
 // sequelize.sync({ alter: true });
 
-const getAverageRating = async (review) => {
+const getAverageRating = async (review, req, res) => {
   const avg = await Reviews.findAll({
     attributes: [
       'productId',
@@ -87,11 +87,26 @@ const getAverageRating = async (review) => {
     raw: true,
   });
 
+  console.log('Avg ==> ', avg[0]);
+
   try {
-    let avgRating =
+    let avgRating;
+
+    // If there are no reviews on a product when the user sets a review, this if statment prevents and error by set avg to the single user's review.
+    avgRating =
       (await avg.length) === 0 ? review.dataValues.rating : avg[0].avgRating;
+
+    // If there are no reviews left once a user deletes a review then this set the product review avg back to zero
+    if (!avg[0] && req.type) {
+      avgRating = 0;
+    }
+
+    console.log('AVG RATING ===> ', Number(avgRating).toFixed(2));
+
+    console.log('Request ==>', req.type);
+
     await Product.update(
-      { avgRating: avgRating },
+      { avgRating: Number(avgRating).toFixed(2) },
       {
         where: { productId: review.dataValues.productId },
       }

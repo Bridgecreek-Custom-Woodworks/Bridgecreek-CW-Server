@@ -17,18 +17,22 @@ const Reviews = sequelize.define(
       allowNull: false,
       unique: false,
       references: {
+        type: Sequelize.UUID,
         model: 'Users',
         key: 'userId',
       },
+      onDelete: 'cascade',
     },
     productId: {
       type: Sequelize.UUID,
       allowNull: false,
       unique: false,
       references: {
+        type: Sequelize.UUID,
         model: 'Products',
         key: 'productId',
       },
+      onDelete: 'NO ACTION',
     },
     comments: {
       type: Sequelize.STRING,

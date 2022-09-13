@@ -186,8 +186,6 @@ exports.removeReview = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const deleted = true;
-
   const count = await Reviews.count({
     where: {
       userId: req.user.userId,

@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Wishlist = require('../models/Wishlist');
 const Products = require('../models/Product');
+const Reviews = require('../models/Reviews');
 const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
 
@@ -17,6 +18,7 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
     },
+
     firstName: {
       type: Sequelize.STRING,
       unique: false,
@@ -155,8 +157,16 @@ const User = sequelize.define(
 User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' });
 Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' });
 
-User.belongsToMany(Products, { through: 'Reviews', foreignKey: 'userId' });
-Products.belongsToMany(User, { through: 'Reviews', foreignKey: 'productId' });
+User.belongsToMany(Products, {
+  through: 'Reviews',
+  foreignKey: 'userId',
+  otherKey: 'productId',
+});
+Products.belongsToMany(User, {
+  through: 'Reviews',
+  foreignKey: 'productId',
+  otherKey: 'userId',
+});
 
 // sequelize.sync({ alter: true });
 // sequelize.sync({ force: true });
@@ -166,6 +176,15 @@ const saltAndHashPassword = async (user) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.dataValues.password, salt);
   }
+};
+
+User.prototype.removeUsersReviews = async function (userId) {
+  await Reviews.destroy({
+    where: {
+      userId: userId,
+    },
+    individualHooks: true,
+  });
 };
 
 User.prototype.getSignedToken = async function () {

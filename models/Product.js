@@ -12,6 +12,7 @@ const Product = sequelize.define(
       allowNull: false,
       unique: true,
     },
+
     productName: {
       type: Sequelize.STRING,
       allowNull: false,

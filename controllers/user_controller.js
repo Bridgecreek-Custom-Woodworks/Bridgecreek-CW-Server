@@ -84,7 +84,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/users/deleteme
 // access Private
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-  const user = await Users.destroy({
+  const user = await Users.findOne({
     where: {
       userId: req.user.userId,
     },
@@ -98,6 +98,10 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
       )
     );
   }
+  await user.removeUsersReviews(req.user.userId);
+
+  user.destroy();
+
   res.status(200).json({
     success: true,
     msg: `User with the id ${req.user.userId} was deleted`,

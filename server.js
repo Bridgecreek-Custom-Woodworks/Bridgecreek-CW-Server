@@ -4,7 +4,7 @@ const colors = require('colors');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
-require('./config/db');
+// require('./config/db');
 
 // Load env vars
 const PORT = process.env.PORT || 5000;
@@ -19,6 +19,7 @@ const reviews = require('./routes/review_routes');
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser
 app.use(cookieParser());

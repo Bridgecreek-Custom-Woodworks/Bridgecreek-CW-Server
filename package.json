@@ -5,10 +5,13 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "dev": "nodemon server",
-    "start": "node server.js",
-    "seed": "npx sequelize-cli db:seed:all",
-    "unseed": "npx sequelize-cli db:seed:undo:all"
+    "start-production": "cross-env NODE_ENV=production node server.js",
+    "start-dev": "cross-env NODE_ENV=development nodemon server.js",
+    "start-test": "cross-env NODE_ENV=test nodemon server.js",
+    "seed-dev": "npx sequelize-cli db:seed:all --env development",
+    "seed-test": "npx sequelize-cli db:seed:all --env test",
+    "unseed-dev": "npx sequelize-cli db:seed:undo:all",
+    "unseed-test": "npx sequelize-cli db:seed:undo:all"
   },
   "keywords": [],
   "author": "Notto Technologies",
@@ -17,6 +20,7 @@
     "@sendgrid/mail": "^7.7.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
+    "config": "^3.3.8",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
@@ -28,7 +32,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "body-parser": "^1.20.0",
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
     "cross-env": "^7.0.3",

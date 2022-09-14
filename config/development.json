@@ -1,0 +1,10 @@
+{
+  "database": {
+    "db": "bridgecreek_dev",
+    "username": "postgres",
+    "dialect": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "logging": false
+  }
+}

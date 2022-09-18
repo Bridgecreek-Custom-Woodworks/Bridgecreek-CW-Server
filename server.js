@@ -33,9 +33,9 @@ app.use('/api/v1/wishlist', wishlist);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/reviews', reviews);
 
-if (process.env.NODE_ENV === 'test') {
-  sequelize.sync({ force: true });
-}
+// if (process.env.NODE_ENV === 'test') {
+//   sequelize.sync({ force: true });
+// }
 
 app.use(errorHandler);
 

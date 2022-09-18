@@ -4,6 +4,7 @@ const colors = require('colors');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
+
 // require('./config/db');
 
 // Load env vars
@@ -15,6 +16,7 @@ const products = require('./routes/products_routes');
 const wishlist = require('./routes/wishlist_routes');
 const admin = require('./routes/admin_routes');
 const reviews = require('./routes/review_routes');
+const sequelize = require('./config/db');
 
 const app = express();
 
@@ -30,6 +32,10 @@ app.use('/api/v1/products', products);
 app.use('/api/v1/wishlist', wishlist);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/reviews', reviews);
+
+if (process.env.NODE_ENV === 'test') {
+  sequelize.sync({ force: true });
+}
 
 app.use(errorHandler);
 

@@ -44,6 +44,7 @@ exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
     require: true,
     where: { userId: req.user.userId },
     include: Product,
+    // required: true,
   });
 
   if (data[0].Products.length === 0) {

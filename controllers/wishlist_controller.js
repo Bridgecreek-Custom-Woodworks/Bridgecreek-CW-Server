@@ -10,6 +10,9 @@ const asyncHandler = require('../middleware/async_middleware');
 // access Private/Admin
 exports.getAllWishlist = asyncHandler(async (req, res, next) => {
   const wishlist = await User.findAll({
+    attributes: {
+      exclude: ['createdAt', 'updatedAt'],
+    },
     include: [
       {
         model: Product,

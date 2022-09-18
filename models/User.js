@@ -154,8 +154,16 @@ const User = sequelize.define(
   }
 );
 
-User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' });
-Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' });
+User.belongsToMany(Products, {
+  through: 'Wishlists',
+  foreignKey: 'userId',
+  otherKey: 'productId',
+});
+Products.belongsToMany(User, {
+  through: 'Wishlists',
+  foreignKey: 'productId',
+  otherKey: 'userId',
+});
 
 User.belongsToMany(Products, {
   through: 'Reviews',

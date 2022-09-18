@@ -4,6 +4,7 @@ const colors = require('colors');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
+const sequelize = require('./config/db');
 // require('./config/db');
 
 // Load env vars
@@ -32,6 +33,10 @@ app.use('/api/v1/admin', admin);
 app.use('/api/v1/reviews', reviews);
 
 app.use(errorHandler);
+
+// if (process.env.NODE_ENV === 'test') {
+//   sequelize.sync({ force: true });
+// }
 
 app.listen(PORT, () =>
   console.log(

@@ -154,19 +154,33 @@ const User = sequelize.define(
   }
 );
 
-User.belongsToMany(Products, { through: 'Wishlists', foreignKey: 'userId' });
-Products.belongsToMany(User, { through: 'Wishlists', foreignKey: 'productId' });
-
 User.belongsToMany(Products, {
-  through: 'Reviews',
+  through: 'Wishlists',
   foreignKey: 'userId',
   otherKey: 'productId',
 });
 Products.belongsToMany(User, {
-  through: 'Reviews',
+  through: 'Wishlists',
   foreignKey: 'productId',
   otherKey: 'userId',
 });
+
+User.hasMany(Reviews, { foreignKey: 'userId' });
+Reviews.belongsTo(User, { foreignKey: 'userId' });
+
+Products.hasMany(Reviews, { foreignKey: 'productId' });
+Reviews.belongsTo(Products, { foreignKey: 'productId' });
+
+// User.belongsToMany(Products, {
+//   through: 'Reviews',
+//   foreignKey: 'userId',
+//   otherKey: 'productId',
+// });
+// Products.belongsToMany(User, {
+//   through: 'Reviews',
+//   foreignKey: 'productId',
+//   otherKey: 'userId',
+// });
 
 // sequelize.sync({ alter: true });
 // sequelize.sync({ force: true });

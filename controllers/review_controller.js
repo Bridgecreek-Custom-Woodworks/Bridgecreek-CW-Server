@@ -1,8 +1,9 @@
-const Reviews = require('../models/Reviews');
 const ErrorResponse = require('../utils/errorResponse');
+const Reviews = require('../models/Reviews');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Wishlist = require('../models/Wishlist');
+
 const { Op } = require('sequelize');
 const asyncHandler = require('../middleware/async_middleware');
 const sequelize = require('sequelize');
@@ -20,21 +21,25 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
     attributes: ['firstName', 'lastName'],
     include: [
       {
-        model: Product,
-        through: {
-          attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
-        },
-        attributes: ['productId', 'productName', 'price', 'avgRating'],
+        model: Reviews,
+        attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
         required: true,
+        include: [
+          {
+            model: Product,
+            attributes: ['productId', 'productName', 'price', 'avgRating'],
+            required: true,
+          },
+        ],
       },
     ],
   });
 
-  const count = reviews[0].Products.length; // Need to figure out how to get the count for this (reduce method?).
+  // const count = reviews[0].Products.length; // Need to figure out how to get the count for this (reduce method?).
 
   res.status(200).json({
     success: true,
-    count,
+    // count,
     data: reviews,
   });
 });
@@ -43,7 +48,7 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/product/review/:productId
 // access Public
 exports.getReview = asyncHandler(async (req, res, next) => {
-  const data = await Product.findAll({
+  const review = await Product.findAll({
     attributes: ['productId', 'productName', 'price'],
 
     where: { productId: req.params.productId },
@@ -67,7 +72,7 @@ exports.getReview = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     count,
-    data,
+    data: review,
   });
 });
 
@@ -76,36 +81,49 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 // access Private
 exports.getMyReviews = asyncHandler(async (req, res, next) => {
   if (!req.user) {
-    return next(new ErrorResponse('Please login to remove your review', 400));
+    return next(new ErrorResponse('Please login to see your reviews', 400));
   }
 
-  const data = await User.findAll({
-    attributes: ['firstName', 'lastName'],
-    where: {
-      userId: req.user.userId,
-    },
+  // const review = await User.findAll({
+  //   attributes: ['firstName', 'lastName'],
+  //   where: {
+  //     userId: req.user.userId,
+  //   },
+  //   include: [
+  //     {
+  //       model: Product,
+  //       through: {
+  //         attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
+  //       },
+  //       attributes: ['productId', 'productName', 'price'],
+  //       required: true,
+  //     },
+  //   ],
+  // });
+
+  const review = await Reviews.findAll({
+    attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
+
+    where: { userId: req.user.userId },
     include: [
       {
         model: Product,
-        through: {
-          attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
-        },
-        attributes: ['productId', 'productName', 'price'],
+        attributes: ['productId', 'productName', 'price', 'avgRating'],
         required: true,
       },
     ],
   });
 
-  if (data[0].Products.length === 0) {
+  if (review.length === 0) {
     return next(new ErrorResponse(`You have not reviewed any products yet.`));
   }
 
-  const count = data[0].Products.length;
+  const count = review.length;
 
   res.status(200).json({
     success: true,
     count,
-    data,
+    data: review,
   });
 });
 

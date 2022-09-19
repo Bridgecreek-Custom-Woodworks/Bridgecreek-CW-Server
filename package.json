@@ -9,6 +9,7 @@
     "start-dev": "cross-env NODE_ENV=development nodemon server.js",
     "start-test": "cross-env NODE_ENV=test nodemon server.js",
     "seed-dev": "npx sequelize-cli db:seed --seed 20220826162419-demo-user.js 20220901215736-demo-product.js --env development",
+    "seed-dev-test": "npx sequelize-cli db:seed --seed 20220826162419-demo-user.js 20220901215736-demo-product.js",
     "seed-test": "npx sequelize-cli db:seed --seed 20220917221820-test-user.js 20220917224907-test-product.js 20220917230626-test-wishlist.js --env test",
     "unseed-dev": "npx sequelize-cli db:seed:undo:all",
     "unseed-test": "npx sequelize-cli db:seed:undo:all"

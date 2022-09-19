@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
 
-// require('./config/db');
+// const models = require('./models/index.js');
 
 // Load env vars
 const PORT = process.env.PORT || 5000;
@@ -33,7 +33,9 @@ app.use('/api/v1/wishlist', wishlist);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/reviews', reviews);
 
-// if (process.env.NODE_ENV === 'test') {
+// if (process.env.NODE_ENV === 'development') {
+//   sequelize.sync();
+// } else if (process.env.NODE_ENV === 'test') {
 //   sequelize.sync({ force: true });
 // }
 
@@ -41,7 +43,7 @@ app.use(errorHandler);
 
 app.listen(PORT, () =>
   console.log(
-    `Server is running on ${process.env.NODE_ENV} mode on port ${PORT}`.gray
+    `Server is running in: ${process.env.NODE_ENV} mode on port ${PORT}`.gray
       .underline
   )
 );

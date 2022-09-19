@@ -16,7 +16,6 @@ exports.getAllWishlist = asyncHandler(async (req, res, next) => {
     include: [
       {
         model: Product,
-        through: { attributes: ['updatedAt', 'createdAt'] },
         attributes: ['productId', 'productName', 'price'],
         required: true,
       },

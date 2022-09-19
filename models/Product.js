@@ -71,7 +71,11 @@ const Product = sequelize.define(
   }
 );
 
-Product.hasMany(Reviews, { as: 'productReview' });
-Reviews.belongsTo(Product);
+Product.hasMany(Reviews, {
+  foreignKey: 'productId',
+  onDelete: 'CASCADE',
+  hooks: true,
+});
+Reviews.belongsTo(Product, { foreignKey: 'productId' });
 
 module.exports = Product;

@@ -35,11 +35,11 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  // const count = reviews[0].Products.length; // Need to figure out how to get the count for this (reduce method?).
+  const count = reviews.length; // Need to figure out how to get the count for this.
 
   res.status(200).json({
     success: true,
-    // count,
+    count,
     data: reviews,
   });
 });
@@ -48,30 +48,25 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/product/review/:productId
 // access Public
 exports.getReview = asyncHandler(async (req, res, next) => {
-  const review = await Product.findAll({
-    attributes: ['productId', 'productName', 'price'],
+  const review = await Reviews.findOne({
+    attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
 
     where: { productId: req.params.productId },
     include: [
       {
-        model: User,
-        through: {
-          attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
-        },
-        attributes: ['firstName', 'lastName'],
+        model: Product,
+        attributes: ['productId', 'productName', 'price', 'avgRating'],
         required: true,
       },
     ],
   });
 
-  if (data.length === 0) {
+  if (!review) {
     return next(new ErrorResponse(`This product currently has no reviews `));
   }
 
-  const count = data.length;
   res.status(200).json({
     success: true,
-    count,
     data: review,
   });
 });
@@ -83,23 +78,6 @@ exports.getMyReviews = asyncHandler(async (req, res, next) => {
   if (!req.user) {
     return next(new ErrorResponse('Please login to see your reviews', 400));
   }
-
-  // const review = await User.findAll({
-  //   attributes: ['firstName', 'lastName'],
-  //   where: {
-  //     userId: req.user.userId,
-  //   },
-  //   include: [
-  //     {
-  //       model: Product,
-  //       through: {
-  //         attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
-  //       },
-  //       attributes: ['productId', 'productName', 'price'],
-  //       required: true,
-  //     },
-  //   ],
-  // });
 
   const review = await Reviews.findAll({
     attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],

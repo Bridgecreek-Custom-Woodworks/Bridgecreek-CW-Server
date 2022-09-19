@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
-const Product = require('../models/Product');
+const Products = require('../models/Product');
 
 const Reviews = sequelize.define(
   'Reviews',
@@ -91,8 +91,6 @@ const getAverageRating = async (review, req, res) => {
     raw: true,
   });
 
-  console.log('Avg ==> ', avg[0]);
-
   try {
     let avgRating;
 
@@ -105,12 +103,21 @@ const getAverageRating = async (review, req, res) => {
       avgRating = 0;
     }
 
-    console.log('AVG RATING ===> ', Number(avgRating).toFixed(2));
+    // console.log('Avg ==> ', avg[0]);
 
-    console.log('Request ==>', req.type);
+    // console.log('Req ===>', req);
 
-    await Product.update(
-      { avgRating: Number(avgRating).toFixed(2) },
+    // console.log('AVG RATING ===> ', Number(avgRating).toFixed(2));
+
+    // console.log('Request ==>', req.type);
+
+    // console.log('Review ===> ', review.dataValues.productId);
+
+    const number = Number(avgRating).toFixed(2);
+
+    // This is the syntax for accessing another model from inside a hook.
+    await sequelize.model('Products').update(
+      { avgRating: number },
       {
         where: { productId: review.dataValues.productId },
       }
@@ -121,7 +128,7 @@ const getAverageRating = async (review, req, res) => {
 };
 
 Reviews.afterDestroy(getAverageRating);
-Reviews.afterCreate(getAverageRating);
 Reviews.afterUpdate(getAverageRating);
+Reviews.afterCreate(getAverageRating);
 
 module.exports = Reviews;

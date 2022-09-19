@@ -168,20 +168,6 @@ Products.belongsToMany(User, {
 User.hasMany(Reviews, { foreignKey: 'userId' });
 Reviews.belongsTo(User, { foreignKey: 'userId' });
 
-Products.hasMany(Reviews, { foreignKey: 'productId' });
-Reviews.belongsTo(Products, { foreignKey: 'productId' });
-
-// User.belongsToMany(Products, {
-//   through: 'Reviews',
-//   foreignKey: 'userId',
-//   otherKey: 'productId',
-// });
-// Products.belongsToMany(User, {
-//   through: 'Reviews',
-//   foreignKey: 'productId',
-//   otherKey: 'userId',
-// });
-
 // sequelize.sync({ alter: true });
 // sequelize.sync({ force: true });
 

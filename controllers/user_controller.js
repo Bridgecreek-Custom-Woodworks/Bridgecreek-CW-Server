@@ -5,7 +5,7 @@ const { sendTokenResponse } = require('../utils/tokenResponse');
 const { verifyPassword } = require('../utils/functions');
 
 // @desc Get all users
-// @route GET /api/v1/user/admin/allusers
+// @route GET /api/v1/users/admin/allusers
 // access Private/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await Users.findAll();

@@ -47,3 +47,5 @@ app.listen(PORT, () =>
       .underline
   )
 );
+
+module.exports = app;

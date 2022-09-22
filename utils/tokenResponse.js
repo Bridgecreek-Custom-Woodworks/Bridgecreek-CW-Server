@@ -1,4 +1,4 @@
-exports.sendTokenResponse = async (user, statusCode, res) => {
+exports.sendTokenResponse = async (user, statusCode, res, count) => {
   const token = await user.getSignedToken();
 
   const options = {
@@ -15,5 +15,5 @@ exports.sendTokenResponse = async (user, statusCode, res) => {
   res
     .status(statusCode)
     .cookie('token', token, options)
-    .json({ success: true, token, data: user });
+    .json({ success: true, count, token, data: user });
 };

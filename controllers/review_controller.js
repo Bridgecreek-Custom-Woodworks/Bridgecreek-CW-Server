@@ -33,7 +33,7 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  const count = reviews.length; // Need to figure out how to get the count for this.
+  const count = await Reviews.count();
 
   res.status(200).json({
     success: true,

@@ -41,7 +41,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Create user
-// @route GET /api/v1/users
+// @route POST /api/v1/users
 // access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const user = await Users.build(req.body);
@@ -58,24 +58,40 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  user.save();
-  sendTokenResponse(user, 201, res);
+
+  count = await Users.count();
+  console.log(count);
+
+  await user.save();
+  sendTokenResponse(user, 201, res, count);
 });
 
 // @desc Update user
 // @route PUT /api/v1/users/updateme
 // access Private
 exports.updateUser = asyncHandler(async (req, res, next) => {
-  const user = await Users.update(req.body, {
+  let user = await Users.update(req.body, {
     where: {
       userId: req.user.userId,
     },
+
+    returning: true,
   });
   if (!user) {
     return next(
       new ErrorResponse(`User not found with the id of ${req.user.userId}`, 404)
     );
   }
+
+  let updatedUser = user.flat(Infinity);
+  user = updatedUser[1].dataValues;
+
+  // Need to figure out a way to remove the password from the return ***********.
+  // const fieldsToExclude = ['password'];
+  // const myfields = Object.keys(user.rawAttributes).filter(
+  //   (s) => !fieldsToExclude.includes(s)
+  // );
+
   res.status(200).json({
     success: true,
     data: user,

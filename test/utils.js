@@ -32,8 +32,19 @@ exports.newUser = {
   zipCode: '28227',
   email: 'samjones@gmail.com',
 };
+exports.updateDeleteUser = {
+  userId: 'e2059294-5a76-4484-8ec1-ea9bdc3a64a0',
+  firstName: 'Leo',
+  lastName: 'Getz',
+  street: '1245 Holly Pl',
+  city: 'Charlotte',
+  state: 'NC',
+  homePhone: '555-342-2245',
+  cellPhone: '555-420-5833',
+  password: 'admin1234',
+  zipCode: '28227',
+  email: 'leogetzs@gmail.com',
+};
 
 exports.hashedPassword =
   '$2a$10$m68LfWK4S1BQoc/C0H9QmO15VcJ0Jaidz1YWFIsJhBCTjtz2RID1m';
-
-// $2a$10$npaPAvV5K9kkmraolgzC3edDWZa6PaC2fUxgk5nrhbHkpFu9E5iOm

@@ -11,7 +11,7 @@ const { Op } = require('sequelize');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // @desc Login User
-// @route PUT /api/v1/auth/login
+// @route POST /api/v1/auth/login
 // access Private
 exports.login = asyncHandler(async (req, res, next) => {
   const { password, email } = req.body;

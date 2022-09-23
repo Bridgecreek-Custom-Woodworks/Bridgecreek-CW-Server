@@ -59,11 +59,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     );
   }
 
-  count = await Users.count();
-  console.log(count);
-
   await user.save();
-  sendTokenResponse(user, 201, res, count);
+  sendTokenResponse(user, 201, res);
 });
 
 // @desc Update user

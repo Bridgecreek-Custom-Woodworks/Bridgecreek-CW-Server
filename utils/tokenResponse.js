@@ -15,5 +15,5 @@ exports.sendTokenResponse = async (user, statusCode, res, count) => {
   res
     .status(statusCode)
     .cookie('token', token, options)
-    .json({ success: true, count, token, data: user });
+    .json({ success: true, token, data: user });
 };

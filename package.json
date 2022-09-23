@@ -12,7 +12,8 @@
     "seed-dev": "npx sequelize-cli db:seed --seed 20220826162419-demo-user.js 20220901215736-demo-product.js --env development",
     "seed-test": "npx sequelize-cli db:seed --seed 20220917221820-test-user.js 20220917224907-test-product.js 20220917230626-test-wishlist.js --env test",
     "unseed-dev": "npx sequelize-cli db:seed:undo:all",
-    "unseed-test": "npx sequelize-cli db:seed:undo:all"
+    "unseed-test": "npx sequelize-cli db:seed:undo:all",
+    "coverage": "nyc --reporter=lcov --reporter=text npm run mocha:test"
   },
   "keywords": [],
   "author": "Notto Technologies",
@@ -39,6 +40,7 @@
     "chai-http": "^4.3.0",
     "cross-env": "^7.0.3",
     "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
     "request": "^2.88.2",
     "sinon": "^14.0.0"
   }

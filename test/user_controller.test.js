@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 const sinon = require('sinon');
 const server = require('../server');
 const User = require('../models/User');
-const { user, newUser, hashedPassword } = require('./utils');
+const { user, newUser, hashedPassword, userKeys } = require('./utils');
 
 describe('USER WORKFLOW TEST ===>', function () {
   this.beforeEach(async () => {
@@ -76,12 +76,13 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.userId).to.be.equal(user.userId);
+        expect(res.body.data).to.have.all.keys(userKeys);
 
         done();
       });
   });
 
-  it('Register a new user', (done) => {
+  it('Create a new user', (done) => {
     chai
       .request(server)
       .post('/api/v1/users')
@@ -124,9 +125,7 @@ describe('USER WORKFLOW TEST ===>', function () {
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
-        expect(res.body.msg).to.be.equal(
-          `User with the id ${newUser.userId} was deleted`
-        );
+        expect(res.body.msg).to.include(newUser.userId);
         expect(deletedCount).to.be.equal(5);
 
         done();

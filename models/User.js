@@ -154,13 +154,6 @@ const User = sequelize.define(
   }
 );
 
-// User.associate = (models) => {
-//   User.belongsToMany(models.Products, {
-//     through: 'Wishlists',
-//     foreignKey: 'userId',
-//     otherKey: 'productId',
-//   });
-// };
 User.belongsToMany(Products, {
   through: 'Wishlists',
   foreignKey: 'userId',

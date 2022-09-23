@@ -3,10 +3,8 @@ const Reviews = require('../models/Reviews');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Wishlist = require('../models/Wishlist');
-
 const { Op } = require('sequelize');
 const asyncHandler = require('../middleware/async_middleware');
-const sequelize = require('sequelize');
 
 // @desc Get all reviews
 // @route GET /api/v1/reviews/admin/allreviews
@@ -35,7 +33,7 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  const count = reviews.length; // Need to figure out how to get the count for this.
+  const count = await Reviews.count();
 
   res.status(200).json({
     success: true,

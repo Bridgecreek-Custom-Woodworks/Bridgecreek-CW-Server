@@ -1,0 +1,10 @@
+{
+  "include": ["controllers", "middleware", "models"],
+  "exclude": ["middleware/async_middleware.js"],
+  "check-coverage": true,
+  "lines": 50,
+  "branches": 50,
+  "functions": 60,
+  "statements": 60,
+  "report-dir": "./test/test_reports"
+}

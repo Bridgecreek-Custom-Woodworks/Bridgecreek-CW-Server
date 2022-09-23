@@ -3,7 +3,6 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
-const User = require('../models/User');
 const Products = require('../models/Product');
 const { user, product, newProduct, productKeys } = require('./utils');
 
@@ -67,6 +66,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
       .send(newProduct)
       .end((err, res) => {
         updateDeleteToken = res.body.token;
+
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;
         expect(res.body.data).to.be.an('object');
@@ -100,6 +100,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const deletedCount = count - res.body.data;
+
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
         expect(res.body.msg).to.include(newProduct.productId);

@@ -22,7 +22,7 @@ exports.getAllWishlist = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  const count = wishlist.length;
+  const count = await Wishlist.count();
 
   res.status(200).json({
     success: true,
@@ -32,7 +32,7 @@ exports.getAllWishlist = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get single user wishlist
-// @route GET /api/v1/wishlist
+// @route GET /api/v1/wishlist/mywishlist
 // access Private
 exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -53,6 +53,7 @@ exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
   }
 
   const count = data[0].Products.length;
+
   res.status(200).json({
     success: true,
     count,
@@ -61,7 +62,7 @@ exports.getUsersWishlist = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Add product to wishlist
-// @route POST /api/v1/wishlist
+// @route POST /api/v1/wishlist/mywishlist
 // access Private
 exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user.userId;
@@ -74,17 +75,17 @@ exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Remove item from wishlist
-// @route DELETE /api/v1/wishlist
+// @route DELETE /api/v1/wishlist/mywishlist
 // access Private
 exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
-  const product = await Wishlist.destroy({
+  const wishlistItem = await Wishlist.destroy({
     where: {
       [Op.and]: { productId: req.params.productId },
       userId: req.user.userId,
     },
   });
 
-  if (!product) {
+  if (!wishlistItem) {
     return next(new ErrorResponse(`User not authorized`));
   }
 
@@ -94,5 +95,12 @@ exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
     },
   });
 
-  res.status(200).json({ success: true, count, data: product });
+  res
+    .status(200)
+    .json({
+      success: true,
+      count,
+      data: wishlistItem,
+      msg: `Wishlist Item with the id of ${req.params.productId} was deleted`,
+    });
 });

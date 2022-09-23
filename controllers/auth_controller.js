@@ -11,7 +11,7 @@ const { Op } = require('sequelize');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // @desc Login User
-// @route PUT /api/v1/auth/login
+// @route POST /api/v1/auth/login
 // access Private
 exports.login = asyncHandler(async (req, res, next) => {
   const { password, email } = req.body;
@@ -48,10 +48,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
     expires: new Date(Date.now() + 10 + 1000),
     httpOnly: true,
   });
-  // req.headers.authorization = null;
-  // req.user = null;
 
-  // console.log('User Id ==> ', req.headers);
   res.status(200).json({
     success: true,
     msg: `User with the id of ${req.user.userId} was logged out`,

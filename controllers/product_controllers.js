@@ -47,10 +47,11 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/products/:productId/admin
 // access Private/Admin
 exports.updateProduct = asyncHandler(async (req, res, next) => {
-  const product = await Products.update(req.body, {
+  let product = await Products.update(req.body, {
     where: {
       productId: req.params.productId,
     },
+    returning: true,
   });
 
   if (!product) {
@@ -61,6 +62,9 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  let updatedProduct = product.flat(Infinity);
+  product = updatedProduct[1].dataValues;
 
   res.status(200).json({
     success: true,
@@ -80,13 +84,15 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
   if (!product) {
     return next(
       new ErrorResponse(
-        `Product not found with the id of ${req.product.productId}`,
+        `Product not found with the id of ${req.params.productId}`,
         404
       )
     );
   }
+
   res.status(200).json({
     success: true,
     data: product,
+    msg: `Product with the id of ${req.params.productId} was deleted`,
   });
 });

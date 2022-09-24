@@ -138,6 +138,5 @@ describe('USER WORKFLOW TEST ===>', function () {
     });
 
     expect(savedUser.dataValues.password.length).to.be.equal(60);
-    expect(savedUser.dataValues.password).to.be.equal(hashedPassword);
   });
 });

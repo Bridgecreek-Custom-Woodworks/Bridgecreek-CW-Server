@@ -1,27 +1,27 @@
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
-const { post } = require('request');
 chai.use(chaiHttp);
 const server = require('../server');
-const dotenv = require('dotenv');
-dotenv.config({ path: './config/config.env' });
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const { user, product, newProduct, productKeys } = require('./utils');
+const { user } = require('./utils');
 
 describe('PASSWORD RESET FLOW ==>', function () {
   this.beforeEach(async () => {
     getUser = await User.findOne({
-      attributes: ['resetPasswordToken'],
+      attributes: ['resetPasswordToken', 'password', 'userId'],
       where: { userId: user.userId },
     });
+
     oldPasswordToken = getUser.dataValues.resetPasswordToken;
+
+    originalPassword = 'admin1234';
+    newPassword = 'admin4321';
   });
 
   let token;
   let oldPasswordToken;
-  let password = 'admin1234';
+  let originalPassword;
 
   it('Send reset password link to users email', (done) => {
     chai
@@ -49,15 +49,43 @@ describe('PASSWORD RESET FLOW ==>', function () {
     chai
       .request(server)
       .put(`/api/v1/auth/resetpassword/${process.env.RESET_PASSWORD}`)
-      .send({ password: password })
-      .end(async (err, res) => {
+      .send({ password: newPassword })
+      .end((err, res) => {
         const { resetPasswordToken, resetPasswordExpire } = res.body.data;
-        // const comparedPasswords = await bcrypt.compare(password, savedPassword);
+        const oldPassword = getUser.dataValues.password;
+        const newPassword = res.body.data.password;
+        token = res.body.token;
 
         expect(res.status).to.be.equal(200);
+        expect(res.body.success).to.be.equal(true);
+        expect(res.body.data.userId).to.be.equal(getUser.dataValues.userId);
+        expect(oldPassword).to.not.be.equal(newPassword);
         expect(resetPasswordToken).to.be.null;
         expect(resetPasswordExpire).to.be.null;
-        // expect(comparedPasswords).to.be.true;
+
+        done();
+      });
+  });
+
+  it('Should change password', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/auth/updatepassword')
+      .set({ Authorization: `Bearer ${token}` })
+      .send({
+        currentPassword: newPassword,
+        newPassword: originalPassword,
+        newPassword2: originalPassword,
+      })
+      .end((err, res) => {
+        const oldPassword = getUser.dataValues.password;
+        const newPassword = res.body.data.password;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body.success).to.be.true;
+        expect(res.body).to.not.have.property('error');
+        expect(oldPassword).to.not.be.equal(newPassword);
+        expect(res.body.token.length).to.be.equal(192);
 
         done();
       });

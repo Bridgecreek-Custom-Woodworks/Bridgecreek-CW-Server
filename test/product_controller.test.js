@@ -6,7 +6,7 @@ const server = require('../server');
 const Products = require('../models/Product');
 const { user, product, newProduct, productKeys } = require('./utils');
 
-describe.only('PRODUCT WORKFLOW TEST ===>', function () {
+describe('PRODUCT WORKFLOW TEST ===>', function () {
   this.beforeEach(async () => {
     count = await Products.count();
   });

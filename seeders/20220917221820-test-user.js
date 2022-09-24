@@ -9,7 +9,7 @@ module.exports = {
     await queryInterface.bulkInsert('Users', [
       {
         userId: '1024cf0f-9c88-4af3-8eb3-928a0a0b844e',
-        firstName: 'Otto',
+        firstName: `Otto-Test-DB`,
         lastName: 'Jones',
         street: '124 Main St',
         city: 'Columbia',

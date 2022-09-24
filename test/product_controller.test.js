@@ -6,7 +6,7 @@ const server = require('../server');
 const Products = require('../models/Product');
 const { user, product, newProduct, productKeys } = require('./utils');
 
-describe('PRODUCT WORKFLOW TEST ===>', function () {
+describe.only('PRODUCT WORKFLOW TEST ===>', function () {
   this.beforeEach(async () => {
     count = await Products.count();
   });
@@ -66,12 +66,21 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
       .send(newProduct)
       .end((err, res) => {
         updateDeleteToken = res.body.token;
+        const { data } = res.body;
+        const newProductPrice = newProduct.price.toString();
+        const newProductWeight = newProduct.weight.toString();
 
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.have.all.keys(productKeys);
-        expect(res.body.data.productId.length).to.be.equal(36);
+        expect(data).to.be.an('object');
+        expect(data).to.have.all.keys(productKeys);
+        expect(data.productId.length).to.be.equal(36);
+        expect(data.productName).to.be.equal(newProduct.productName);
+        expect(data.price).to.be.equal(newProductPrice);
+        expect(data.weight).to.be.equal(newProductWeight);
+        expect(data.description).to.be.equal(newProduct.description);
+        expect(data.dementions).to.be.equal(newProduct.dementions);
+        expect(data.url).to.be.equal(newProduct.url);
 
         done();
       });

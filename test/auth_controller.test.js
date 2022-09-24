@@ -7,19 +7,21 @@ const server = require('../server');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 const { user, product, newProduct, productKeys } = require('./utils');
 
-describe.only('PASSWORD RESET FLOW ==>', function () {
+describe('PASSWORD RESET FLOW ==>', function () {
   this.beforeEach(async () => {
     getUser = await User.findOne({
       attributes: ['resetPasswordToken'],
       where: { userId: user.userId },
     });
-    resetPasswordToken = getUser.dataValues.resetPasswordToken;
+    oldPasswordToken = getUser.dataValues.resetPasswordToken;
   });
 
   let token;
-  let resetPasswordToken;
+  let oldPasswordToken;
+  let password = 'admin1234';
 
   it('Send reset password link to users email', (done) => {
     chai
@@ -47,11 +49,16 @@ describe.only('PASSWORD RESET FLOW ==>', function () {
     chai
       .request(server)
       .put(`/api/v1/auth/resetpassword/${process.env.RESET_PASSWORD}`)
-      .send({ password: 'admin1234' })
-      .end((err, res) => {
-        console.log('Reset Password', process.env.RESET_PASSWORD);
-        // console.log(resetPasswordToken);
-        // console.log(getUser.dataValues.resetPasswordToken);
+      .send({ password: password })
+      .end(async (err, res) => {
+        const { resetPasswordToken, resetPasswordExpire } = res.body.data;
+        // const comparedPasswords = await bcrypt.compare(password, savedPassword);
+
+        expect(res.status).to.be.equal(200);
+        expect(resetPasswordToken).to.be.null;
+        expect(resetPasswordExpire).to.be.null;
+        // expect(comparedPasswords).to.be.true;
+
         done();
       });
   });

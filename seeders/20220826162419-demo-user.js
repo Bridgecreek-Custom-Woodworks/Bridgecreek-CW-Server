@@ -8,8 +8,8 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Users', [
       {
-        userId: uuidv4(),
-        firstName: 'Otto',
+        userId: '1024cf0f-9c88-4af3-8eb3-928a0a0b844e',
+        firstName: `Otto-Development-DB`,
         lastName: 'Jones',
         street: '124 Main St',
         city: 'Columbia',
@@ -24,7 +24,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        userId: uuidv4(),
+        userId: '15242016-6385-4ef3-9c9a-0ec1bf595515',
         firstName: 'Mike',
         lastName: 'Strange',
         street: '107 Juanita Dr',
@@ -40,7 +40,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        userId: uuidv4(),
+        userId: 'aa1b2829-6807-4d6e-b6bd-f5debeb93577',
         firstName: 'Debrah',
         lastName: 'Johnson',
         street: '14327 Old Dubbin Dr',
@@ -56,7 +56,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        userId: uuidv4(),
+        userId: 'cfbe9359-0b14-430a-ad6c-0aef1a36152f',
         firstName: 'Jordan',
         lastName: 'Peters',
         street: '12307 Kayak Dr',
@@ -72,7 +72,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        userId: uuidv4(),
+        userId: 'e857a4a6-b506-4e20-b214-1ce57773bc46',
         firstName: 'Some',
         lastName: 'Body',
         street: '5908 Queens Cove Ct',

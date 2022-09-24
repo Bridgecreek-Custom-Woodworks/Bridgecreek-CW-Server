@@ -94,7 +94,7 @@ const getAverageRating = async (review, req, res) => {
   try {
     let avgRating;
 
-    // If there are no reviews on a product when the user sets a review, this if statment prevents and error by set avg to the single user's review.
+    // If there are no reviews on a product when the user posts a review, then this ternary prevents and error by seting avg to the single user's review.
     avgRating =
       (await avg.length) === 0 ? review.dataValues.rating : avg[0].avgRating;
 
@@ -102,16 +102,6 @@ const getAverageRating = async (review, req, res) => {
     if (!avg[0] && req.type) {
       avgRating = 0;
     }
-
-    // console.log('Avg ==> ', avg[0]);
-
-    // console.log('Req ===>', req);
-
-    // console.log('AVG RATING ===> ', Number(avgRating).toFixed(2));
-
-    // console.log('Request ==>', req.type);
-
-    // console.log('Review ===> ', review.dataValues.productId);
 
     const number = Number(avgRating).toFixed(2);
 
@@ -130,5 +120,7 @@ const getAverageRating = async (review, req, res) => {
 Reviews.afterDestroy(getAverageRating);
 Reviews.afterUpdate(getAverageRating);
 Reviews.afterCreate(getAverageRating);
+Reviews.beforeBulkCreate(getAverageRating);
+Reviews.afterBulkCreate(getAverageRating);
 
 module.exports = Reviews;

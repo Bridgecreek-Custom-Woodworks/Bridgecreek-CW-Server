@@ -13,6 +13,7 @@ module.exports = {
         url: 'foo@bar.com',
         createdAt: '2022-09-01T21:43:17.243Z',
         updatedAt: '2022-09-01T21:43:17.243Z',
+        avgRating: 4.5,
       },
       {
         productId: '2c7e9ccd-a521-4505-b03f-1ff24614fad7',
@@ -24,6 +25,7 @@ module.exports = {
         url: 'foo@bar.com',
         createdAt: '2022-09-01T21:44:04.610Z',
         updatedAt: '2022-09-01T21:44:04.610Z',
+        avgRating: 3,
       },
       {
         productId: '33cf392c-087e-4143-858c-9e00c7c6a119',
@@ -35,6 +37,7 @@ module.exports = {
         url: 'foo@bar.com',
         createdAt: '2022-09-01T21:44:04.610Z',
         updatedAt: '2022-09-01T21:44:04.610Z',
+        avgRating: 5,
       },
       {
         productId: '68c70732-98ff-40cc-86ce-04ceef2eb623',
@@ -46,6 +49,7 @@ module.exports = {
         url: 'foo@bar.com',
         createdAt: '2022-09-01T21:44:04.610Z',
         updatedAt: '2022-09-01T21:44:04.610Z',
+        avgRating: 0,
       },
       {
         productId: '700b2eb1-3de0-4d9d-a0b7-a9d48c67f1ac',
@@ -57,6 +61,7 @@ module.exports = {
         url: 'foo@bar.com',
         createdAt: '2022-09-01T21:44:04.610Z',
         updatedAt: '2022-09-01T21:44:04.610Z',
+        avgRating: 0,
       },
     ]);
   },

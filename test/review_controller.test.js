@@ -149,7 +149,6 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
         expect(data.flat(Infinity)[1].rating).to.be.equal(1);
         expect(mockExpectedAvg).to.be.equal(2.33);
         expect(err).to.be.null;
-        console.log('Avg', productAvg);
 
         done();
       });

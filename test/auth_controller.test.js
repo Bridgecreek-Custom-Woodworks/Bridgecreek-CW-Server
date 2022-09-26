@@ -13,15 +13,60 @@ describe('PASSWORD RESET FLOW ==>', function () {
       where: { userId: user.userId },
     });
 
-    oldPasswordToken = getUser.dataValues.resetPasswordToken;
-
     originalPassword = 'admin1234';
     newPassword = 'admin4321';
   });
 
   let token;
-  let oldPasswordToken;
   let originalPassword;
+
+  it('Verify error if user is not found', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'otto@gmail.com',
+        password: user.password,
+      })
+      .end(function (err, res) {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.success).to.be.false;
+
+        done();
+      });
+  });
+
+  it('Verify error if password doesnt match', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({
+        email: user.email,
+        password: 'admin5050',
+      })
+      .end(function (err, res) {
+        expect(res.status).to.be.equal(401);
+        expect(res.body.success).to.be.false;
+
+        done();
+      });
+  });
+
+  it('Verify error if both email and/or password not being sent', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({
+        email: '',
+        password: '',
+      })
+      .end(function (err, res) {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.success).to.be.false;
+
+        done();
+      });
+  });
 
   it('Send reset password link to users email', (done) => {
     chai
@@ -42,6 +87,18 @@ describe('PASSWORD RESET FLOW ==>', function () {
         expect(usersEmail).to.include('.com');
         expect(err).to.be.null;
 
+        done();
+      });
+  });
+
+  it('Verify error if no user is found', (done) => {
+    chai
+      .request(server)
+      .put(`/api/v1/auth/resetpassword/BAD-RESET-TOKEN`)
+      .send({ password: newPassword })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.success).to.be.false;
         done();
       });
   });
@@ -69,7 +126,41 @@ describe('PASSWORD RESET FLOW ==>', function () {
       });
   });
 
-  it('Should change password', (done) => {
+  it('Verify error if passwords dont match', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/auth/updatepassword')
+      .set({ Authorization: `Bearer ${token}` })
+      .send({
+        currentPassword: newPassword,
+        newPassword: 'passwordOne',
+        newPassword2: 'passwordTwo',
+      })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body.success).to.be.false;
+
+        done();
+      });
+  });
+
+  it('Verify error if doesnt match', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/auth/updatepassword')
+      .set({ Authorization: `Bearer ${token}` })
+      .send({
+        currentPassword: newPassword,
+        newPassword: originalPassword,
+        newPassword2: originalPassword,
+        user: '',
+      })
+      .end((err, res) => {
+        done();
+      });
+  });
+
+  it('Should update password', (done) => {
     chai
       .request(server)
       .put('/api/v1/auth/updatepassword')

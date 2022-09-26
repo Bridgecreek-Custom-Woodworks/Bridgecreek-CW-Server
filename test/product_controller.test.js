@@ -4,7 +4,13 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const Products = require('../models/Product');
-const { user, product, newProduct, productKeys } = require('./utils');
+const {
+  user,
+  product,
+  newProduct,
+  productKeys,
+  badIdProduct,
+} = require('./utils');
 
 describe('PRODUCT WORKFLOW TEST ===>', function () {
   this.beforeEach(async () => {
@@ -40,6 +46,32 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.body.count).to.be.gte(5);
         expect(res.body.data[0]).to.have.all.keys(productKeys);
         expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Verify error of no product is found', (done) => {
+    chai
+      .request(server)
+      .get(`/api/v1/products/2c7e9ccd-a521-4505-b03f-1ff24614fad0`) // <== Bad product id
+      .end((err, res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res).to.have.a.property('error');
+
+        done();
+      });
+  });
+
+  it('Verify error of no product is found (Admin product update route)', (done) => {
+    chai
+      .request(server)
+      .put(`/api/v1/products/2c7e9ccd-a521-4505-b03f-1ff24614fad0/admin`) // <== Bad product id
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ productName: '' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(500);
+        expect(res).to.have.a.property('error');
 
         done();
       });

@@ -126,7 +126,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
       });
   });
 
-  it('Verify error if passwords dont match', (done) => {
+  it('Verify error if newPassword and newPassword2 dont match', (done) => {
     chai
       .request(server)
       .put('/api/v1/auth/updatepassword')
@@ -150,12 +150,13 @@ describe('PASSWORD RESET FLOW ==>', function () {
       .put('/api/v1/auth/updatepassword')
       .set({ Authorization: `Bearer ${token}` })
       .send({
-        currentPassword: newPassword,
+        currentPassword: '',
         newPassword: originalPassword,
         newPassword2: originalPassword,
-        user: '',
       })
       .end((err, res) => {
+        expect(res.status).to.be.equal(401);
+        expect(res.body.success).to.be.false;
         done();
       });
   });

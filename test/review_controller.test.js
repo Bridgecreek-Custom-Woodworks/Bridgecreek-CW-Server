@@ -71,6 +71,20 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Verify error if review is not found', (done) => {
+    chai
+      .request(server)
+      .get(
+        `/api/v1/reviews/product/review/2c7e9ccd-a521-4505-b03f-1ff24614fad0`
+      )
+      .end((err, res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res.body.success).to.be.false;
+
+        done();
+      });
+  });
+
   it('Should get a single review', (done) => {
     chai
       .request(server)

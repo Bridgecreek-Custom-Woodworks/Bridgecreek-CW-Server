@@ -16,6 +16,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   } else if (req.cookies.token) {
     token = req.cookies.token;
   }
+
   // Check to see if token exists
   if (!token) {
     return next(new ErrorResponse('Not authorized to access this route', 401));

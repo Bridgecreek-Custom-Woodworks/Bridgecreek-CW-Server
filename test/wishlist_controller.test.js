@@ -30,7 +30,6 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
       .end(function (err, res) {
         token = res.body.token;
         expect(res.status).to.be.equal(200);
-
         done();
       });
   });

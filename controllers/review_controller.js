@@ -72,7 +72,9 @@ exports.getReview = asyncHandler(async (req, res, next) => {
   });
 
   if (!review) {
-    return next(new ErrorResponse(`This product currently has no reviews `));
+    return next(
+      new ErrorResponse(`This product currently has no reviews`, 404)
+    );
   }
 
   res.status(200).json({
@@ -103,7 +105,9 @@ exports.getMyReviews = asyncHandler(async (req, res, next) => {
   });
 
   if (review.length === 0) {
-    return next(new ErrorResponse(`You have not reviewed any products yet.`));
+    return next(
+      new ErrorResponse(`You have not reviewed any products yet.`, 400)
+    );
   }
 
   const count = review.length;

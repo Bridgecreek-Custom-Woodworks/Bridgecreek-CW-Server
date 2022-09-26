@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>13/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/15</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -103,33 +103,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,37 +137,37 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const ErrorResponse = require('../utils/errorResponse');
 &nbsp;
-const errorHandler = <span class="fstat-no" title="function not covered" >(e</span>rr, req, res, next) =&gt; {
+const errorHandler = (err, req, res, next) =&gt; {
   // console.log(err);
-  let error = <span class="cstat-no" title="statement not covered" >{ ...err };</span>
-<span class="cstat-no" title="statement not covered" >  error.message = err.message;</span>
+  let error = { ...err };
+  error.message = err.message;
 &nbsp;
   // Check for Sequelize bad Primary Key (Bad Format)
-<span class="cstat-no" title="statement not covered" >  if (err.name === 'SequelizeDatabaseError' &amp;&amp; err.parent.code === '22P02') {</span>
-    const message = <span class="cstat-no" title="statement not covered" >'Resource not found';</span>
-<span class="cstat-no" title="statement not covered" >    error = new ErrorResponse(message, 404);</span>
+  if (err.name === 'SequelizeDatabaseError' &amp;&amp; err.parent.code === '22P02') {
+    const message = 'Resource not found';
+    error = new ErrorResponse(message, 404);
   }
 &nbsp;
   // Check for Sequelize duplicate field value
-<span class="cstat-no" title="statement not covered" >  if (</span>
+  if (
     err.name === 'SequelizeUniqueConstraintError' &amp;&amp;
     err.parent.code === '23505'
   ) {
-    let message = <span class="cstat-no" title="statement not covered" >Object.values(err.errors).map(<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >val.message)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    error = new ErrorResponse(message, 400);</span>
+    let message = Object.values(err.errors).map((val) =&gt; val.message);
+    error = new ErrorResponse(message, 400);
   }
 &nbsp;
   // console.log(err.name)
 &nbsp;
   // Sequelize Validation Error
-<span class="cstat-no" title="statement not covered" >  if (err.name === 'SequelizeValidationError') {</span>
-    const message = <span class="cstat-no" title="statement not covered" >Object.values(err.errors).map(<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >val.message)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    error = new ErrorResponse(message, 400);</span>
+  if (err.name === 'SequelizeValidationError') {
+    const message = Object.values(err.errors).map((val) =&gt; val.message);
+    error = new ErrorResponse(message, 400);
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  res</span>
+  res
     .status(error.statusCode || 500)
-    .json({ success: false, error: error.message || 'Server Error' });
+    .json({ success: false, error: error.message || <span class="branch-1 cbranch-no" title="branch not covered" >'Server Error' </span>});
 };
 &nbsp;
 module.exports = errorHandler;
@@ -178,7 +178,7 @@ module.exports = errorHandler;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-09-26T02:06:03.369Z
+                at 2022-09-26T22:40:18.668Z
             </div>
         <script src="../prettify.js"></script>
         <script>

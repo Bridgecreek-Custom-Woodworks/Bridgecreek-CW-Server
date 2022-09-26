@@ -203,3 +203,51 @@ exports.reviewedProduct = {
   updatedAt: '2022-09-01T21:44:04.610Z',
   avgRating: 3,
 };
+
+//  ERROR HANDLING AND AUTHORIZATION INFO ****************************************************
+
+exports.badIdProduct = {
+  productId: '1ee44e7e-6a3a-4a6d-9626-32d4447ef25fTEST', // <== Bad Id for test
+  productName: 'Cutting Board',
+  price: 45,
+  weight: 12,
+  dementions: '1.5ft X 2ft',
+  description: 'Wooded cutting board',
+  url: 'foo@bar.com',
+  createdAt: '2022-09-01T21:43:17.243Z',
+  updatedAt: '2022-09-01T21:43:17.243Z',
+};
+
+exports.badValidationProduct = {
+  productId: '6db8cfdd-ddaf-4165-be30-6eb55107a0b8',
+  productName: 'New Product',
+  price: 119,
+  weight: 24,
+  dementions: '1.5ft X 2ft',
+  description: 'Some new product description',
+  url: 'foo@bar', // <== Bad url format
+  createdAt: '2022-09-01T21:43:17.243Z',
+  updatedAt: '2022-09-01T21:43:17.243Z',
+};
+
+exports.badToken = {
+  token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMDI0Y2YwZi05Yzg4LTRhZjMtOGViMy05MjhhMGEwYjg0NGUiLCJpYXQiOjE2NjQyMTk3NjUsImV4cCI6MTY2NjgxMTc2NX0.BEWxEXwufLSCriwlL4ogqr-WjY1ufTjuD_v5j9c9tC',
+};
+
+exports.unauthorizedUser = {
+  userId: 'e857a4a6-b506-4e20-b214-1ce57773bc46',
+  firstName: 'Some',
+  lastName: 'Body',
+  street: '5908 Queens Cove Ct',
+  city: 'Charlotte',
+  state: 'NC',
+  homePhone: '555-342-9236',
+  cellPhone: '555-420-1583',
+  password: 'admin1234',
+  zipCode: '28217',
+  email: 'somebody@gmail.com',
+  role: 'user',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};

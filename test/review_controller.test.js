@@ -118,6 +118,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       .end((err, res) => {
         const { success, data } = res.body;
         const updatedCount = count + 1;
+        const mockExpectedAvg = productAvg + 0.67; // Takes the current product avg and adds the expected dif
 
         expect(res.status).to.be.equal(200);
         expect(success).to.be.true;
@@ -125,6 +126,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
         expect(data).to.have.all.keys(addReviewKeys);
         expect(updatedCount).to.be.equal(6);
         expect(err).to.be.null;
+        expect(mockExpectedAvg).to.be.equal(3.67);
 
         done();
       });
@@ -138,14 +140,16 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       .send({ comments: 'Terrible Product', rating: 1 })
       .end((err, res) => {
         const { success, data } = res.body;
+        const mockExpectedAvg = productAvg - 1.34; // Takes the current product avg and adds the expected dif
 
         expect(res.status).to.be.equal(200);
         expect(success).to.be.true;
         expect(data).to.be.a('array');
         expect(data.flat(Infinity)[1].comments).to.be.equal('Terrible Product');
         expect(data.flat(Infinity)[1].rating).to.be.equal(1);
-        expect(productAvg).to.be.equal(3.67); // <== Average after the previous test case
+        expect(mockExpectedAvg).to.be.equal(2.33);
         expect(err).to.be.null;
+        console.log('Avg', productAvg);
 
         done();
       });
@@ -158,12 +162,13 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const { success, msg } = res.body;
+        const mockExpectedAvg = productAvg + 1.34; // Takes the current product avg and adds the expected dif
 
         expect(res.status).to.be.equal(200);
         expect(success).to.be.true;
         expect(res.body).to.be.a('object');
         expect(res.body.count).to.be.equal(2);
-        expect(productAvg).to.be.equal(2.33); // <== Average after the previous test case
+        expect(mockExpectedAvg).to.be.equal(3.67);
         expect(msg).to.be.equal('Your review has been deleted');
         expect(err).to.be.null;
         done();

@@ -48,6 +48,7 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
         expect(res.body.data[0].Products[0].Wishlists.productId).to.be.a(
           'string'
         );
+        expect(err).to.be.null;
 
         done();
       });
@@ -64,6 +65,7 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(Wishlists).to.be.a('object');
         expect(Wishlists).to.have.all.keys(wishlistKeys);
+        expect(err).to.be.null;
 
         done();
       });
@@ -84,6 +86,7 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
         expect(productId).to.be.a('string');
         expect(userId).to.be.equal(user.userId);
         expect(productId).to.be.equal(newWishlistItem.productId);
+        expect(err).to.be.null;
 
         done();
       });
@@ -101,6 +104,7 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
         expect(res.body.success).to.be.true;
         expect(res.body.msg).to.include(newWishlistItem.productId);
         expect(deletedCount).to.be.equal(2);
+        expect(err).to.be.null;
 
         done();
       });

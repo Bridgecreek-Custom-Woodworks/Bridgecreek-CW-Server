@@ -40,6 +40,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
         expect(passwordExpire).to.be.a('string');
         expect(usersEmail).to.include('@');
         expect(usersEmail).to.include('.com');
+        expect(err).to.be.null;
 
         done();
       });
@@ -62,6 +63,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
         expect(oldPassword).to.not.be.equal(newPassword);
         expect(resetPasswordToken).to.be.null;
         expect(resetPasswordExpire).to.be.null;
+        expect(err).to.be.null;
 
         done();
       });
@@ -86,6 +88,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
         expect(res.body).to.not.have.property('error');
         expect(oldPassword).to.not.be.equal(newPassword);
         expect(res.body.token.length).to.be.equal(192);
+        expect(err).to.be.null;
 
         done();
       });

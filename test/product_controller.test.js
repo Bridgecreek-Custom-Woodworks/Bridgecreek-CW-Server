@@ -39,6 +39,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.body.data).to.be.an('array');
         expect(res.body.count).to.be.gte(5);
         expect(res.body.data[0]).to.have.all.keys(productKeys);
+        expect(err).to.be.null;
 
         done();
       });
@@ -53,6 +54,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.productId).to.be.equal(product.productId);
         expect(res.body.data).to.have.all.keys(productKeys);
+        expect(err).to.be.null;
 
         done();
       });
@@ -81,6 +83,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(data.description).to.be.equal(newProduct.description);
         expect(data.dementions).to.be.equal(newProduct.dementions);
         expect(data.url).to.be.equal(newProduct.url);
+        expect(err).to.be.null;
 
         done();
       });
@@ -97,6 +100,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.productName).to.be.equal('Updated Product');
         expect(res.body.data.price).to.be.equal('20.2');
+        expect(err).to.be.null;
 
         done();
       });
@@ -114,6 +118,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.body.success).to.be.true;
         expect(res.body.msg).to.include(newProduct.productId);
         expect(deletedCount).to.be.equal(5);
+        expect(err).to.be.null;
 
         done();
       });

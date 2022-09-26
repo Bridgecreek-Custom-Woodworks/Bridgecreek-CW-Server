@@ -150,3 +150,56 @@ exports.newWishlistItem = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+
+//  REVIEWS INFO ****************************************************
+
+exports.reviewKeys = ['firstName', 'lastName', 'Reviews'];
+
+exports.singleReviewKeys = [
+  'reviewId',
+  'productId',
+  'comments',
+  'rating',
+  'updatedAt',
+  'createdAt',
+  'Product',
+  'User',
+];
+
+exports.myReviewKeys = [
+  'updatedAt',
+  'createdAt',
+  'comments',
+  'rating',
+  'Product',
+];
+
+exports.addReviewKeys = [
+  'userId',
+  'reviewId',
+  'productId',
+  'comments',
+  'rating',
+  'updatedAt',
+  'createdAt',
+];
+
+exports.review = {
+  reviewId: 'f4019e62-f3c7-44fc-9b0e-bf308b1b46bb',
+  productId: '2c7e9ccd-a521-4505-b03f-1ff24614fad7',
+  comments: 'I love my new coasters. The wood is so beautiful!!',
+  rating: 5,
+};
+
+exports.reviewedProduct = {
+  productId: '2c7e9ccd-a521-4505-b03f-1ff24614fad7',
+  productName: 'Coasters',
+  price: 15,
+  weight: 12,
+  dementions: '.5ft X .5ft',
+  description: 'Wooded coaster',
+  url: 'foo@bar.com',
+  createdAt: '2022-09-01T21:44:04.610Z',
+  updatedAt: '2022-09-01T21:44:04.610Z',
+  avgRating: 3,
+};

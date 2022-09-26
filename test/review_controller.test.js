@@ -118,7 +118,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       .end((err, res) => {
         const { success, data } = res.body;
         const updatedCount = count + 1;
-        const mockExpectedAvg = productAvg + 0.67;
+        const mockExpectedAvg = productAvg + 0.67; // Takes the current product avg and adds the expected dif
 
         expect(res.status).to.be.equal(200);
         expect(success).to.be.true;
@@ -140,7 +140,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       .send({ comments: 'Terrible Product', rating: 1 })
       .end((err, res) => {
         const { success, data } = res.body;
-        const mockExpectedAvg = productAvg - 1.34;
+        const mockExpectedAvg = productAvg - 1.34; // Takes the current product avg and adds the expected dif
 
         expect(res.status).to.be.equal(200);
         expect(success).to.be.true;
@@ -162,7 +162,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const { success, msg } = res.body;
-        const mockExpectedAvg = productAvg + 1.34;
+        const mockExpectedAvg = productAvg + 1.34; // Takes the current product avg and adds the expected dif
 
         expect(res.status).to.be.equal(200);
         expect(success).to.be.true;

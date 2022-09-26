@@ -30,6 +30,8 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body).to.be.a('object');
         expect(err).to.be.equal(null);
+        expect(err).to.be.null;
+
         done();
       });
   });
@@ -46,6 +48,7 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.body.msg).to.be.a('string');
         expect(userId[5].length).to.be.equal(36);
         expect(userId[5]).to.be.equal(user.userId);
+        expect(err).to.be.null;
 
         done();
       });
@@ -57,11 +60,13 @@ describe('USER WORKFLOW TEST ===>', function () {
       .get('/api/v1/users/admin/allusers')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
+        count = res.body.data.length;
+
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
         expect(res.body.data[0]).to.be.an('object');
         expect(res.body.data.length).to.be.gte(5);
-        count = res.body.data.length;
+        expect(err).to.be.null;
 
         done();
       });
@@ -77,6 +82,7 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.userId).to.be.equal(user.userId);
         expect(res.body.data).to.have.all.keys(userKeys);
+        expect(err).to.be.null;
 
         done();
       });
@@ -95,6 +101,7 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.body.data.password.length).to.be.equal(60);
         expect(res.body.data.email).to.include('@');
         expect(res.body.data.email).to.include(['.com']);
+        expect(err).to.be.null;
 
         done();
       });
@@ -111,6 +118,7 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.firstName).to.be.equal('Sam-Updated');
         expect(res.body.data.city).to.be.equal('Charlotte-Updated');
+        expect(err).to.be.null;
 
         done();
       });
@@ -127,6 +135,7 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.body.success).to.be.true;
         expect(res.body.msg).to.include(newUser.userId);
         expect(deletedCount).to.be.equal(5);
+        expect(err).to.be.null;
 
         done();
       });

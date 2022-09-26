@@ -43,17 +43,29 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get single review
-// @route GET /api/v1/product/review/:productId
+// @route GET /api/v1/reviews/product/review/:productId
 // access Public
 exports.getReview = asyncHandler(async (req, res, next) => {
   const review = await Reviews.findOne({
-    attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
+    attributes: [
+      'reviewId',
+      'productId',
+      'updatedAt',
+      'createdAt',
+      'comments',
+      'rating',
+    ],
 
     where: { productId: req.params.productId },
     include: [
       {
         model: Product,
         attributes: ['productId', 'productName', 'price', 'avgRating'],
+        required: true,
+      },
+      {
+        model: User,
+        attributes: ['firstName', 'lastName'],
         required: true,
       },
     ],
@@ -70,7 +82,7 @@ exports.getReview = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get users reviews
-// @route GET /api/v1/product/myreviews
+// @route GET /api/v1/reviews/product/myreviews
 // access Private
 exports.getMyReviews = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -104,20 +116,20 @@ exports.getMyReviews = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Add review to product
-// @route POST /api/v1/review
+// @route POST /api/v1/reviews
 // access Private
 exports.addReview = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user.userId;
 
   const review = await Reviews.create(req.body);
 
-  const count = review.length;
+  const count = await Reviews.count();
 
   res.status(200).json({ success: true, count, data: review });
 });
 
 // @desc Update review
-// @route PUT /api/v1/review/:productId
+// @route PUT /api/v1/reviews/:productId
 // access Private
 exports.updateReview = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -151,12 +163,12 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
     success: true,
     count,
     data: review,
-    review: 'Your review has been updated',
+    msg: 'Your review has been updated',
   });
 });
 
 // @desc Remove review from product
-// @route DELETE /api/v1/review
+// @route DELETE /api/v1/reviews/:productId
 // access Private
 exports.removeReview = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -190,6 +202,6 @@ exports.removeReview = asyncHandler(async (req, res, next) => {
     success: true,
     count,
     data: review,
-    review: 'Your review has been deleted',
+    msg: 'Your review has been deleted',
   });
 });

@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
+const Products = require('../models/Product');
+const CartItem = require('../models/CartItem');
 
 const Carts = sequelize.define(
   'Carts',
@@ -36,5 +38,19 @@ const Carts = sequelize.define(
     modelName: 'Carts',
   }
 );
+
+// sequelize.sync({ force: true });
+
+Carts.belongsToMany(Products, {
+  through: 'CartItems',
+  foreignKey: 'cartId',
+  otherKey: 'productId',
+});
+
+Products.belongsToMany(Carts, {
+  through: 'CartItems',
+  foreignKey: 'productId',
+  otherKey: 'cartId',
+});
 
 module.exports = Carts;

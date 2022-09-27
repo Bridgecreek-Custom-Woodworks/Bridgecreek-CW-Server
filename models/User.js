@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const Wishlist = require('../models/Wishlist');
 const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
+const Cart = require('../models/Cart');
 const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
 
@@ -167,6 +168,9 @@ Products.belongsToMany(User, {
 
 User.hasMany(Reviews, { foreignKey: 'userId' });
 Reviews.belongsTo(User, { foreignKey: 'userId' });
+
+User.hasOne(Cart, { foreignKey: 'userId' });
+Cart.belongsTo(User, { foreignKey: 'userId' });
 
 // sequelize.sync({ alter: true });
 // sequelize.sync({ force: true });

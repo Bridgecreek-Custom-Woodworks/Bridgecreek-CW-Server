@@ -65,15 +65,14 @@ const CartItem = sequelize.define(
       type: Sequelize.DATE,
     },
   },
-
   {
     indexes: [
-        {
-            unique: true, 
-            fields: ['productId', 'cartId']
-        }
-    ]
-  }
+      {
+        unique: true,
+        fields: ['productId', 'cartId'],
+      },
+    ],
+  },
   {
     sequelize,
     modelName: 'CartItem',

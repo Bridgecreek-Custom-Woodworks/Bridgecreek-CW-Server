@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
-const User = require('../models/User');
 const Reviews = require('./Reviews');
 
 const Product = sequelize.define(

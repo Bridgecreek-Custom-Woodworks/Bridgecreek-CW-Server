@@ -10,13 +10,14 @@ dotenv.config({ path: './config/config.env' });
 // Load env vars
 const PORT = process.env.PORT || 5000;
 
+const sequelize = require('./config/db');
+
 const users = require('./routes/users_routes');
 const auth = require('./routes/auth_routes');
 const products = require('./routes/products_routes');
 const wishlist = require('./routes/wishlist_routes');
 const admin = require('./routes/admin_routes');
 const reviews = require('./routes/review_routes');
-const sequelize = require('./config/db');
 
 const app = express();
 

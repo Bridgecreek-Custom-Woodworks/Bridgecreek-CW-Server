@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
 
-const CartItem = sequelize.define(
-  'CartItem',
+const CartItems = sequelize.define(
+  'CartItems',
   {
     cartItemId: {
       type: Sequelize.INTEGER,
@@ -47,13 +47,13 @@ const CartItem = sequelize.define(
           args: [5],
           msg: 'Quantity can not be greater than 5',
         },
-
-        discount: {
-          type: Sequelize.INTEGER,
-          allowNull: true,
-          unique: false,
-        },
       },
+    },
+
+    discount: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      unique: false,
     },
 
     updatedAt: {
@@ -75,8 +75,8 @@ const CartItem = sequelize.define(
   },
   {
     sequelize,
-    modelName: 'CartItem',
+    modelName: 'CartItems',
   }
 );
 
-module.exports = CartItem;
+module.exports = CartItems;

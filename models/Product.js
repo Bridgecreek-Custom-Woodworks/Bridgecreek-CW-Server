@@ -75,6 +75,7 @@ Product.hasMany(Reviews, {
   onDelete: 'CASCADE',
   hooks: true,
 });
+
 Reviews.belongsTo(Product, { foreignKey: 'productId' });
 
 module.exports = Product;

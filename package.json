@@ -4,7 +4,7 @@
   "description": "Bridgecreek Custom Wood API",
   "main": "server.js",
   "scripts": {
-    "mocha:test": "cross-env NODE_ENV=test mocha --exit",
+    "mocha:test": "cross-env NODE_ENV=test mocha --watch",
     "mocha:dev": "cross-env NODE_ENV=development mocha --exit",
     "start-production": "cross-env NODE_ENV=production node server.js",
     "start-dev": "cross-env NODE_ENV=development nodemon server.js",

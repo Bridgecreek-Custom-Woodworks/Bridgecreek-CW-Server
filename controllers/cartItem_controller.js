@@ -33,7 +33,7 @@ exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
 // access Private/Guest
 exports.createCartItem = asyncHandler(async (req, res, next) => {
   req.body.productId = req.params.productId;
-  req.body.cartId = '2ee6c6f6-3445-4985-821c-e65ba478ad71';
+  req.body.cartId = '68e182fe-128d-4504-aa9b-0cb70af43c1e'; // <== REMOVE AFTER TESTING **
 
   const cartItem = await CartItem.create(req.body);
 

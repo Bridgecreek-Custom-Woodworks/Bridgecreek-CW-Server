@@ -34,7 +34,7 @@ app.use('/api/v1/products', products);
 app.use('/api/v1/wishlist', wishlist);
 app.use('/api/v1/admin', admin);
 app.use('/api/v1/reviews', reviews);
-app.use('/api/v1/cart', cart);
+app.use('/api/v1/carts', cart);
 
 // if (process.env.NODE_ENV === 'development') {
 //   sequelize.sync();

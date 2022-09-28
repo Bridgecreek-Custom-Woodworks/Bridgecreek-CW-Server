@@ -1,15 +1,34 @@
 const Cart = require('../models/Cart');
+const User = require('../models/User');
+const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
-const User = require('../models/User');
-const CartItems = require('../models/CartItem');
-const Products = require('../models/Product');
 
 // @desc Get all carts
 // @route GET /api/v1/carts/admin/allcarts
 // access Private/Admin
 exports.getAllCarts = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findAll();
+  const cart = await Cart.findAll({
+    include: [
+      {
+        model: User,
+        required: true,
+      },
+      {
+        model: Products,
+        through: {
+          attributes: [
+            'cartItemId',
+            'quantity',
+            'discount',
+            'updatedAt',
+            'createdAt',
+          ],
+        },
+        required: true,
+      },
+    ],
+  });
 
   const count = await Cart.count();
 

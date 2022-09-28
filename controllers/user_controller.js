@@ -23,11 +23,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     where: { userId: req.user.userId },
   });
 
-  // IF PASSWORD IS NEEDED TO BE RETURNED THEN THIS CAN BE UNCOMMENTED
-  // const user = await Users.scope('withPassword').findOne({
-  //   where: { userId: req.params.userId },
-  // })
-
   if (!user) {
     return next(
       new ErrorResponse(

@@ -12,7 +12,7 @@ router.use('/admin', cartAdminRouter);
 
 // Route = /api/v1/carts
 
-router.get('/mycart/:cartId', protect, getMyCart);
-router.post('/', createCart);
+router.get('/mycart', protect, getMyCart);
+router.post('/', protect, createCart);
 
 module.exports = router;

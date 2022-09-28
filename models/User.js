@@ -123,7 +123,7 @@ const User = sequelize.define(
       validate: {
         isIn: {
           args: [['user']],
-          msg: 'User can only have a role of user or sales rep',
+          msg: 'User can only have a role of user',
         },
       },
     },

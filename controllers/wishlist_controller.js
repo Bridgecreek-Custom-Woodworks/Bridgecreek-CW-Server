@@ -95,12 +95,10 @@ exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
     },
   });
 
-  res
-    .status(200)
-    .json({
-      success: true,
-      count,
-      data: wishlistItem,
-      msg: `Wishlist Item with the id of ${req.params.productId} was deleted`,
-    });
+  res.status(200).json({
+    success: true,
+    count,
+    data: wishlistItem,
+    msg: `Wishlist Item with the id of ${req.params.productId} was deleted`,
+  });
 });

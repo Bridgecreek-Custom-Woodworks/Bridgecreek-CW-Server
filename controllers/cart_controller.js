@@ -12,7 +12,6 @@ exports.getAllCarts = asyncHandler(async (req, res, next) => {
     include: [
       {
         model: User,
-        required: true,
       },
       {
         model: Products,
@@ -25,7 +24,6 @@ exports.getAllCarts = asyncHandler(async (req, res, next) => {
             'createdAt',
           ],
         },
-        required: true,
       },
     ],
   });
@@ -39,8 +37,8 @@ exports.getAllCarts = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/carts/mycart/:cartId
 // access Private/Guest
 exports.getMyCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({
-    where: { cartId: req.params.cartId }, // <== Might need to add Op and userId ***
+  const cart = await Cart.findAll({
+    where: { userId: req.user.userId }, // <== Might need to add Op and cart status ***
     include: [
       {
         model: User,
@@ -71,6 +69,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/carts
 // access Private/Guest
 exports.createCart = asyncHandler(async (req, res, next) => {
+  req.body.userId = req.user.userId;
   const cart = await Cart.create(req.body);
 
   if (!cart) {

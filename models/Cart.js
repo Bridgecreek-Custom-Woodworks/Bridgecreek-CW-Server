@@ -45,12 +45,14 @@ Carts.belongsToMany(Products, {
   through: 'CartItems',
   foreignKey: 'cartId',
   otherKey: 'productId',
+  onDelete: 'NO ACTION',
 });
 
 Products.belongsToMany(Carts, {
   through: 'CartItems',
   foreignKey: 'productId',
   otherKey: 'cartId',
+  onDelete: 'NO ACTION',
 });
 
 module.exports = Carts;

@@ -15,6 +15,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // access Private
 exports.login = asyncHandler(async (req, res, next) => {
   const { password, email } = req.body;
+
   if (!email || !password) {
     return next(
       new ErrorResponse('Please enter a valid email and password', 400)

@@ -13,10 +13,13 @@ const { getAllReviews } = require('../controllers/review_controller');
 
 const { protect, authorize } = require('../middleware/auth_middleware');
 
+const { getAllCarts } = require('../controllers/cart_controller');
+
 const router = express.Router({ mergeParams: true });
 
 // Route  = /api/v1/admin
 
+router.get('/allcarts', protect, authorize('admin'), getAllCarts);
 router.get('/allreviews', protect, authorize('admin'), getAllReviews);
 router.get('/allwishlist', protect, authorize('admin'), getAllWishlist);
 router.get('/allusers', protect, authorize('admin'), getAllUsers);

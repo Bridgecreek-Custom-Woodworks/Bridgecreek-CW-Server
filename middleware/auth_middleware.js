@@ -1,7 +1,8 @@
+const Users = require('../models/User');
+const Cart = require('../models/Cart');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('./async_middleware');
 const ErrorResponse = require('../utils/errorResponse');
-const Users = require('../models/User');
 
 // Authentication for protected routes
 
@@ -24,8 +25,13 @@ exports.protect = asyncHandler(async (req, res, next) => {
   try {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await Users.findOne({ where: { userId: decoded.userId } });
-    // console.log(req.user)
+
+    // Adding user to the req object for all protected routes
+    req.user = await Users.findOne({
+      where: { userId: decoded.userId },
+      include: [{ model: Cart }],
+    });
+
     next();
   } catch (error) {
     return next(new ErrorResponse('Not authorized to access this route', 401));

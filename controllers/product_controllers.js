@@ -22,7 +22,7 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
   if (!product) {
     return next(
       new ErrorResponse(
-        `Product not found with the id of ${req.params.productId} `,
+        `Product not found with the id of ${req.params.productId}`,
         404
       )
     );

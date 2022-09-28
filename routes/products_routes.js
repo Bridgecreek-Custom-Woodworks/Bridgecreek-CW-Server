@@ -4,16 +4,14 @@ const {
   getProduct,
 } = require('../controllers/product_controllers');
 
-const { protect } = require('../middleware/auth_middleware');
-
 // Include other resource routers
-const productRouter = require('./admin_routes');
+const productAdminRouter = require('./admin_routes');
 
 const router = express.Router();
 
 // Re-route into other resource routers (routes/admin_route)
-router.use('/admin', productRouter);
-router.use('/:productId', productRouter);
+router.use('/admin', productAdminRouter);
+router.use('/:productId', productAdminRouter);
 
 // Route = /api/v1/products
 router.get('/', getAllProducts);

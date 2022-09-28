@@ -25,7 +25,7 @@ const CartItems = sequelize.define(
 
     cartId: {
       type: Sequelize.UUID,
-      allowNull: true,
+      allowNull: false,
       unique: false,
       references: {
         type: Sequelize.UUID,
@@ -65,14 +65,14 @@ const CartItems = sequelize.define(
       type: Sequelize.DATE,
     },
   },
-  {
-    indexes: [
-      {
-        unique: true,
-        fields: ['productId', 'cartId'],
-      },
-    ],
-  },
+  // {
+  //   indexes: [
+  //     {
+  //       unique: true,
+  //       fields: ['productId', 'cartId'],
+  //     },
+  //   ],
+  // },
   {
     sequelize,
     modelName: 'CartItems',

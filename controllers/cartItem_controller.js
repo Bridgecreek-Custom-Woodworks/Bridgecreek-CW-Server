@@ -1,4 +1,5 @@
 const CartItem = require('../models/CartItem');
+const Carts = require('../models/Cart');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 
@@ -33,7 +34,15 @@ exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
 // access Private/Guest
 exports.createCartItem = asyncHandler(async (req, res, next) => {
   req.body.productId = req.params.productId;
-  req.body.cartId = '68e182fe-128d-4504-aa9b-0cb70af43c1e'; // <== REMOVE AFTER TESTING **
+  req.body.userId = req.user.userId;
+
+  if (req.user.Cart === null) {
+    req.body.userId = await Carts.create(req.body);
+  } else {
+    req.body.cartId = req.user.Cart.dataValues.cartId;
+  }
+
+  console.log(req.body.cartId);
 
   const cartItem = await CartItem.create(req.body);
 

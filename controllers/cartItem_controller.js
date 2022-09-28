@@ -42,8 +42,6 @@ exports.createCartItem = asyncHandler(async (req, res, next) => {
     req.body.cartId = req.user.Cart.dataValues.cartId;
   }
 
-  console.log(req.body.cartId);
-
   const cartItem = await CartItem.create(req.body);
 
   if (!cartItem) {

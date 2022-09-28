@@ -34,7 +34,7 @@ exports.getAllCarts = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get a single cart
-// @route GET /api/v1/carts/mycart/:cartId
+// @route GET /api/v1/carts/mycart
 // access Private/Guest
 exports.getMyCart = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findAll({

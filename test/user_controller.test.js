@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 const sinon = require('sinon');
 const server = require('../server');
 const User = require('../models/User');
-const { user, newUser, hashedPassword, userKeys } = require('./utils');
+const { user, newUser, userKeys } = require('./utils');
 
 describe('USER WORKFLOW TEST ===>', function () {
   this.beforeEach(async () => {

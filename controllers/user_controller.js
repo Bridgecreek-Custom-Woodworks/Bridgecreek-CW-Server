@@ -66,9 +66,9 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     where: {
       userId: req.user.userId,
     },
-
     returning: true,
   });
+
   if (!user) {
     return next(
       new ErrorResponse(`User not found with the id of ${req.user.userId}`, 404)

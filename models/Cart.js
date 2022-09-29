@@ -21,8 +21,21 @@ const Carts = sequelize.define(
         model: 'Users',
         key: 'userId',
       },
-      onDelete: 'cascade',
+      onDelete: 'NO ACTION',
     },
+    cartStatus: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: false,
+      defaultValue: 'New',
+      validate: {
+        isIn: {
+          args: [['New', 'Checkout', 'Paid', 'Completed']],
+          msg: 'Cart status can only have a values of New, Checkout, Paid, Completed',
+        },
+      },
+    },
+
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

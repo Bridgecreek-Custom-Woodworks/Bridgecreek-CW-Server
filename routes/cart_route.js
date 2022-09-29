@@ -1,5 +1,9 @@
 const express = require('express');
-const { createCart, getMyCart } = require('../controllers/cart_controller');
+const {
+  createCart,
+  getMyCart,
+  updateMyCart,
+} = require('../controllers/cart_controller');
 const { protect } = require('../middleware/auth_middleware');
 
 // Include other resource routers
@@ -14,5 +18,6 @@ router.use('/admin', cartAdminRouter);
 
 router.get('/mycart', protect, getMyCart);
 router.post('/', protect, createCart);
+router.put('/mycart/update/:cartId', protect, updateMyCart);
 
 module.exports = router;

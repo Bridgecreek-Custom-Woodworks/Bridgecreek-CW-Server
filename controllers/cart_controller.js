@@ -67,7 +67,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  if (!cart) {
+  if (!cart || cart.length === 0) {
     return next(new ErrorResponse(`Your cart is currently empty`, 404));
   }
 

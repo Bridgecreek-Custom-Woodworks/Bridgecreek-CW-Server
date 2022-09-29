@@ -24,6 +24,12 @@ const Carts = sequelize.define(
       },
       onDelete: 'NO ACTION',
     },
+    total: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+      allowNull: false,
+      unique: false,
+    },
     cartStatus: {
       type: Sequelize.STRING,
       allowNull: false,

@@ -63,6 +63,7 @@ exports.userKeys = [
   'role',
   'updatedAt',
   'userId',
+  'activeStatus',
 ];
 
 exports.hashedPassword =

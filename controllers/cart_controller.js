@@ -3,6 +3,7 @@ const User = require('../models/User');
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
+const { Op } = require('sequelize');
 
 // @desc Get all carts
 // @route GET /api/v1/carts/admin/allcarts
@@ -38,7 +39,12 @@ exports.getAllCarts = asyncHandler(async (req, res, next) => {
 // access Private/Guest
 exports.getMyCart = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findAll({
-    where: { userId: req.user.userId }, // <== Might need to add Op and cart status ***
+    where: {
+      [Op.and]: [
+        { userId: req.user.userId },
+        { cartStatus: ['New', 'Checkout'] },
+      ],
+    },
     include: [
       {
         model: User,
@@ -60,12 +66,17 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
     ],
   });
 
+  if (!cart) {
+    return next(new ErrorResponse(`Your cart is currently empty`, 404));
+  }
+
   res.status(200).json({ success: true, data: cart });
 });
 
 // @desc Create cart
 // @route POST /api/v1/carts
 // access Private/Guest
+// THIS ROUTE MAT NOT BE NECESSARY AS THE CART IS CREATED AT THE TIME THE CUSTOMER ADDS A PRODUCT.
 exports.createCart = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user.userId;
   const cart = await Cart.create(req.body);
@@ -86,7 +97,10 @@ exports.createCart = asyncHandler(async (req, res, next) => {
 // access Private/Guest
 exports.updateMyCart = asyncHandler(async (req, res, next) => {
   const updatedCart = await Cart.update(req.body, {
-    where: { cartId: req.params.cartId },
+    where: {
+      cartId: req.params.cartId,
+    },
+    returning: true,
   });
 
   if (!updatedCart) {
@@ -98,4 +112,31 @@ exports.updateMyCart = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({ success: true, data: updatedCart });
+});
+
+// @desc Delete cart
+// @route DELETE /api/v1/admin/deletecart/:cartId
+// access Private/Admin
+exports.deleteCart = asyncHandler(async (req, res, next) => {
+  const cart = await Cart.findOne({
+    where: { cartId: req.params.cartId },
+  });
+
+  if (!cart) {
+    return next(
+      new ErrorResponse(
+        `The cart with the id of ${req.params.cartId} has already been removed`,
+        404
+      )
+    );
+  }
+
+  await cart.removeCartItems(req.params.cartId);
+
+  cart.destroy();
+
+  res.status(200).json({
+    success: true,
+    msg: `Cart with the id ${req.params.cartId} was deleted`,
+  });
 });

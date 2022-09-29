@@ -15,6 +15,8 @@ const { protect, authorize } = require('../middleware/auth_middleware');
 
 const { getAllCarts } = require('../controllers/cart_controller');
 
+const { deleteCart } = require('../controllers/cart_controller');
+
 const router = express.Router({ mergeParams: true });
 
 // Route  = /api/v1/admin
@@ -26,5 +28,6 @@ router.get('/allusers', protect, authorize('admin'), getAllUsers);
 router.post('/', protect, authorize('admin'), createProducts);
 router.put('/admin', protect, authorize('admin'), updateProduct);
 router.delete('/admin', protect, authorize('admin'), deleteProduct);
+router.delete('/deletecart/:cartId', protect, authorize('admin'), deleteCart);
 
 module.exports = router;

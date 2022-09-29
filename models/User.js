@@ -127,6 +127,17 @@ const User = sequelize.define(
         },
       },
     },
+    activeStatus: {
+      type: Sequelize.STRING,
+      defaultValue: 'not active',
+      allowNull: false,
+      unique: false,
+      validate: {
+        isIn: {
+          args: [['not active', 'pending', 'active']],
+        },
+      },
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -155,6 +166,9 @@ const User = sequelize.define(
   }
 );
 
+// sequelize.sync({ alter: true });
+// sequelize.sync({ force: true });
+
 User.belongsToMany(Products, {
   through: 'Wishlists',
   foreignKey: 'userId',
@@ -171,9 +185,6 @@ Reviews.belongsTo(User, { foreignKey: 'userId' });
 
 User.hasOne(Cart, { foreignKey: 'userId' });
 Cart.belongsTo(User, { foreignKey: 'userId' });
-
-// sequelize.sync({ alter: true });
-// sequelize.sync({ force: true });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

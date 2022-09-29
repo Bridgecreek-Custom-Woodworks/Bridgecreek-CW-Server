@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
 const Products = require('../models/Product');
+const CartItems = require('../models/CartItem');
 
 const Carts = sequelize.define(
   'Carts',
@@ -35,7 +36,6 @@ const Carts = sequelize.define(
         },
       },
     },
-
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -45,6 +45,7 @@ const Carts = sequelize.define(
       type: Sequelize.DATE,
     },
   },
+
   {
     sequelize,
     modelName: 'Carts',
@@ -66,5 +67,15 @@ Products.belongsToMany(Carts, {
   otherKey: 'cartId',
   onDelete: 'NO ACTION',
 });
+
+Carts.prototype.removeCartItems = async function (cartId) {
+  console.log('From cart model ==>', cartId);
+  await CartItems.destroy({
+    where: {
+      cartId: cartId,
+    },
+    individualHooks: true,
+  });
+};
 
 module.exports = Carts;

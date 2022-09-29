@@ -60,9 +60,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  const count = await Cart.count();
-
-  res.status(200).json({ success: true, count: count, data: cart });
+  res.status(200).json({ success: true, data: cart });
 });
 
 // @desc Create cart
@@ -84,14 +82,20 @@ exports.createCart = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update cart
-// @route POST /api/v1/carts/mycart/:cartId
+// @route POST /api/v1/carts/mycart/update/:cartId
 // access Private/Guest
 exports.updateMyCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findAll({
+  const updatedCart = await Cart.update(req.body, {
     where: { cartId: req.params.cartId },
   });
 
-  const count = await Cart.count();
+  if (!updatedCart) {
+    return next(
+      new ErrorResponse(
+        `There is not cart found with the id of ${req.params.cartId}`
+      )
+    );
+  }
 
-  res.status(200).json({ success: true, count: count, data: cart });
+  res.status(200).json({ success: true, data: updatedCart });
 });

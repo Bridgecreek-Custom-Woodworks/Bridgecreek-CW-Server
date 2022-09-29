@@ -7,13 +7,8 @@ const {
 const { protect } = require('../middleware/auth_middleware');
 
 // Include other resource routers
-const cartAdminRouter = require('./admin_routes');
 
 const router = express.Router();
-
-// Re-route into other resource routers (routes/admin_route)
-router.use('/admin', cartAdminRouter);
-router.use('/', cartAdminRouter);
 
 // Route = /api/v1/carts
 

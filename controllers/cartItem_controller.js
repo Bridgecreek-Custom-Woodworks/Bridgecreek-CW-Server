@@ -4,12 +4,12 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 
 // @desc Get all items
-// @route GET /api/v1/cartItems
-// access Private/Guest
+// @route GET /api/v1/admin/allcartitems
+// access Private/Admin
 exports.getAllCartItems = asyncHandler(async (req, res, next) => {
   const cartItems = await CartItem.findAll();
 
-  const count = CartItem.count();
+  const count = await CartItem.count();
 
   res.status(200).json({ success: true, count: count, data: cartItems });
 });
@@ -23,7 +23,7 @@ exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
   });
 
   if (!cartItem) {
-    return next(new ErrorResponse('This item is not longer in your cart', 404));
+    return next(new ErrorResponse('The item is not longer in your cart', 404));
   }
 
   res.status(200).json({ success: true, data: cartItem });
@@ -50,4 +50,45 @@ exports.createCartItem = asyncHandler(async (req, res, next) => {
   }
 
   res.status(201).json({ success: true, data: cartItem });
+});
+
+// @desc Update cartItem
+// @route PUT /api/v1/cartItems/update/:cartItemId
+// access Private/Guest
+exports.updateCartItem = asyncHandler(async (req, res, next) => {
+  const cartItem = await CartItem.update(req.body, {
+    where: { cartItemId: req.params.cartItemId },
+    returning: true,
+  });
+
+  if (!cartItem) {
+    return next(
+      new ErrorResponse(
+        `This cart item with the id of ${req.params.cartItemId} was now found`,
+        404
+      )
+    );
+  }
+
+  res.status(200).json({ success: true, data: cartItem });
+});
+
+// @desc Delete cartItem
+// @route DELETE /api/v1/cartItems/delete/:cartItemId
+// access Private/Guest
+exports.deleteCartItem = asyncHandler(async (req, res, next) => {
+  const cartItem = await CartItem.destroy({
+    where: { cartItemId: req.params.cartItemId },
+  });
+
+  if (!cartItem) {
+    return next(
+      new ErrorResponse(
+        `This cart item with the id of ${req.params.cartItemId} has already been deleted`,
+        400
+      )
+    );
+  }
+
+  res.status(200).json({ success: true, data: cartItem });
 });

@@ -6,7 +6,7 @@ const asyncHandler = require('../middleware/async_middleware');
 const { Op } = require('sequelize');
 
 // @desc Get all carts
-// @route GET /api/v1/carts/admin/allcarts
+// @route GET /api/v1/admin/allcarts
 // access Private/Admin
 exports.getAllCarts = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findAll({
@@ -54,6 +54,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
         model: Products,
         through: {
           attributes: [
+            'productId',
             'cartItemId',
             'quantity',
             'discount',

@@ -252,3 +252,25 @@ exports.unauthorizedUser = {
   createdAt: new Date(),
   updatedAt: new Date(),
 };
+
+//  CART INFO ****************************************************
+
+exports.userCartKeys = [
+  'cartId',
+  'userId',
+  'total',
+  'cartStatus',
+  'createdAt',
+  'updatedAt',
+  'User',
+  'Products',
+];
+
+exports.cartKeys = [
+  'cartId',
+  'userId',
+  'total',
+  'cartStatus',
+  'createdAt',
+  'updatedAt',
+];

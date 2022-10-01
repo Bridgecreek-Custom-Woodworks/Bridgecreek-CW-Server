@@ -67,7 +67,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
     ],
   });
 
-  if (!cart) {
+  if (!cart || cart.length === 0) {
     return next(new ErrorResponse(`Your cart is currently empty`, 404));
   }
 
@@ -97,14 +97,14 @@ exports.createCart = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/carts/mycart/update/:cartId
 // access Private/Guest
 exports.updateMyCart = asyncHandler(async (req, res, next) => {
-  const updatedCart = await Cart.update(req.body, {
+  const cart = await Cart.update(req.body, {
     where: {
       cartId: req.params.cartId,
     },
     returning: true,
   });
 
-  if (!updatedCart) {
+  if (!cart) {
     return next(
       new ErrorResponse(
         `There is not cart found with the id of ${req.params.cartId}`
@@ -112,7 +112,7 @@ exports.updateMyCart = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: updatedCart });
+  res.status(200).json({ success: true, data: cart });
 });
 
 // @desc Delete cart
@@ -138,6 +138,7 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    data: cart,
     msg: `Cart with the id ${req.params.cartId} was deleted`,
   });
 });

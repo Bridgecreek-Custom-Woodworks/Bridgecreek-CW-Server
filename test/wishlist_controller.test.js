@@ -4,7 +4,6 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const Wishlist = require('../models/Wishlist');
-const { Op } = require('sequelize');
 const { user, wishlistKeys, newWishlistItem } = require('./utils');
 
 describe('WISHLIST WORKFLOW TEST ==>', function () {

@@ -24,6 +24,12 @@ const Carts = sequelize.define(
       },
       onDelete: 'NO ACTION',
     },
+    total: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0,
+      allowNull: false,
+      unique: false,
+    },
     cartStatus: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -69,7 +75,6 @@ Products.belongsToMany(Carts, {
 });
 
 Carts.prototype.removeCartItems = async function (cartId) {
-  console.log('From cart model ==>', cartId);
   await CartItems.destroy({
     where: {
       cartId: cartId,

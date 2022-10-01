@@ -53,12 +53,13 @@ exports.createCartItem = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update cartItem
-// @route PUT /api/v1/cartItems/update/:cartItemId
+// @route PUT /api/v1/cartitems/update/:cartItemId
 // access Private/Guest
 exports.updateCartItem = asyncHandler(async (req, res, next) => {
   const cartItem = await CartItem.update(req.body, {
     where: { cartItemId: req.params.cartItemId },
     returning: true,
+    individualHooks: true,
   });
 
   if (!cartItem) {
@@ -79,6 +80,7 @@ exports.updateCartItem = asyncHandler(async (req, res, next) => {
 exports.deleteCartItem = asyncHandler(async (req, res, next) => {
   const cartItem = await CartItem.destroy({
     where: { cartItemId: req.params.cartItemId },
+    individualHooks: true,
   });
 
   if (!cartItem) {

@@ -7,6 +7,10 @@ const Carts = require('../models/Cart');
 const { user, userCartKeys, cartKeys } = require('./utils');
 
 describe('CART WORKFLOW TEST ==>', function () {
+  this.beforeEach(async () => {
+    count = await Carts.count();
+  });
+
   let token;
   let count;
   let createdCartId; // <== From Create cart test case below
@@ -70,11 +74,13 @@ describe('CART WORKFLOW TEST ==>', function () {
       .end((err, res) => {
         const { data } = res.body;
         createdCartId = data.cartId;
+        const addedCount = count + 1;
 
         expect(res.status).to.be.equal(201);
         expect(data).to.be.a('object');
         expect(data.cartId).to.be.a('string');
         expect(data).to.have.all.keys(cartKeys);
+        expect(addedCount).to.be.equal(4);
         expect(err).to.be.null;
 
         done();
@@ -88,13 +94,32 @@ describe('CART WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${token}` })
       .send({ total: 40, cartStatus: 'Checkout' })
       .end((err, res) => {
-        const { cartId, userId, total } = res.body.data[1][0];
+        const { cartId, userId, total, cartStatus } = res.body.data[1][0];
 
         expect(res.status).to.be.equal(200);
         expect(res.body.data[1]).to.be.a('array');
         expect(res.body.data[1][0]).to.have.all.keys(cartKeys);
         expect(cartId).to.be.a('string');
-        expect(total).to.be.a('number');
+        expect(userId).to.be.a('string');
+        expect(total).to.be.equal('40');
+        expect(cartStatus).to.be.equal('Checkout');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Delete cart', (done) => {
+    chai
+      .request(server)
+      .delete(`/api/v1/admin/deletecart/${createdCartId}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .end((err, res) => {
+        const afterdeletedCount = count - 1;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body.success).to.be.true;
+        expect(afterdeletedCount).to.be.equal(3);
         expect(err).to.be.null;
 
         done();

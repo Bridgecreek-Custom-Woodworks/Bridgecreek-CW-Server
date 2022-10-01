@@ -138,6 +138,7 @@ exports.deleteCart = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    data: cart,
     msg: `Cart with the id ${req.params.cartId} was deleted`,
   });
 });

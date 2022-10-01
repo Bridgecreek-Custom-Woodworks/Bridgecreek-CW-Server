@@ -105,7 +105,7 @@ const getAverageRating = async (review, req, res) => {
 
     const newAvg = Number(avgRating).toFixed(2);
 
-    // This is the syntax for accessing another model from inside a hook.
+    // This is the syntax for updating another model from inside a hook.
     await sequelize.model('Products').update(
       { avgRating: newAvg },
       {

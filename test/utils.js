@@ -274,3 +274,16 @@ exports.cartKeys = [
   'createdAt',
   'updatedAt',
 ];
+
+//  CART ITEM INFO ****************************************************
+
+exports.cartItemKeys = [
+  'cartItemId',
+  'productId',
+  'cartId',
+  'quantity',
+  'discount',
+  'updatedAt',
+  'createdAt',
+  'total',
+];

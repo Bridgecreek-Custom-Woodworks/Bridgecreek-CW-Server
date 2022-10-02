@@ -10,7 +10,6 @@ const { verifyPassword } = require('../utils/functions');
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await Users.findAll();
 
-  // console.log('User Id ==> ', req.headers);
   const count = users.length;
   res.status(200).json({ success: true, count, data: users });
 });

@@ -1,12 +1,63 @@
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
+const { Op, Sequelize, Model } = require('sequelize');
 
 // @desc Get all products
 // @route GET /api/v1/products
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
-  const products = await Products.findAll();
+  // const products = await Products.findAll(); // <== Restore after testing *****
+  let query = {};
+
+  const { pricegte, pricelte, weightgte, weightlte } = req.query;
+
+  if (pricegte || pricelte || weightgte || weightlte) {
+    const { pricegte, pricelte, weightgte, weightlte } = req.query;
+    if (pricegte) {
+      query['where'] = { price: { [Op.gte]: pricegte } };
+    }
+    if (pricelte) {
+      query['where'] = { price: { [Op.lte]: pricelte } };
+    }
+    if (weightgte) {
+      query['where'] = { weight: { [Op.gte]: weightgte } };
+    }
+    if (weightlte) {
+      query['where'] = { weight: { [Op.lte]: weightlte } };
+    }
+  }
+
+  // Coping req.query for the if statement below
+  let reqQuery = { ...req.query };
+
+  if (!query.where || !query.where) {
+    // Coping req.query for the if statement below
+    reqQuery = { ...req.query };
+
+    // Fields to exclude
+    const removeFields = ['attributes'];
+
+    // Loop over removeFields and delete them from req.query
+    removeFields.forEach((param) => delete req.query[param]);
+
+    query['where'] = req.query;
+    console.log('NO price or weight');
+  }
+
+  if (reqQuery.attributes) {
+    const attributesArr = reqQuery.attributes[0].split(',');
+    query['attributes'] = attributesArr;
+  }
+
+  // query['order'] = [['price', 'DESC']]; // <== Need to impliment this still
+
+  console.log(query);
+
+  query = Products.findAll(query);
+
+  const products = await query;
+
   const count = products.length;
   res.status(200).json({ success: true, count: count, data: products });
 });

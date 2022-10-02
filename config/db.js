@@ -6,7 +6,7 @@ const configuration = config.get('database');
 const sequelize = new Sequelize(
   configuration.db,
   configuration.username,
-  process.env.SQL_PASSWORD,
+  configuration.password,
   {
     dialect: configuration.dialect,
     host: configuration.host,

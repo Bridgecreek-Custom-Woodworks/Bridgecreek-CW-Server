@@ -42,17 +42,21 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     removeFields.forEach((param) => delete req.query[param]);
 
     query['where'] = req.query;
-    console.log('NO price or weight');
   }
 
+  // Place if statement here for Op.and operator... if query.where && query.where has , then do stuff...
+
   if (reqQuery.attributes) {
+    // Turn attributes values from string into array
     const attributesArr = reqQuery.attributes[0].split(',');
     query['attributes'] = attributesArr;
   }
 
-  // query['order'] = [['price', 'DESC']]; // <== Need to impliment this still
-
-  console.log(query);
+  if (reqQuery.order) {
+    // Turn order values from string into array
+    const orderArr = reqQuery.order[0].split(',');
+    query['order'] = [[orderArr]];
+  }
 
   query = Products.findAll(query);
 

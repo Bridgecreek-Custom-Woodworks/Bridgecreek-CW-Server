@@ -80,8 +80,10 @@ exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
 exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
   const wishlistItem = await Wishlist.destroy({
     where: {
-      [Op.and]: { productId: req.params.productId },
-      userId: req.user.userId,
+      [Op.and]: [
+        { productId: req.params.productId },
+        { userId: req.user.userId },
+      ],
     },
   });
 

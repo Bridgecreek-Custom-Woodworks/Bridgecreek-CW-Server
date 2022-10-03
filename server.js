@@ -38,12 +38,6 @@ app.use('/api/v1/reviews', reviews);
 app.use('/api/v1/carts', cart);
 app.use('/api/v1/cartitems', cartItem);
 
-// if (process.env.NODE_ENV === 'development') {
-//   sequelize.sync();
-// } else if (process.env.NODE_ENV === 'test') {
-//   sequelize.sync({ force: true });
-// }
-
 app.use(errorHandler);
 
 app.listen(PORT, () =>

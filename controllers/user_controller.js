@@ -8,10 +8,12 @@ const { verifyPassword } = require('../utils/functions');
 // @route GET /api/v1/users/admin/allusers
 // access Private/Admin
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
-  const users = await Users.findAll();
+  // const users = await Users.findAll();
 
-  const count = users.length;
-  res.status(200).json({ success: true, count, data: users });
+  // const count = users.length;
+  // res.status(200).json({ success: true, count, data: users });
+
+  res.status(200).json(res.advancedQuerySearch);
 });
 
 // @desc Get single user

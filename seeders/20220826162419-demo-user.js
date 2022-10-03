@@ -28,7 +28,7 @@ module.exports = {
         firstName: 'Mike',
         lastName: 'Strange',
         street: '107 Juanita Dr',
-        city: 'Pineville',
+        city: 'Charlotte',
         state: 'NC',
         homePhone: '555-980-2589',
         cellPhone: '555-409-2947',

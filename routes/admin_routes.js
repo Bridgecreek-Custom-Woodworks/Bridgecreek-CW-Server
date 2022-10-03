@@ -11,8 +11,6 @@ const { getAllUsers } = require('../controllers/user_controller');
 
 const { getAllReviews } = require('../controllers/review_controller');
 
-const { protect, authorize } = require('../middleware/auth_middleware');
-
 const { getAllCarts } = require('../controllers/cart_controller');
 
 const { deleteCart } = require('../controllers/cart_controller');
@@ -20,6 +18,12 @@ const { deleteCart } = require('../controllers/cart_controller');
 const { getAllCartItems } = require('../controllers/cartItem_controller');
 
 const router = express.Router({ mergeParams: true });
+
+const { protect, authorize } = require('../middleware/auth_middleware');
+
+const advancedQuerySearch = require('../middleware/advancedQuerySearch');
+
+const Users = require('../models/User');
 
 // Route  = /api/v1/admin
 
@@ -30,7 +34,13 @@ router.get('/allreviews', protect, authorize('admin'), getAllReviews);
 router.get('/allwishlist', protect, authorize('admin'), getAllWishlist);
 
 // Admin Users Routes
-router.get('/allusers', protect, authorize('admin'), getAllUsers);
+router.get(
+  '/allusers',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(Users),
+  getAllUsers
+);
 
 // Admin Product Routes
 router.post('/', protect, authorize('admin'), createProducts);

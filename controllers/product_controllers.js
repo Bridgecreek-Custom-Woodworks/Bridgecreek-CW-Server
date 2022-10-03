@@ -7,7 +7,8 @@ const { Op } = require('sequelize');
 // @route GET /api/v1/products
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
-  // const products = await Products.findAll(); // <== Restore after testing *****
+  // res.status(200).json(res.advancedQuerySearch);
+
   let query = {};
   query['subQuery'] = true;
 
@@ -76,7 +77,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
   }
 
-  console.log(query);
+  console.log(query); // <== Remove after testing
 
   query = Products.findAll(query); // <== Products will need to become model to make this more reusable and then a parameters model can be passed to the function
 

@@ -142,8 +142,10 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 
   const review = await Reviews.update(req.body, {
     where: {
-      [Op.and]: { productId: req.params.productId },
-      userId: req.user.userId,
+      [Op.and]: [
+        { productId: req.params.productId },
+        { userId: req.user.userId },
+      ],
     },
     individualHooks: true,
   });

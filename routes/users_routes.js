@@ -8,8 +8,6 @@ const {
 
 const { protect } = require('../middleware/auth_middleware');
 
-const advancedQuerySearch = require('../middleware/advancedQuerySearch');
-
 const userRouter = require('./admin_routes');
 
 const router = express.Router();

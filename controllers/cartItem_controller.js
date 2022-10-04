@@ -7,9 +7,16 @@ const asyncHandler = require('../middleware/async_middleware');
 // @route GET /api/v1/admin/allcartitems
 // access Private/Admin
 exports.getAllCartItems = asyncHandler(async (req, res, next) => {
+  if (
+    Object.keys(req.query).length > 0 ||
+    !Object.keys(req.query).length === 0
+  ) {
+    return res.status(200).json(res.advancedQuerySearch);
+  }
+
   const cartItems = await CartItem.findAll();
 
-  const count = await CartItem.count();
+  const count = cartItems.length;
 
   res.status(200).json({ success: true, count: count, data: cartItems });
 });

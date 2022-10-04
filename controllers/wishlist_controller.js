@@ -9,20 +9,36 @@ const asyncHandler = require('../middleware/async_middleware');
 // @route GET /api/v1/wishlist/admin/allwishlist
 // access Private/Admin
 exports.getAllWishlist = asyncHandler(async (req, res, next) => {
-  const wishlist = await User.findAll({
-    attributes: {
-      exclude: ['createdAt', 'updatedAt'],
-    },
+  if (
+    Object.keys(req.query).length > 0 ||
+    !Object.keys(req.query).length === 0
+  ) {
+    return res.status(200).json(res.advancedQuerySearch);
+  }
+
+  const wishlist = await Wishlist.findAll({
     include: [
       {
         model: Product,
         attributes: ['productId', 'productName', 'price'],
         required: true,
       },
+      {
+        model: User,
+        attributes: {
+          exclude: [
+            'createdAt',
+            'updatedAt',
+            'password',
+            'resetPasswordToken',
+            'resetPasswordExpire',
+          ],
+        },
+      },
     ],
   });
 
-  const count = await Wishlist.count();
+  const count = wishlist.length;
 
   res.status(200).json({
     success: true,

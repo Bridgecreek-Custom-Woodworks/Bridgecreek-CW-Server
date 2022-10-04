@@ -25,14 +25,29 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
 const Carts = require('../models/Cart');
+const CartItems = require('../models/CartItem');
+const Reviews = require('../models/Reviews');
+const Wishlist = require('../models/Wishlist');
 
 // Route  = /api/v1/admin
 
 // Admin Review Routes
-router.get('/allreviews', protect, authorize('admin'), getAllReviews);
+router.get(
+  '/allreviews',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(Reviews),
+  getAllReviews
+);
 
 // Admin Wishlist Routes
-router.get('/allwishlist', protect, authorize('admin'), getAllWishlist);
+router.get(
+  '/allwishlist',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(Wishlist),
+  getAllWishlist
+);
 
 // Admin Users Routes
 router.get(
@@ -59,5 +74,12 @@ router.get(
 router.delete('/deletecart/:cartId', protect, authorize('admin'), deleteCart);
 
 // Admin CartItems Routes
-router.get('/allcartitems', protect, getAllCartItems);
+router.get(
+  '/allcartitems',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(CartItems),
+  getAllCartItems
+);
+
 module.exports = router;

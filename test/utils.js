@@ -134,6 +134,20 @@ exports.productKeys = [
   'updatedAt',
 ];
 
+exports.singleProductKeys = [
+  'productId',
+  'productName',
+  'price',
+  'weight',
+  'dementions',
+  'description',
+  'url',
+  'avgRating',
+  'createdAt',
+  'updatedAt',
+  'Reviews',
+];
+
 // WISHLISTS INFO ****************************************************
 
 exports.wishlist = [

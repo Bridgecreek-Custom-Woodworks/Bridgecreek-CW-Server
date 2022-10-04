@@ -15,6 +15,14 @@ exports.getAllReviews = asyncHandler(async (req, res, next) => {
       new ErrorResponse('User must be logged in to add a review', 400)
     );
   }
+
+  if (
+    Object.keys(req.query).length > 0 ||
+    !Object.keys(req.query).length === 0
+  ) {
+    return res.status(200).json(res.advancedQuerySearch);
+  }
+
   const reviews = await User.findAll({
     attributes: ['firstName', 'lastName'],
     include: [

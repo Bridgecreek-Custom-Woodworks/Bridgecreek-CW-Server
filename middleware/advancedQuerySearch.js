@@ -1,15 +1,22 @@
 const { Op } = require('sequelize');
-const User = require('../models/User');
-const Products = require('../models/Product');
 
 const advancedQuerySearch = (model) => async (req, res, next) => {
   let query = {};
   query['subQuery'] = true;
 
-  const { pricegte, pricelte, weightgte, weightlte } = req.query;
+  const { pricegte, pricelte, weightgte, weightlte, ratinggte, ratinglte } =
+    req.query;
 
-  if (pricegte || pricelte || weightgte || weightlte) {
-    const { pricegte, pricelte, weightgte, weightlte } = req.query;
+  if (
+    pricegte ||
+    pricelte ||
+    weightgte ||
+    weightlte ||
+    ratinggte ||
+    ratinglte
+  ) {
+    const { pricegte, pricelte, weightgte, weightlte, ratinggte, ratinglte } =
+      req.query;
     if (pricegte) {
       query['where'] = { price: { [Op.gte]: pricegte } };
     }
@@ -22,6 +29,12 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     if (weightlte) {
       query['where'] = { weight: { [Op.lte]: weightlte } };
     }
+    if (ratinggte) {
+      query['where'] = { rating: { [Op.gte]: ratinggte } };
+    }
+    if (ratinglte) {
+      query['where'] = { rating: { [Op.lte]: ratinglte } };
+    }
   }
 
   // Coping req.query for the if statement below
@@ -32,7 +45,14 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     reqQuery = { ...req.query };
 
     // Fields to exclude
-    const removeFields = ['attributes', 'limit', 'offset', 'page', 'order'];
+    const removeFields = [
+      'attributes',
+      'limit',
+      'offset',
+      'page',
+      'order',
+      'include',
+    ];
 
     // Loop over removeFields and delete them from req.query
     removeFields.forEach((param) => delete req.query[param]);
@@ -68,7 +88,9 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
   }
 
-  query['include'] = { all: true };
+  if (!reqQuery.include) {
+    query['include'] = { all: true };
+  }
 
   query = model.findAll(query);
 

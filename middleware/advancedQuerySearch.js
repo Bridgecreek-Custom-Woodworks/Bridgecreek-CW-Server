@@ -1,4 +1,6 @@
 const { Op } = require('sequelize');
+const User = require('../models/User');
+const Products = require('../models/Product');
 
 const advancedQuerySearch = (model) => async (req, res, next) => {
   let query = {};
@@ -37,8 +39,6 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     query['where'] = req.query;
   }
 
-  //   query['where'] = { [Op.and]: [{ lastName: 'Body' }, { zipCode: '28217' }] };
-
   if (reqQuery.attributes) {
     // Turn attributes values from string into array
     const attributesArr = reqQuery.attributes[0].split(',');
@@ -68,10 +68,11 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
   }
 
-  console.log(query);
+  query['include'] = { all: true };
+
   query = model.findAll(query);
 
-  const results = await query; // <== products will need to be turned into results to make this more reusable
+  const results = await query;
 
   if (endIndex < total) {
     pagination.next = {

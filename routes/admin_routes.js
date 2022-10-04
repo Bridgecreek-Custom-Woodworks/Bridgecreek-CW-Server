@@ -24,6 +24,7 @@ const { protect, authorize } = require('../middleware/auth_middleware');
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
+const Carts = require('../models/Cart');
 
 // Route  = /api/v1/admin
 
@@ -48,7 +49,13 @@ router.put('/admin', protect, authorize('admin'), updateProduct);
 router.delete('/admin', protect, authorize('admin'), deleteProduct);
 
 // Admin Cart Routes
-router.get('/allcarts', protect, authorize('admin'), getAllCarts);
+router.get(
+  '/allcarts',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(Carts),
+  getAllCarts
+);
 router.delete('/deletecart/:cartId', protect, authorize('admin'), deleteCart);
 
 // Admin CartItems Routes

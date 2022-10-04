@@ -9,6 +9,10 @@ const { Op } = require('sequelize');
 // @route GET /api/v1/admin/allcarts
 // access Private/Admin
 exports.getAllCarts = asyncHandler(async (req, res, next) => {
+  if (Object.keys(req.query).length > 0) {
+    return res.status(200).json(res.advancedQuerySearch);
+  }
+
   const cart = await Cart.findAll({
     include: [
       {

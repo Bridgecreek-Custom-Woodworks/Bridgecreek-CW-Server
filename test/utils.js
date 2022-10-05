@@ -27,7 +27,7 @@ if (process.argv[2] === '-dev') {
 } else if (process.argv[2] === '-test') {
   process.env.NODE_ENV = 'test';
   deleteData();
-  console.log(`Your test data was destroyed`.bluy.inverse);
+  console.log(`Your test data was destroyed`.blue.inverse);
 }
 
 // USERS INFO ***************************************

@@ -9,7 +9,7 @@ const {
   getFirstLetterOfFirstName,
 } = require('./utils');
 
-describe.only('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
+describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   let token;
 
   it('Set Token', (done) => {
@@ -39,8 +39,8 @@ describe.only('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
         expect(res.body.count).to.be.equal(2);
-        expect(res.body.data[0].firstName).to.be.equal('Jordan');
         expect(pagination.next.page).to.be.equal(3);
+        expect(pagination.prev.page).to.be.equal(1);
         expect(pagination.next.limit).to.be.equal(2);
         expect(err).to.be.null;
 
@@ -121,7 +121,6 @@ describe.only('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.body.data[0].firstName).to.be.equal('Mike');
         expect(err).to.be.null;
 
-        console.log(res.body);
         done();
       });
   });
@@ -194,51 +193,112 @@ describe.only('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(Number(res.body.data[1].weight)).to.be.lte(10);
         expect(err).to.be.null;
 
-        console.log(res.body);
         done();
       });
   });
 
-  it.skip('Check if Rating gte query returns correct data', (done) => {
+  it('Check if Avg Rating gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get()
-      .set()
+      .get('/api/v1/products?avgRatinggte=4')
+      .set({ Autorization: `Bearer ${token}` })
       .end((err, res) => {
-        console.log(res.body);
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data.length).to.be.gte(2);
+        expect(Number(res.body.data[0].avgRating)).to.be.gte(4);
+        expect(Number(res.body.data[1].avgRating)).to.be.gte(4);
+        expect(err).to.be.null;
+
         done();
       });
   });
 
-  it.skip('Check if Rating lte query returns correct data', (done) => {
+  it('Check if Avg Rating lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get()
-      .set()
+      .get('/api/v1/products?avgRatinglte=2')
+      .set({ Autorization: `Bearer ${token}` })
       .end((err, res) => {
-        console.log(res.body);
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data.length).to.be.gte(2);
+        expect(Number(res.body.data[0].avgRating)).to.be.lte(2);
+        expect(Number(res.body.data[1].avgRating)).to.be.lte(2);
+        expect(err).to.be.null;
+
         done();
       });
   });
 
-  it.skip('Check if Total gte query returns correct data', (done) => {
+  it('Check if Rating gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get()
-      .set()
+      .get('/api/v1/admin/allreviews?ratinggte=5')
+      .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
-        console.log(res.body);
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data.length).to.be.gte(2);
+        expect(Number(res.body.data[0].rating)).to.be.gte(5);
+        expect(Number(res.body.data[1].rating)).to.be.gte(5);
+        expect(err).to.be.null;
+
         done();
       });
   });
 
-  it.skip('Check if Total lte query returns correct data', (done) => {
+  it('Check if Rating lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get()
-      .set()
+      .get('/api/v1/admin/allreviews?ratinglte=4')
+      .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
-        console.log(res.body);
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data.length).to.be.gte(3);
+        expect(Number(res.body.data[0].rating)).to.be.lte(4);
+        expect(Number(res.body.data[1].rating)).to.be.lte(4);
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Check if Total gte query returns correct data', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/admin/allcarts?totalgte=300')
+      .set({ Authorization: `Bearer ${token}` })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data.length).to.be.gte(1);
+        expect(Number(res.body.data[0].total)).to.be.gte(300);
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Check if Total lte query returns correct data', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/admin/allcarts?totallte=300')
+      .set({ Authorization: `Bearer ${token}` })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data.length).to.be.gte(2);
+        expect(Number(res.body.data[0].total)).to.be.lte(300);
+        expect(err).to.be.null;
+
         done();
       });
   });

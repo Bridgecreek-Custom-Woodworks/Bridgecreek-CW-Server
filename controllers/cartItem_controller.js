@@ -7,18 +7,10 @@ const asyncHandler = require('../middleware/async_middleware');
 // @route GET /api/v1/admin/allcartitems
 // access Private/Admin
 exports.getAllCartItems = asyncHandler(async (req, res, next) => {
-  if (
-    Object.keys(req.query).length > 0 ||
-    !Object.keys(req.query).length === 0
-  ) {
-    return res.status(200).json(res.advancedQuerySearch);
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
   }
-
-  const cartItems = await CartItem.findAll();
-
-  const count = cartItems.length;
-
-  res.status(200).json({ success: true, count: count, data: cartItems });
+  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
 // @desc Get single product

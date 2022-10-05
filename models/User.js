@@ -6,6 +6,7 @@ const Wishlist = require('../models/Wishlist');
 const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
 const Cart = require('../models/Cart');
+const CartItems = require('../models/CartItem');
 const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
 const { UUID } = require('sequelize');
@@ -192,6 +193,12 @@ Wishlist.belongsTo(User, { foreignKey: 'userId' });
 
 Products.hasMany(Wishlist, { foreignKey: 'productId' });
 Wishlist.belongsTo(Products, { foreignKey: 'productId' });
+
+Products.hasMany(CartItems, { foreignKey: 'productId' });
+CartItems.belongsTo(Products, { foreignKey: 'productId' });
+
+Cart.hasMany(CartItems, { foreignKey: 'cartId' });
+CartItems.belongsTo(Cart, { foreignKey: 'cartId' });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

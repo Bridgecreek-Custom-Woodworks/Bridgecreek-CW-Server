@@ -88,7 +88,7 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
   }
 
-  if (!reqQuery.include) {
+  if (reqQuery.include) {
     query['include'] = { all: true };
   }
 

@@ -194,7 +194,15 @@ exports.newWishlistItem = {
 
 //  REVIEWS INFO ****************************************************
 
-exports.reviewKeys = ['firstName', 'lastName', 'Reviews'];
+exports.reviewKeys = [
+  'userId',
+  'reviewId',
+  'productId',
+  'comments',
+  'rating',
+  'updatedAt',
+  'createdAt',
+];
 
 exports.singleReviewKeys = [
   'reviewId',

@@ -1,24 +1,13 @@
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
-const { Op } = require('sequelize');
 const Reviews = require('../models/Reviews');
 
 // @desc Get all products
 // @route GET /api/v1/products
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
-  if (
-    Object.keys(req.query).length > 0 ||
-    !Object.keys(req.query).length === 0
-  ) {
-    return res.status(200).json(res.advancedQuerySearch);
-  }
-
-  const products = await Products.findAll();
-  const count = products.length;
-
-  res.status(200).json({ success: true, count: count, data: products });
+  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
 // @desc Get single product

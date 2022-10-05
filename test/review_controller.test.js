@@ -64,7 +64,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
         expect(data).to.be.a('array');
         expect(data[0]).to.be.a('object');
         expect(data[0]).to.have.all.keys(reviewKeys);
-        expect(data[0].Reviews.length).to.be.gte(1);
+        expect(data.length).to.be.gte(5);
         expect(err).to.be.null;
 
         done();

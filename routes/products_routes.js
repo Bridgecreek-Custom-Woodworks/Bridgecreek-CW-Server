@@ -4,6 +4,9 @@ const {
   getProduct,
 } = require('../controllers/product_controllers');
 
+const advancedQuerySearch = require('../middleware/advancedQuerySearch');
+const Products = require('../models/Product');
+
 // Include other resource routers
 const productAdminRouter = require('./admin_routes');
 
@@ -14,7 +17,7 @@ router.use('/admin', productAdminRouter);
 router.use('/:productId', productAdminRouter);
 
 // Route = /api/v1/products
-router.get('/', getAllProducts);
+router.get('/', advancedQuerySearch(Products), getAllProducts);
 router.get('/:productId', getProduct);
 
 module.exports = router;

@@ -9,26 +9,10 @@ const asyncHandler = require('../middleware/async_middleware');
 // @route GET /api/v1/wishlist/admin/allwishlist
 // access Private/Admin
 exports.getAllWishlist = asyncHandler(async (req, res, next) => {
-  const wishlist = await User.findAll({
-    attributes: {
-      exclude: ['createdAt', 'updatedAt'],
-    },
-    include: [
-      {
-        model: Product,
-        attributes: ['productId', 'productName', 'price'],
-        required: true,
-      },
-    ],
-  });
-
-  const count = await Wishlist.count();
-
-  res.status(200).json({
-    success: true,
-    count,
-    data: wishlist,
-  });
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
+  }
+  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
 // @desc Get single user wishlist
@@ -80,8 +64,10 @@ exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
 exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
   const wishlistItem = await Wishlist.destroy({
     where: {
-      [Op.and]: { productId: req.params.productId },
-      userId: req.user.userId,
+      [Op.and]: [
+        { productId: req.params.productId },
+        { userId: req.user.userId },
+      ],
     },
   });
 

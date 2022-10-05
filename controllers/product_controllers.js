@@ -1,14 +1,13 @@
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
+const Reviews = require('../models/Reviews');
 
 // @desc Get all products
 // @route GET /api/v1/products
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
-  const products = await Products.findAll();
-  const count = products.length;
-  res.status(200).json({ success: true, count: count, data: products });
+  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
 // @desc Get single product
@@ -17,6 +16,9 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 exports.getProduct = asyncHandler(async (req, res, next) => {
   const product = await Products.findOne({
     where: { productId: req.params.productId },
+    include: {
+      model: Reviews,
+    },
   });
 
   if (!product) {

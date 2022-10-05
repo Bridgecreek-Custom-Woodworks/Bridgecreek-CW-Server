@@ -9,29 +9,10 @@ const { Op } = require('sequelize');
 // @route GET /api/v1/admin/allcarts
 // access Private/Admin
 exports.getAllCarts = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findAll({
-    include: [
-      {
-        model: User,
-      },
-      {
-        model: Products,
-        through: {
-          attributes: [
-            'cartItemId',
-            'quantity',
-            'discount',
-            'updatedAt',
-            'createdAt',
-          ],
-        },
-      },
-    ],
-  });
-
-  const count = await Cart.count();
-
-  res.status(200).json({ success: true, count: count, data: cart });
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
+  }
+  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
 // @desc Get a single cart

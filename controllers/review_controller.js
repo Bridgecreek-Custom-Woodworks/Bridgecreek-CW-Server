@@ -2,7 +2,6 @@ const ErrorResponse = require('../utils/errorResponse');
 const Reviews = require('../models/Reviews');
 const User = require('../models/User');
 const Product = require('../models/Product');
-const Wishlist = require('../models/Wishlist');
 const { Op } = require('sequelize');
 const asyncHandler = require('../middleware/async_middleware');
 
@@ -11,35 +10,9 @@ const asyncHandler = require('../middleware/async_middleware');
 // access Private / Admin
 exports.getAllReviews = asyncHandler(async (req, res, next) => {
   if (!req.user) {
-    return next(
-      new ErrorResponse('User must be logged in to add a review', 400)
-    );
+    return next(new ErrorResponse('Please log in', 400));
   }
-  const reviews = await User.findAll({
-    attributes: ['firstName', 'lastName'],
-    include: [
-      {
-        model: Reviews,
-        attributes: ['updatedAt', 'createdAt', 'comments', 'rating'],
-        required: true,
-        include: [
-          {
-            model: Product,
-            attributes: ['productId', 'productName', 'price', 'avgRating'],
-            required: true,
-          },
-        ],
-      },
-    ],
-  });
-
-  const count = await Reviews.count();
-
-  res.status(200).json({
-    success: true,
-    count,
-    data: reviews,
-  });
+  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
 // @desc Get single review
@@ -142,8 +115,10 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 
   const review = await Reviews.update(req.body, {
     where: {
-      [Op.and]: { productId: req.params.productId },
-      userId: req.user.userId,
+      [Op.and]: [
+        { productId: req.params.productId },
+        { userId: req.user.userId },
+      ],
     },
     individualHooks: true,
   });

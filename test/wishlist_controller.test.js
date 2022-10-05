@@ -42,10 +42,8 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
         expect(res.body.count).to.be.gte(5);
-        expect(res.body.data[0].Products[0].Wishlists.userId).to.be.a('string');
-        expect(res.body.data[0].Products[0].Wishlists.productId).to.be.a(
-          'string'
-        );
+        expect(res.body.data[0].userId).to.be.a('string');
+        expect(res.body.data[0].productId).to.be.a('string');
         expect(err).to.be.null;
 
         done();

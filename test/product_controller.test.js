@@ -9,7 +9,7 @@ const {
   product,
   newProduct,
   productKeys,
-  badIdProduct,
+  singleProductKeys,
 } = require('./utils');
 
 describe('PRODUCT WORKFLOW TEST ===>', function () {
@@ -85,7 +85,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.productId).to.be.equal(product.productId);
-        expect(res.body.data).to.have.all.keys(productKeys);
+        expect(res.body.data).to.have.all.keys(singleProductKeys);
         expect(err).to.be.null;
 
         done();

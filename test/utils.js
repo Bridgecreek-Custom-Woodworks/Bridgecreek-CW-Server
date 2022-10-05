@@ -1,8 +1,34 @@
+process.argv[2] === '-dev'
+  ? (process.env.NODE_ENV = 'development')
+  : (process.env.NODE_ENV = 'test');
+
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const server = require('../server');
 chai.use(chaiHttp);
+const User = require('../models/User');
+const colors = require('colors');
+const sequelize = require('../config/db');
+
+// console.log(process);
+
+const deleteData = async () => {
+  await sequelize.sync({ force: true });
+  const count = await User.count();
+  console.log('Count', count);
+  process.exit();
+};
+
+if (process.argv[2] === '-dev') {
+  process.env.NODE_ENV = 'development';
+  deleteData();
+  console.log(`Your development data was destroyed`.red.inverse);
+} else if (process.argv[2] === '-test') {
+  process.env.NODE_ENV = 'test';
+  deleteData();
+  console.log(`Your test data was destroyed`.bluy.inverse);
+}
 
 // USERS INFO ***************************************
 exports.user = {
@@ -108,6 +134,20 @@ exports.productKeys = [
   'updatedAt',
 ];
 
+exports.singleProductKeys = [
+  'productId',
+  'productName',
+  'price',
+  'weight',
+  'dementions',
+  'description',
+  'url',
+  'avgRating',
+  'createdAt',
+  'updatedAt',
+  'Reviews',
+];
+
 // WISHLISTS INFO ****************************************************
 
 exports.wishlist = [
@@ -154,7 +194,15 @@ exports.newWishlistItem = {
 
 //  REVIEWS INFO ****************************************************
 
-exports.reviewKeys = ['firstName', 'lastName', 'Reviews'];
+exports.reviewKeys = [
+  'userId',
+  'reviewId',
+  'productId',
+  'comments',
+  'rating',
+  'updatedAt',
+  'createdAt',
+];
 
 exports.singleReviewKeys = [
   'reviewId',

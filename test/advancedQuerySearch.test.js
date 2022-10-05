@@ -89,7 +89,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Inlude query returns model associations', (done) => {
+  it('Check if Include query returns model associations', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allusers?include=true')

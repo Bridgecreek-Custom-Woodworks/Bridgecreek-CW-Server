@@ -27,7 +27,7 @@ if (process.argv[2] === '-dev') {
 } else if (process.argv[2] === '-test') {
   process.env.NODE_ENV = 'test';
   deleteData();
-  console.log(`Your test data was destroyed`.bluy.inverse);
+  console.log(`Your test data was destroyed`.blue.inverse);
 }
 
 // USERS INFO ***************************************
@@ -335,3 +335,17 @@ exports.cartItemKeys = [
   'createdAt',
   'total',
 ];
+
+//  ADVANCED QUERY SEARCH INFO ****************************************************
+
+exports.advancedQuerySearchKeys = ['firstName', 'lastName', 'cellPhone'];
+
+exports.getFirstLetterOfFirstName = (arr) => {
+  const letterArray = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    const firstLetter = arr[i].firstName[0].toUpperCase();
+    letterArray.push(firstLetter);
+  }
+  return letterArray;
+};

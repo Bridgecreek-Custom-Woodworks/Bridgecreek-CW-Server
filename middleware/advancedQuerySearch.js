@@ -4,8 +4,18 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
   let query = {};
   query['subQuery'] = true;
 
-  const { pricegte, pricelte, weightgte, weightlte, ratinggte, ratinglte } =
-    req.query;
+  const {
+    pricegte,
+    pricelte,
+    weightgte,
+    weightlte,
+    ratinggte,
+    ratinglte,
+    avgRatinggte,
+    avgRatinglte,
+    totalgte,
+    totallte,
+  } = req.query;
 
   if (
     pricegte ||
@@ -13,10 +23,24 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     weightgte ||
     weightlte ||
     ratinggte ||
-    ratinglte
+    ratinglte ||
+    avgRatinggte ||
+    avgRatinglte ||
+    totalgte ||
+    totallte
   ) {
-    const { pricegte, pricelte, weightgte, weightlte, ratinggte, ratinglte } =
-      req.query;
+    const {
+      pricegte,
+      pricelte,
+      weightgte,
+      weightlte,
+      ratinggte,
+      ratinglte,
+      avgRatinggte,
+      avgRatinglte,
+      totalgte,
+      totallte,
+    } = req.query;
     if (pricegte) {
       query['where'] = { price: { [Op.gte]: pricegte } };
     }
@@ -34,6 +58,18 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     }
     if (ratinglte) {
       query['where'] = { rating: { [Op.lte]: ratinglte } };
+    }
+    if (avgRatinggte) {
+      query['where'] = { avgRating: { [Op.gte]: avgRatinggte } };
+    }
+    if (avgRatinglte) {
+      query['where'] = { avgRating: { [Op.lte]: avgRatinglte } };
+    }
+    if (totalgte) {
+      query['where'] = { total: { [Op.gte]: totalgte } };
+    }
+    if (totallte) {
+      query['where'] = { total: { [Op.lte]: totallte } };
     }
   }
 

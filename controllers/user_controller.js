@@ -3,6 +3,9 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
 const { verifyPassword } = require('../utils/functions');
+const sendEmail = require('../utils/sendEmail');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // @desc Get all users
 // @route GET /api/v1/users/admin/allusers
@@ -52,6 +55,23 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  const emailOptions = await user.emailVerification(req);
+
+  const { email, from, subject, msg } = emailOptions;
+
+  try {
+    await sendEmail(email, from, subject, msg);
+  } catch (error) {
+    (user.resetPasswordToken = null), (user.resetPasswordExpire = null);
+    await user.save({ validate: false });
+
+    return next(new ErrorResponse('Email could not be sent', 400));
+  }
+
+  user.activeStatus = 'pending';
+
+  // await user.update();
 
   await user.save();
   sendTokenResponse(user, 201, res);

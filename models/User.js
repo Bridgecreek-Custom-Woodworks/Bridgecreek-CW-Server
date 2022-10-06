@@ -9,7 +9,6 @@ const Cart = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
-const { UUID } = require('sequelize');
 
 const User = sequelize.define(
   'Users',
@@ -241,6 +240,40 @@ User.prototype.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+
+User.prototype.emailVerification = function (req) {
+  const resetToken = this.getResetPasswordToken();
+
+  let email;
+
+  if (process.env.NODE_ENV === 'test' || 'development') {
+    email = `testperson394@gmail.com`;
+  } else {
+    email = this.email;
+  }
+
+  // Set reset token in env for testing reset passwordPassword route.
+  process.env.RESET_PASSWORD = resetToken;
+
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/auth/resetpassword/${resetToken}`; // <== Change this to new Route once it's createde
+
+  const msg = `You are receiving this email because you or someone else has created an account with Totally Board. Please click this link to verify your email address and activate your account: ${resetUrl}`;
+
+  const from = `<${process.env.FROM_EMAIL}>`;
+
+  const subject = 'Verify Email';
+
+  const options = {
+    email: email,
+    subject: subject,
+    from: from,
+    msg: msg,
+  };
+
+  return options;
 };
 
 User.beforeCreate(saltAndHashPassword);

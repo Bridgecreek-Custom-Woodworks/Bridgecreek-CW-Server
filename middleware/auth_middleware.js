@@ -32,11 +32,31 @@ exports.protect = asyncHandler(async (req, res, next) => {
       include: [{ model: Cart }],
     });
 
+    try {
+      checkAccountStatus(req.user.activeStatus);
+    } catch (error) {
+      return next(
+        new ErrorResponse(
+          'Please verify your email to activate your account',
+          400
+        )
+      );
+    }
+
     next();
   } catch (error) {
     return next(new ErrorResponse('Not authorized to access this route', 401));
   }
 });
+
+// Check account status
+const checkAccountStatus = (accountStatus) => {
+  if (accountStatus === 'not active') {
+    return next(new error());
+  } else if (accountStatus === 'pending') {
+    return next(new error());
+  }
+};
 
 // Grant access to specific roles
 exports.authorize = (...roles) => {

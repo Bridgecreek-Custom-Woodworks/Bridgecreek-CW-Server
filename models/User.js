@@ -225,7 +225,7 @@ User.prototype.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-// Generate and hash password token
+// Generate and hash password token for reset password
 User.prototype.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
@@ -241,9 +241,28 @@ User.prototype.getResetPasswordToken = function () {
 
   return resetToken;
 };
+// Generate and hash password token for email verification
+User.prototype.getEmailPasswordToken = function () {
+  // Generate token
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash token and set to resetPasswordToken field
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  // Set expire to 24 hours from now
+  const date = new Date();
+  const addOneDay = date.setDate(date.getDate() + 1);
+  const nextDay = new Date(addOneDay);
+  this.resetPasswordExpire = nextDay;
+
+  return resetToken;
+};
 
 User.prototype.emailVerification = function (req) {
-  const resetToken = this.getResetPasswordToken();
+  const resetToken = this.getEmailPasswordToken();
 
   let email;
 

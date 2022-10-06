@@ -41,6 +41,10 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/users
 // access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
+  const existingUser = await Users.findOne({
+    where: { email: req.body.email },
+  });
+
   const user = await Users.build(req.body);
   let password = user.password;
 
@@ -69,7 +73,18 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Email could not be sent', 400));
   }
 
-  // await user.update(); // Should be able to update the resetPasswordExpire value
+  if (existingUser && existingUser.activeStatus === 'pending') {
+    // Set expire to 24 hours from now
+    const date = new Date();
+    const addOneDay = date.setDate(date.getDate() + 1);
+    const nextDay = new Date(addOneDay);
+
+    await Users.update(
+      { resetPasswordExpire: nextDay },
+      { where: { email: existingUser.email } }
+    ); // Should be able to update the resetPasswordExpire value
+    return sendTokenResponse(existingUser, 201, res);
+  }
 
   user.activeStatus = 'pending';
 

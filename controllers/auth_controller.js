@@ -38,7 +38,11 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  sendTokenResponse(user, 200, res);
+  if (user.activeStatus === 'pending') {
+    msg = 'Please verify your email to activate your account';
+  }
+
+  sendTokenResponse(user, 200, res, msg);
 });
 
 // @desc Logout User / Clear cookie

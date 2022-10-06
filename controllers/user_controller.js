@@ -69,9 +69,9 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Email could not be sent', 400));
   }
 
-  user.activeStatus = 'pending';
+  // await user.update(); // Should be able to update the resetPasswordExpire value
 
-  // await user.update();
+  user.activeStatus = 'pending';
 
   await user.save();
   sendTokenResponse(user, 201, res);

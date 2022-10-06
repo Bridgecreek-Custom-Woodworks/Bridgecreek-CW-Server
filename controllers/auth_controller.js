@@ -38,6 +38,8 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
+  let msg;
+
   if (user.activeStatus === 'pending') {
     msg = 'Please verify your email to activate your account';
   }

@@ -73,6 +73,11 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     }
   }
 
+  console.log(model.associations);
+  const asscArray = Object.values(model.associations);
+  console.log(asscArray);
+  const wishlist = asscArray.pop();
+
   // Coping req.query for the if statement below
   let reqQuery = { ...req.query };
 

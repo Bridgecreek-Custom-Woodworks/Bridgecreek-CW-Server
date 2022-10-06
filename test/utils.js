@@ -58,6 +58,7 @@ exports.newUser = {
   password: 'admin1234',
   zipCode: '28227',
   email: 'samjones@gmail.com',
+  // activeStatus: 'active', // <== Remove after test is written for email verification
 };
 exports.updateDeleteUser = {
   userId: 'e2059294-5a76-4484-8ec1-ea9bdc3a64a0',

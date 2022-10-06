@@ -9,13 +9,29 @@ let uuid3 = uuidv4();
 
 // How generate next day
 const date = new Date();
-console.log(date);
+// console.log(date);
 
 const addOneDay = date.setDate(date.getDate() + 1);
-console.log(addOneDay);
+// console.log(addOneDay);
 
 const nextDay = new Date(addOneDay);
-console.log(nextDay);
+// console.log(nextDay);
 
 // Verify date is greater than now
-console.log(nextDay > Date.now());
+// console.log(nextDay > Date.now());
+
+let word = 'pricelte';
+
+let newWord = word.replace(/\w(gt|lt)\w/, '');
+
+// console.log(newWord);
+
+if (word.includes('gte')) {
+  let lastIndex = word.indexOf('gte');
+  console.log(word.slice(0, lastIndex));
+  return word.slice(0, lastIndex);
+} else if (word.includes('lte')) {
+  let lastIndex = word.indexOf('lte');
+  console.log(word.slice(0, lastIndex));
+  return word.slice(0, lastIndex);
+}

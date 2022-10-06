@@ -261,8 +261,8 @@ User.prototype.getEmailPasswordToken = function () {
   return resetToken;
 };
 
-User.prototype.emailVerification = function (req) {
-  const resetToken = this.getEmailPasswordToken();
+User.prototype.emailVerification = async function (req) {
+  let resetToken = await this.getEmailPasswordToken();
 
   let email;
 
@@ -277,15 +277,15 @@ User.prototype.emailVerification = function (req) {
 
   const resetUrl = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/auth/resetpassword/${resetToken}`; // <== Change this to new Route once it's createde
+  )}/api/v1/auth/accountactivation/${resetToken}`;
 
-  const msg = `You are receiving this email because you or someone else has created an account with Totally Board. Please click this link to verify your email address and activate your account: ${resetUrl}`;
+  const msg = `You are receiving this email because you or someone else has created an account with Totally Board. This link will expire in 24 hours. Please click this link to verify your email address and activate your account: ${resetUrl}`;
 
   const from = `<${process.env.FROM_EMAIL}>`;
 
   const subject = 'Verify Email';
 
-  const options = {
+  let options = {
     email: email,
     subject: subject,
     from: from,

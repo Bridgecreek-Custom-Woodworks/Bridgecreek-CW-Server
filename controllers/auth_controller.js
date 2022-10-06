@@ -3,12 +3,13 @@ const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
 const asyncHandler = require('../middleware/async_middleware');
 const sendEmail = require('../utils/sendEmail');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { sendTokenResponse } = require('../utils/tokenResponse');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const sgMail = require('@sendgrid/mail');
 const { Op } = require('sequelize');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const { options } = require('../server');
 
 // @desc Login User
 // @route POST /api/v1/auth/login
@@ -108,7 +109,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Reset password
-// @route POST /api/v1/auth/resetpassword/:resettoken
+// @route PUT /api/v1/auth/resetpassword/:resettoken
 // access Public
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   // Get hashed password
@@ -132,6 +133,59 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   // Set new pasword
   user.password = req.body.password;
+  user.resetPasswordToken = null;
+  user.resetPasswordExpire = null;
+  await user.save({ validate: true });
+
+  sendTokenResponse(user, 200, res);
+});
+
+// @desc Activate Account
+// @route PUT /api/v1/auth/accountactivation/:resettoken
+// access Private
+exports.activateAccount = asyncHandler(async (req, res, next) => {
+  // Get hashed password
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
+
+  let user = await Users.findOne({
+    where: {
+      resetPasswordToken: resetPasswordToken,
+    },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid token', 400));
+  }
+
+  if (
+    user.activeStatus === 'pending' &&
+    user.resetPasswordExpire < Date.now()
+  ) {
+    const emailOptions = await user.emailVerification(req);
+
+    const { email, from, subject, msg } = emailOptions;
+
+    try {
+      await sendEmail(email, from, subject, msg);
+    } catch (error) {
+      (user.resetPasswordToken = null), (user.resetPasswordExpire = null);
+      await user.save({ validate: false });
+
+      return next(new ErrorResponse('Email could not be sent', 400));
+    }
+
+    const message =
+      'A new account activation link was sent to your email. If you do not see it in your inbox please check your spam folder';
+
+    await user.save({ validate: true });
+
+    return sendTokenResponse(user, 201, res, message);
+  }
+
+  user.activeStatus = 'active';
   user.resetPasswordToken = null;
   user.resetPasswordExpire = null;
   await user.save({ validate: true });

@@ -9,7 +9,6 @@ const { sendTokenResponse } = require('../utils/tokenResponse');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
-const { options } = require('../server');
 
 // @desc Login User
 // @route POST /api/v1/auth/login

@@ -2,81 +2,34 @@ const { Op } = require('sequelize');
 
 const advancedQuerySearch = (model) => async (req, res, next) => {
   let query = {};
+  let queryField;
+  let fieldValue;
+
   query['subQuery'] = true;
 
-  const {
-    pricegte,
-    pricelte,
-    weightgte,
-    weightlte,
-    ratinggte,
-    ratinglte,
-    avgRatinggte,
-    avgRatinglte,
-    totalgte,
-    totallte,
-  } = req.query;
+  let str = JSON.stringify(req.query);
+  let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
 
-  if (
-    pricegte ||
-    pricelte ||
-    weightgte ||
-    weightlte ||
-    ratinggte ||
-    ratinglte ||
-    avgRatinggte ||
-    avgRatinglte ||
-    totalgte ||
-    totallte
-  ) {
-    const {
-      pricegte,
-      pricelte,
-      weightgte,
-      weightlte,
-      ratinggte,
-      ratinglte,
-      avgRatinggte,
-      avgRatinglte,
-      totalgte,
-      totallte,
-    } = req.query;
-    if (pricegte) {
-      query['where'] = { price: { [Op.gte]: pricegte } };
-    }
-    if (pricelte) {
-      query['where'] = { price: { [Op.lte]: pricelte } };
-    }
-    if (weightgte) {
-      query['where'] = { weight: { [Op.gte]: weightgte } };
-    }
-    if (weightlte) {
-      query['where'] = { weight: { [Op.lte]: weightlte } };
-    }
-    if (ratinggte) {
-      query['where'] = { rating: { [Op.gte]: ratinggte } };
-    }
-    if (ratinglte) {
-      query['where'] = { rating: { [Op.lte]: ratinglte } };
-    }
-    if (avgRatinggte) {
-      query['where'] = { avgRating: { [Op.gte]: avgRatinggte } };
-    }
-    if (avgRatinglte) {
-      query['where'] = { avgRating: { [Op.lte]: avgRatinglte } };
-    }
-    if (totalgte) {
-      query['where'] = { total: { [Op.gte]: totalgte } };
-    }
-    if (totallte) {
-      query['where'] = { total: { [Op.lte]: totallte } };
+  if (match) {
+    queryField = match[0].replace(match[1], '');
+    fieldValue = req.query[match[0]];
+
+    if (match[1] === 'gte') {
+      query['where'] = { [queryField]: { [Op.gte]: fieldValue } };
+    } else if (match[1] === 'gt') {
+      query['where'] = { [queryField]: { [Op.gt]: fieldValue } };
+    } else if (match[1] === 'lte') {
+      query['where'] = { [queryField]: { [Op.lte]: fieldValue } };
+    } else if (match[1] === 'lt') {
+      query['where'] = { [queryField]: { [Op.lt]: fieldValue } };
     }
   }
 
-  console.log(model.associations);
-  const asscArray = Object.values(model.associations);
-  console.log(asscArray);
-  const wishlist = asscArray.pop();
+  // REMOVE AFTER TESTING **************
+  // console.log(model.associations);
+  // const asscArray = Object.values(model.associations);
+  // console.log(asscArray);
+  // const wishlist = asscArray.pop();
 
   // Coping req.query for the if statement below
   let reqQuery = { ...req.query };

@@ -2,10 +2,10 @@ const { Op } = require('sequelize');
 
 const advancedQuerySearch = (model) => async (req, res, next) => {
   let query = {};
+  query['subQuery'] = true;
+
   let queryField;
   let fieldValue;
-
-  query['subQuery'] = true;
 
   let str = JSON.stringify(req.query);
   let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
@@ -24,12 +24,6 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
       query['where'] = { [queryField]: { [Op.lt]: fieldValue } };
     }
   }
-
-  // REMOVE AFTER TESTING **************
-  // console.log(model.associations);
-  // const asscArray = Object.values(model.associations);
-  // console.log(asscArray);
-  // const wishlist = asscArray.pop();
 
   // Coping req.query for the if statement below
   let reqQuery = { ...req.query };
@@ -75,7 +69,7 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
   // Pagination result
   const pagination = {};
 
-  // Add limit and offset to query being returned for pagination\
+  // Add limit and offset to query being returned for pagination
   if (reqQuery.offset || reqQuery.limit) {
     query.subQuery = false;
     query['offset'] = startIndex;
@@ -104,14 +98,51 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     };
   }
 
+  // Need to work on returning the model associations to the client for dynamic drop down (include: model)
+  let modelAssociations = Object.values(model.associations);
+  req.modelAssociations = modelAssociations;
+
   res.advancedQuerySearch = {
     success: true,
     count: results.length,
     pagination,
     data: results,
+    // modelAssociations,
   };
 
   next();
 };
 
 module.exports = advancedQuerySearch;
+
+// let str = JSON.stringify(req.query);
+// let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
+
+// if (match) {
+//   return next((query = queryGt_e_Lt_e(query, req.query, match, next)));
+// }
+
+// Still working on implementing this. *************
+const queryGt_e_Lt_e = (query, reqQuery, match, next) => {
+  let queryField;
+  let fieldValue;
+
+  console.log('Match', match);
+  console.log('Query', reqQuery);
+
+  queryField = match[0].replace(match[1], '');
+
+  fieldValue = reqQuery[match[0]];
+
+  if (match[1] === 'gte') {
+    console.log('QueryField', queryField);
+
+    return next((query['where'] = { [queryField]: { [Op.gte]: fieldValue } }));
+  } else if (match[1] === 'gt') {
+    return (query['where'] = { [queryField]: { [Op.gt]: fieldValue } });
+  } else if (match[1] === 'lte') {
+    return (query['where'] = { [queryField]: { [Op.lte]: fieldValue } });
+  } else if (match[1] === 'lt') {
+    return (query['where'] = { [queryField]: { [Op.lt]: fieldValue } });
+  }
+};

@@ -4,6 +4,28 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
   let query = {};
   query['subQuery'] = true;
 
+  let str = JSON.stringify(req.query);
+  let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
+  console.log('Match ==>', match[0]);
+  console.log('Match Array ==>', match);
+  let newWord = match[0].replace(match[1], '');
+  console.log(newWord);
+
+  let symbol = [Op.gte];
+  let checkOp = symbol;
+
+  console.log(checkOp);
+
+  // let keys = Object.keys(req.query);
+  // console.log(keys);
+  // let word = JSON.stringify(req.query);
+
+  // console.log(keys.includes('avgRatinggte'));
+
+  // // console.log(word.includes('gte'));
+  // let lastIndex = word.indexOf('gte');
+  // // console.log(word.slice(0, lastIndex));
+
   const {
     pricegte,
     pricelte,
@@ -73,10 +95,11 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     }
   }
 
-  console.log(model.associations);
-  const asscArray = Object.values(model.associations);
-  console.log(asscArray);
-  const wishlist = asscArray.pop();
+  // REMOVE AFTER TESTING **************
+  // console.log(model.associations);
+  // const asscArray = Object.values(model.associations);
+  // console.log(asscArray);
+  // const wishlist = asscArray.pop();
 
   // Coping req.query for the if statement below
   let reqQuery = { ...req.query };

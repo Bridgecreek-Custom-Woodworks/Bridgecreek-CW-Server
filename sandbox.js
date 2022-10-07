@@ -22,16 +22,27 @@ const nextDay = new Date(addOneDay);
 
 let word = 'pricelte';
 
-let newWord = word.replace(/\w(gt|lt)\w/, '');
+// let match = word.match(/\w(gt|gte|lt|lte)\w/);
+let match = word.match(/(lte|gte|lt|gt)/);
+console.log(match);
+// let newWord = word.replace(match[0], '');
+// let newWord = word.replace(/\w(gt|lt)\w/, '');
 
 // console.log(newWord);
 
-if (word.includes('gte')) {
-  let lastIndex = word.indexOf('gte');
-  console.log(word.slice(0, lastIndex));
-  return word.slice(0, lastIndex);
-} else if (word.includes('lte')) {
-  let lastIndex = word.indexOf('lte');
-  console.log(word.slice(0, lastIndex));
-  return word.slice(0, lastIndex);
+if (match) {
+  let newWord = word.replace(match[0], '');
+  console.log(newWord);
 }
+
+// if (word.includes('gte')) {
+//   let lastIndex = word.indexOf('gte');
+//   console.log(word.slice(0, lastIndex));
+//   return word.slice(0, lastIndex);
+// } else if (word.includes('lte')) {
+//   let lastIndex = word.indexOf('lte');
+//   console.log(word.slice(0, lastIndex));
+//   return word.slice(0, lastIndex);
+// }
+
+// console.log(word.includes(/[lte]/));

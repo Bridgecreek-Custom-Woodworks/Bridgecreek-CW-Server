@@ -87,6 +87,60 @@ describe('CART WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Check if cart total is being added and subtracted correctly', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/cartItems/68c70732-98ff-40cc-86ce-04ceef2eb623')
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ quantity: 2, discount: 10 })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(201);
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data.total).to.be.equal(301.98);
+        expect(res.body.data.quantity).to.be.equal(2);
+        expect(err).to.be.null;
+        cartItemId = res.body.data.cartItemId;
+
+        chai
+          .request(server)
+          .get('/api/v1/carts/mycart')
+          .set({ Authorization: `Bearer ${token}` })
+          .end((err, res) => {
+            const { cartId, total } = res.body.data[0];
+
+            expect(res.status).to.be.equal(200);
+            expect(res.body.data).to.be.an('array');
+            expect(cartId).to.be.a('string');
+            expect(total).to.be.equal('466.98');
+            expect(res.body.data[0]).to.have.all.keys(userCartKeys);
+            expect(err).to.be.null;
+
+            chai
+              .request(server)
+              .delete(`/api/v1/cartItems/delete/${cartItemId}`)
+              .set({ Authorization: `Bearer ${token}` })
+              .end((err, res) => {
+                expect(res.status).to.be.equal(200);
+                expect(res.body.data).to.be.equal(1);
+                expect(err).to.be.null;
+
+                chai
+                  .request(server)
+                  .get('/api/v1/carts/mycart')
+                  .set({ Authorization: `Bearer ${token}` })
+                  .end((err, res) => {
+                    expect(res.status).to.be.equal(200);
+                    expect(res.body.data).to.be.a('array');
+                    expect(res.body.data[0].total).to.be.equal('165.00');
+                    expect(err).to.be.null;
+
+                    done();
+                  });
+              });
+          });
+      });
+  });
+
   it('Update cart', (done) => {
     chai
       .request(server)

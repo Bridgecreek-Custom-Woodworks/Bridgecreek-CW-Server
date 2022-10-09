@@ -124,8 +124,6 @@ describe('USER WORKFLOW TEST ===>', function () {
       .set({ Authorization: `Bearer ${updateDeleteToken}` })
       .send({ firstName: 'Sam-Updated', city: 'Charlotte-Updated' })
       .end((err, res) => {
-        console.log(res.body);
-
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.firstName).to.be.equal('Sam-Updated');

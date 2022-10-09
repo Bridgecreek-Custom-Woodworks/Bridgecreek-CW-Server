@@ -66,184 +66,35 @@ console.log('query', query);
 
 // console.log('include', include);
 
-// Working Advanced Query Search Function *************************************
+//  FUNCTION FOR ADVANCE QUERY SEARCH (STILL NOT FUNCTIONING) ***********************
+// let str = JSON.stringify(req.query);
+// let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
 
-// const { Op } = require('sequelize');
+// if (match) {
+//   return next((query = queryGt_e_Lt_e(query, req.query, match, next)));
+// }
 
-// const advancedQuerySearch = (model) => async (req, res, next) => {
-//   let query = {};
-//   query['subQuery'] = true;
+// Still working on implementing this. *************
+const queryGt_e_Lt_e = (query, reqQuery, match, next) => {
+  let queryField;
+  let fieldValue;
 
-//   let str = JSON.stringify(req.query);
-//   let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
-//   console.log('Match ==>', match[0]);
-//   console.log('Match Array ==>', match);
-//   let newWord = match[0].replace(match[1], '');
-//   console.log('New Word', newWord);
+  console.log('Match', match);
+  console.log('Query', reqQuery);
 
-//   let symbol = [Op.gte];
-//   let checkOp = symbol;
+  queryField = match[0].replace(match[1], '');
 
-//   console.log(checkOp);
+  fieldValue = reqQuery[match[0]];
 
-//   const {
-//     pricegte,
-//     pricelte,
-//     weightgte,
-//     weightlte,
-//     ratinggte,
-//     ratinglte,
-//     avgRatinggte,
-//     avgRatinglte,
-//     totalgte,
-//     totallte,
-//   } = req.query;
+  if (match[1] === 'gte') {
+    console.log('QueryField', queryField);
 
-//   if (
-//     pricegte ||
-//     pricelte ||
-//     weightgte ||
-//     weightlte ||
-//     ratinggte ||
-//     ratinglte ||
-//     avgRatinggte ||
-//     avgRatinglte ||
-//     totalgte ||
-//     totallte ||
-//     newWord
-//   ) {
-//     const {
-//       pricegte,
-//       pricelte,
-//       weightgte,
-//       weightlte,
-//       ratinggte,
-//       ratinglte,
-//       avgRatinggte,
-//       avgRatinglte,
-//       totalgte,
-//       totallte,
-//     } = req.query;
-
-//     if (pricegte) {
-//       query['where'] = { price: { [Op.gte]: pricegte } };
-//     }
-//     if (pricelte) {
-//       query['where'] = { price: { [Op.lte]: pricelte } };
-//     }
-//     if (weightgte) {
-//       query['where'] = { weight: { [Op.gte]: weightgte } };
-//     }
-//     if (weightlte) {
-//       query['where'] = { weight: { [Op.lte]: weightlte } };
-//     }
-//     if (ratinggte) {
-//       query['where'] = { rating: { [Op.gte]: ratinggte } };
-//     }
-//     if (ratinglte) {
-//       query['where'] = { rating: { [Op.lte]: ratinglte } };
-//     }
-//     if (avgRatinggte) {
-//       query['where'] = { avgRating: { [Op.gte]: avgRatinggte } };
-//     }
-//     if (avgRatinglte) {
-//       query['where'] = { avgRating: { [Op.lte]: avgRatinglte } };
-//     }
-//     if (totalgte) {
-//       query['where'] = { total: { [Op.gte]: totalgte } };
-//     }
-//     if (totallte) {
-//       query['where'] = { total: { [Op.lte]: totallte } };
-//     }
-//   }
-
-//   // REMOVE AFTER TESTING **************
-//   // console.log(model.associations);
-//   // const asscArray = Object.values(model.associations);
-//   // console.log(asscArray);
-//   // const wishlist = asscArray.pop();
-
-//   // Coping req.query for the if statement below
-//   let reqQuery = { ...req.query };
-
-//   if (!query.where || !query.where) {
-//     // Coping req.query for the if statement below
-//     reqQuery = { ...req.query };
-
-//     // Fields to exclude
-//     const removeFields = [
-//       'attributes',
-//       'limit',
-//       'offset',
-//       'page',
-//       'order',
-//       'include',
-//     ];
-
-//     // Loop over removeFields and delete them from req.query
-//     removeFields.forEach((param) => delete req.query[param]);
-//     query['where'] = req.query;
-//   }
-
-//   if (reqQuery.attributes) {
-//     // Turn attributes values from string into array
-//     const attributesArr = reqQuery.attributes[0].split(',');
-//     query['attributes'] = attributesArr;
-//   }
-
-//   if (reqQuery.order) {
-//     // Turn order values from string into array
-//     const orderArr = reqQuery.order[0].split(',');
-//     query['order'] = [[orderArr]];
-//   }
-
-//   // Pagination
-//   const page = parseInt(reqQuery.page, 10) || 1;
-//   const limit = parseInt(reqQuery.limit, 10) || 10;
-//   const startIndex = (page - 1) * limit;
-//   const endIndex = page * limit;
-//   const total = await model.count();
-
-//   // Pagination result
-//   const pagination = {};
-
-//   // Add limit and offset to query being returned for pagination\
-//   if (reqQuery.offset || reqQuery.limit) {
-//     query.subQuery = false;
-//     query['offset'] = startIndex;
-//     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
-//   }
-
-//   if (reqQuery.include) {
-//     query['include'] = { all: true };
-//   }
-
-//   query = model.findAll(query);
-
-//   const results = await query;
-
-//   if (endIndex < total) {
-//     pagination.next = {
-//       page: page + 1,
-//       limit,
-//     };
-//   }
-
-//   if (startIndex > 0) {
-//     pagination.prev = {
-//       page: page - 1,
-//       limit,
-//     };
-//   }
-
-//   res.advancedQuerySearch = {
-//     success: true,
-//     count: results.length,
-//     pagination,
-//     data: results,
-//   };
-
-//   next();
-// };
-
-// module.exports = advancedQuerySearch;
+    return next((query['where'] = { [queryField]: { [Op.gte]: fieldValue } }));
+  } else if (match[1] === 'gt') {
+    return (query['where'] = { [queryField]: { [Op.gt]: fieldValue } });
+  } else if (match[1] === 'lte') {
+    return (query['where'] = { [queryField]: { [Op.lte]: fieldValue } });
+  } else if (match[1] === 'lt') {
+    return (query['where'] = { [queryField]: { [Op.lt]: fieldValue } });
+  }
+};

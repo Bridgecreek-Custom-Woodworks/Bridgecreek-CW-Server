@@ -100,22 +100,26 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         expect(res.body.data).to.be.a('object');
         expect(res.body.data.quantity).to.be.equal(3);
         expect(res.body.data.discount).to.be.equal(10);
+        expect(res.body.data.total).to.be.equal(135);
         expect(err).to.be.null;
 
         done();
       });
   });
 
-  it('Should update cartItem', (done) => {
+  it('Should update cartItem and checks if cart item and cart totals are added correctly', (done) => {
     chai
       .request(server)
       .put(`/api/v1/cartItems/update/${newCartItemId}`)
       .set({ Authorization: `Bearer ${userToken}` })
       .send({ quantity: 5 })
       .end((err, res) => {
+        const { total, quantity } = res.body.data[1][0];
+
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('array');
-        expect(res.body.data[1][0].quantity).to.be.equal(5);
+        expect(quantity).to.be.equal(5);
+        expect(total).to.be.equal(225);
         expect(err).to.be.null;
 
         done();

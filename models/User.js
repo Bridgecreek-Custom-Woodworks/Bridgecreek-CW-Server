@@ -9,7 +9,6 @@ const Cart = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
-const { UUID } = require('sequelize');
 
 const User = sequelize.define(
   'Users',
@@ -226,7 +225,7 @@ User.prototype.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-// Generate and hash password token
+// Generate and hash password token for reset password
 User.prototype.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
@@ -241,6 +240,59 @@ User.prototype.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+// Generate and hash password token for email verification
+User.prototype.getEmailPasswordToken = function () {
+  // Generate token
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash token and set to resetPasswordToken field
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  // Set expire to 24 hours from now
+  const date = new Date();
+  const addOneDay = date.setDate(date.getDate() + 1);
+  const nextDay = new Date(addOneDay);
+  this.resetPasswordExpire = nextDay;
+
+  return resetToken;
+};
+
+User.prototype.emailVerification = async function (req) {
+  let resetToken = await this.getEmailPasswordToken();
+
+  let email;
+
+  if (process.env.NODE_ENV === 'test' || 'development') {
+    email = `testperson394@gmail.com`;
+  } else {
+    email = this.email;
+  }
+
+  // Set reset token in env for testing reset passwordPassword route.
+  process.env.RESET_PASSWORD = resetToken;
+
+  const resetUrl = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/auth/accountactivation/${resetToken}`;
+
+  const msg = `You are receiving this email because you or someone else has created an account with Totally Board. This link will expire in 24 hours. Please click this link to verify your email address and activate your account: ${resetUrl}`;
+
+  const from = `<${process.env.FROM_EMAIL}>`;
+
+  const subject = 'Verify Email';
+
+  let options = {
+    email: email,
+    subject: subject,
+    from: from,
+    msg: msg,
+  };
+
+  return options;
 };
 
 User.beforeCreate(saltAndHashPassword);

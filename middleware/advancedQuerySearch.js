@@ -1,75 +1,33 @@
 const { Op } = require('sequelize');
+const User = require('../models/User');
+const Cart = require('../models/Cart');
+const CartItem = require('../models/CartItem');
+const Products = require('../models/Product');
+const Reviews = require('../models/Reviews');
+const Wishlist = require('../models/Wishlist');
 
-const advancedQuerySearch = (model) => async (req, res, next) => {
+const advancedQuerySearch = (Model) => async (req, res, next) => {
   let query = {};
   query['subQuery'] = true;
 
-  const {
-    pricegte,
-    pricelte,
-    weightgte,
-    weightlte,
-    ratinggte,
-    ratinglte,
-    avgRatinggte,
-    avgRatinglte,
-    totalgte,
-    totallte,
-  } = req.query;
+  let queryField;
+  let fieldValue;
 
-  if (
-    pricegte ||
-    pricelte ||
-    weightgte ||
-    weightlte ||
-    ratinggte ||
-    ratinglte ||
-    avgRatinggte ||
-    avgRatinglte ||
-    totalgte ||
-    totallte
-  ) {
-    const {
-      pricegte,
-      pricelte,
-      weightgte,
-      weightlte,
-      ratinggte,
-      ratinglte,
-      avgRatinggte,
-      avgRatinglte,
-      totalgte,
-      totallte,
-    } = req.query;
-    if (pricegte) {
-      query['where'] = { price: { [Op.gte]: pricegte } };
-    }
-    if (pricelte) {
-      query['where'] = { price: { [Op.lte]: pricelte } };
-    }
-    if (weightgte) {
-      query['where'] = { weight: { [Op.gte]: weightgte } };
-    }
-    if (weightlte) {
-      query['where'] = { weight: { [Op.lte]: weightlte } };
-    }
-    if (ratinggte) {
-      query['where'] = { rating: { [Op.gte]: ratinggte } };
-    }
-    if (ratinglte) {
-      query['where'] = { rating: { [Op.lte]: ratinglte } };
-    }
-    if (avgRatinggte) {
-      query['where'] = { avgRating: { [Op.gte]: avgRatinggte } };
-    }
-    if (avgRatinglte) {
-      query['where'] = { avgRating: { [Op.lte]: avgRatinglte } };
-    }
-    if (totalgte) {
-      query['where'] = { total: { [Op.gte]: totalgte } };
-    }
-    if (totallte) {
-      query['where'] = { total: { [Op.lte]: totallte } };
+  let queryStr = JSON.stringify(req.query);
+  let match = queryStr.match(/[a-z]*(lte|gte|lt|gt)/i);
+
+  if (match) {
+    queryField = match[0].replace(match[1], '');
+    fieldValue = req.query[match[0]];
+
+    if (match[1] === 'gte') {
+      query['where'] = { [queryField]: { [Op.gte]: fieldValue } };
+    } else if (match[1] === 'gt') {
+      query['where'] = { [queryField]: { [Op.gt]: fieldValue } };
+    } else if (match[1] === 'lte') {
+      query['where'] = { [queryField]: { [Op.lte]: fieldValue } };
+    } else if (match[1] === 'lt') {
+      query['where'] = { [queryField]: { [Op.lt]: fieldValue } };
     }
   }
 
@@ -112,23 +70,46 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
   const limit = parseInt(reqQuery.limit, 10) || 10;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const total = await model.count();
+  const total = await Model.count();
 
   // Pagination result
   const pagination = {};
 
-  // Add limit and offset to query being returned for pagination\
+  // Add limit and offset to query being returned for pagination
   if (reqQuery.offset || reqQuery.limit) {
     query.subQuery = false;
     query['offset'] = startIndex;
     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
   }
 
-  if (reqQuery.include) {
+  if (reqQuery.include === 'true') {
     query['include'] = { all: true };
   }
 
-  query = model.findAll(query);
+  // Working on more advanced and selective include query. Remove after testing  ***********
+
+  if (reqQuery.include && reqQuery.include.startsWith('model')) {
+    query['include'] = [];
+    const includeArry = reqQuery.include.split(',');
+
+    for (let i = 0; i < includeArry.length; i++) {
+      if (includeArry[i] === 'users') {
+        query['include'].push({ model: User });
+      } else if (includeArry[i] === 'carts') {
+        query['include'].push({ model: Cart });
+      } else if (includeArry[i] === 'cartitems') {
+        query['include'].push({ model: CartItem });
+      } else if (includeArry[i] === 'products') {
+        query['include'].push({ model: Products });
+      } else if (includeArry[i] === 'reviews') {
+        query['include'].push({ model: Reviews });
+      } else if (includeArry[i] === 'wishlist') {
+        query['include'].push({ model: Wishlist });
+      }
+    }
+  }
+
+  query = Model.findAll(query);
 
   const results = await query;
 
@@ -146,14 +127,51 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     };
   }
 
+  // Need to work on returning the model associations to the client for dynamic drop down (include: model)
+  let modelAssociations = Object.values(Model.associations);
+  req.modelAssociations = modelAssociations;
+
   res.advancedQuerySearch = {
     success: true,
     count: results.length,
     pagination,
     data: results,
+    // modelAssociations,
   };
 
   next();
 };
 
 module.exports = advancedQuerySearch;
+
+// let str = JSON.stringify(req.query);
+// let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
+
+// if (match) {
+//   return next((query = queryGt_e_Lt_e(query, req.query, match, next)));
+// }
+
+// Still working on implementing this. *************
+const queryGt_e_Lt_e = (query, reqQuery, match, next) => {
+  let queryField;
+  let fieldValue;
+
+  console.log('Match', match);
+  console.log('Query', reqQuery);
+
+  queryField = match[0].replace(match[1], '');
+
+  fieldValue = reqQuery[match[0]];
+
+  if (match[1] === 'gte') {
+    console.log('QueryField', queryField);
+
+    return next((query['where'] = { [queryField]: { [Op.gte]: fieldValue } }));
+  } else if (match[1] === 'gt') {
+    return (query['where'] = { [queryField]: { [Op.gt]: fieldValue } });
+  } else if (match[1] === 'lte') {
+    return (query['where'] = { [queryField]: { [Op.lte]: fieldValue } });
+  } else if (match[1] === 'lt') {
+    return (query['where'] = { [queryField]: { [Op.lt]: fieldValue } });
+  }
+};

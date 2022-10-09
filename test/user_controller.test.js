@@ -107,6 +107,16 @@ describe('USER WORKFLOW TEST ===>', function () {
       });
   });
 
+  it.skip('Verify email to activate account', (done) => {
+    chai
+      .request(server)
+      .post()
+      .send()
+      .end((err, res) => {
+        done();
+      });
+  });
+
   it('Update a user', (done) => {
     chai
       .request(server)
@@ -114,12 +124,13 @@ describe('USER WORKFLOW TEST ===>', function () {
       .set({ Authorization: `Bearer ${updateDeleteToken}` })
       .send({ firstName: 'Sam-Updated', city: 'Charlotte-Updated' })
       .end((err, res) => {
+        console.log(res.body);
+
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.firstName).to.be.equal('Sam-Updated');
         expect(res.body.data.city).to.be.equal('Charlotte-Updated');
         expect(err).to.be.null;
-
         done();
       });
   });

@@ -3,6 +3,9 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
 const { verifyPassword } = require('../utils/functions');
+const sendEmail = require('../utils/sendEmail');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // @desc Get all users
 // @route GET /api/v1/users/admin/allusers
@@ -38,6 +41,10 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/users
 // access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
+  const existingUser = await Users.findOne({
+    where: { email: req.body.email },
+  });
+
   const user = await Users.build(req.body);
   let password = user.password;
 
@@ -52,6 +59,35 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  const emailOptions = await user.emailVerification(req);
+
+  const { email, from, subject, msg } = emailOptions;
+
+  try {
+    await sendEmail(email, from, subject, msg);
+  } catch (error) {
+    (user.resetPasswordToken = null), (user.resetPasswordExpire = null);
+    await user.save({ validate: false });
+
+    return next(new ErrorResponse('Email could not be sent', 400));
+  }
+
+  // Move this if block into the verify password route once it's completed!!
+  if (existingUser && existingUser.activeStatus === 'pending') {
+    // Set expire to 24 hours from now
+    const date = new Date();
+    const addOneDay = date.setDate(date.getDate() + 1);
+    const nextDay = new Date(addOneDay);
+
+    await Users.update(
+      { resetPasswordExpire: nextDay },
+      { where: { email: existingUser.email } }
+    );
+    return sendTokenResponse(existingUser, 201, res);
+  }
+
+  user.activeStatus = 'pending';
 
   await user.save();
   sendTokenResponse(user, 201, res);

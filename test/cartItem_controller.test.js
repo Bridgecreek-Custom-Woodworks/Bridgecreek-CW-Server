@@ -107,7 +107,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Should update cartItem and checks if cart item and cart totals are added correctly', (done) => {
+  it('Should update cartItem and checks if cartItem total is being added correctly', (done) => {
     chai
       .request(server)
       .put(`/api/v1/cartItems/update/${newCartItemId}`)

@@ -1,14 +1,20 @@
 const { Op } = require('sequelize');
+const User = require('../models/User');
+const Cart = require('../models/Cart');
+const CartItem = require('../models/CartItem');
+const Products = require('../models/Product');
+const Reviews = require('../models/Reviews');
+const Wishlist = require('../models/Wishlist');
 
-const advancedQuerySearch = (model) => async (req, res, next) => {
+const advancedQuerySearch = (Model) => async (req, res, next) => {
   let query = {};
   query['subQuery'] = true;
 
   let queryField;
   let fieldValue;
 
-  let str = JSON.stringify(req.query);
-  let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
+  let queryStr = JSON.stringify(req.query);
+  let match = queryStr.match(/[a-z]*(lte|gte|lt|gt)/i);
 
   if (match) {
     queryField = match[0].replace(match[1], '');
@@ -64,7 +70,7 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
   const limit = parseInt(reqQuery.limit, 10) || 10;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const total = await model.count();
+  const total = await Model.count();
 
   // Pagination result
   const pagination = {};
@@ -76,11 +82,34 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
   }
 
-  if (reqQuery.include) {
+  if (reqQuery.include === 'true') {
     query['include'] = { all: true };
   }
 
-  query = model.findAll(query);
+  // Working on more advanced and selective include query. Remove after testing  ***********
+
+  if (reqQuery.include && reqQuery.include.startsWith('model')) {
+    query['include'] = [];
+    const includeArry = reqQuery.include.split(',');
+
+    for (let i = 0; i < includeArry.length; i++) {
+      if (includeArry[i] === 'users') {
+        query['include'].push({ model: User });
+      } else if (includeArry[i] === 'carts') {
+        query['include'].push({ model: Cart });
+      } else if (includeArry[i] === 'cartitems') {
+        query['include'].push({ model: CartItem });
+      } else if (includeArry[i] === 'products') {
+        query['include'].push({ model: Products });
+      } else if (includeArry[i] === 'reviews') {
+        query['include'].push({ model: Reviews });
+      } else if (includeArry[i] === 'wishlist') {
+        query['include'].push({ model: Wishlist });
+      }
+    }
+  }
+
+  query = Model.findAll(query);
 
   const results = await query;
 
@@ -99,7 +128,7 @@ const advancedQuerySearch = (model) => async (req, res, next) => {
   }
 
   // Need to work on returning the model associations to the client for dynamic drop down (include: model)
-  let modelAssociations = Object.values(model.associations);
+  let modelAssociations = Object.values(Model.associations);
   req.modelAssociations = modelAssociations;
 
   res.advancedQuerySearch = {

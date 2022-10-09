@@ -24,7 +24,7 @@ let word = 'pricelte';
 
 // let match = word.match(/\w(gt|gte|lt|lte)\w/);
 let match = word.match(/(lte|gte|lt|gt)/);
-console.log(match);
+// console.log(match);
 // let newWord = word.replace(match[0], '');
 // let newWord = word.replace(/\w(gt|lt)\w/, '');
 
@@ -32,199 +32,218 @@ console.log(match);
 
 if (match) {
   let newWord = word.replace(match[0], '');
-  console.log(newWord);
+  //   console.log(newWord);
 }
 
-// if (word.includes('gte')) {
-//   let lastIndex = word.indexOf('gte');
-//   console.log(word.slice(0, lastIndex));
-//   return word.slice(0, lastIndex);
-// } else if (word.includes('lte')) {
-//   let lastIndex = word.indexOf('lte');
-//   console.log(word.slice(0, lastIndex));
-//   return word.slice(0, lastIndex);
-// }
+let query = {};
+let include = {};
+let Model = {
+  associations: {
+    Products: 'Products',
+    User: 'User',
+    Cart: 'Cart',
+  },
+};
 
-// console.log(word.includes(/[lte]/));
+const modelAssociations = Object.keys(Model.associations);
+console.log(modelAssociations);
+
+// let array = ['User', 'Product', 'Cart'];
+
+const shouldInclude = modelAssociations.map((element) => {
+  return (include['include'] = [
+    {
+      model: element,
+    },
+  ]);
+});
+
+// console.log(shouldInclude.flat(1));
+
+query['include'] = shouldInclude.flat(1);
+
+console.log('query', query);
+
+// console.log('include', include);
 
 // Working Advanced Query Search Function *************************************
 
-const { Op } = require('sequelize');
+// const { Op } = require('sequelize');
 
-const advancedQuerySearch = (model) => async (req, res, next) => {
-  let query = {};
-  query['subQuery'] = true;
+// const advancedQuerySearch = (model) => async (req, res, next) => {
+//   let query = {};
+//   query['subQuery'] = true;
 
-  let str = JSON.stringify(req.query);
-  let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
-  console.log('Match ==>', match[0]);
-  console.log('Match Array ==>', match);
-  let newWord = match[0].replace(match[1], '');
-  console.log('New Word', newWord);
+//   let str = JSON.stringify(req.query);
+//   let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
+//   console.log('Match ==>', match[0]);
+//   console.log('Match Array ==>', match);
+//   let newWord = match[0].replace(match[1], '');
+//   console.log('New Word', newWord);
 
-  let symbol = [Op.gte];
-  let checkOp = symbol;
+//   let symbol = [Op.gte];
+//   let checkOp = symbol;
 
-  console.log(checkOp);
+//   console.log(checkOp);
 
-  const {
-    pricegte,
-    pricelte,
-    weightgte,
-    weightlte,
-    ratinggte,
-    ratinglte,
-    avgRatinggte,
-    avgRatinglte,
-    totalgte,
-    totallte,
-  } = req.query;
+//   const {
+//     pricegte,
+//     pricelte,
+//     weightgte,
+//     weightlte,
+//     ratinggte,
+//     ratinglte,
+//     avgRatinggte,
+//     avgRatinglte,
+//     totalgte,
+//     totallte,
+//   } = req.query;
 
-  if (
-    pricegte ||
-    pricelte ||
-    weightgte ||
-    weightlte ||
-    ratinggte ||
-    ratinglte ||
-    avgRatinggte ||
-    avgRatinglte ||
-    totalgte ||
-    totallte ||
-    newWord
-  ) {
-    const {
-      pricegte,
-      pricelte,
-      weightgte,
-      weightlte,
-      ratinggte,
-      ratinglte,
-      avgRatinggte,
-      avgRatinglte,
-      totalgte,
-      totallte,
-    } = req.query;
+//   if (
+//     pricegte ||
+//     pricelte ||
+//     weightgte ||
+//     weightlte ||
+//     ratinggte ||
+//     ratinglte ||
+//     avgRatinggte ||
+//     avgRatinglte ||
+//     totalgte ||
+//     totallte ||
+//     newWord
+//   ) {
+//     const {
+//       pricegte,
+//       pricelte,
+//       weightgte,
+//       weightlte,
+//       ratinggte,
+//       ratinglte,
+//       avgRatinggte,
+//       avgRatinglte,
+//       totalgte,
+//       totallte,
+//     } = req.query;
 
-    if (pricegte) {
-      query['where'] = { price: { [Op.gte]: pricegte } };
-    }
-    if (pricelte) {
-      query['where'] = { price: { [Op.lte]: pricelte } };
-    }
-    if (weightgte) {
-      query['where'] = { weight: { [Op.gte]: weightgte } };
-    }
-    if (weightlte) {
-      query['where'] = { weight: { [Op.lte]: weightlte } };
-    }
-    if (ratinggte) {
-      query['where'] = { rating: { [Op.gte]: ratinggte } };
-    }
-    if (ratinglte) {
-      query['where'] = { rating: { [Op.lte]: ratinglte } };
-    }
-    if (avgRatinggte) {
-      query['where'] = { avgRating: { [Op.gte]: avgRatinggte } };
-    }
-    if (avgRatinglte) {
-      query['where'] = { avgRating: { [Op.lte]: avgRatinglte } };
-    }
-    if (totalgte) {
-      query['where'] = { total: { [Op.gte]: totalgte } };
-    }
-    if (totallte) {
-      query['where'] = { total: { [Op.lte]: totallte } };
-    }
-  }
+//     if (pricegte) {
+//       query['where'] = { price: { [Op.gte]: pricegte } };
+//     }
+//     if (pricelte) {
+//       query['where'] = { price: { [Op.lte]: pricelte } };
+//     }
+//     if (weightgte) {
+//       query['where'] = { weight: { [Op.gte]: weightgte } };
+//     }
+//     if (weightlte) {
+//       query['where'] = { weight: { [Op.lte]: weightlte } };
+//     }
+//     if (ratinggte) {
+//       query['where'] = { rating: { [Op.gte]: ratinggte } };
+//     }
+//     if (ratinglte) {
+//       query['where'] = { rating: { [Op.lte]: ratinglte } };
+//     }
+//     if (avgRatinggte) {
+//       query['where'] = { avgRating: { [Op.gte]: avgRatinggte } };
+//     }
+//     if (avgRatinglte) {
+//       query['where'] = { avgRating: { [Op.lte]: avgRatinglte } };
+//     }
+//     if (totalgte) {
+//       query['where'] = { total: { [Op.gte]: totalgte } };
+//     }
+//     if (totallte) {
+//       query['where'] = { total: { [Op.lte]: totallte } };
+//     }
+//   }
 
-  // REMOVE AFTER TESTING **************
-  // console.log(model.associations);
-  // const asscArray = Object.values(model.associations);
-  // console.log(asscArray);
-  // const wishlist = asscArray.pop();
+//   // REMOVE AFTER TESTING **************
+//   // console.log(model.associations);
+//   // const asscArray = Object.values(model.associations);
+//   // console.log(asscArray);
+//   // const wishlist = asscArray.pop();
 
-  // Coping req.query for the if statement below
-  let reqQuery = { ...req.query };
+//   // Coping req.query for the if statement below
+//   let reqQuery = { ...req.query };
 
-  if (!query.where || !query.where) {
-    // Coping req.query for the if statement below
-    reqQuery = { ...req.query };
+//   if (!query.where || !query.where) {
+//     // Coping req.query for the if statement below
+//     reqQuery = { ...req.query };
 
-    // Fields to exclude
-    const removeFields = [
-      'attributes',
-      'limit',
-      'offset',
-      'page',
-      'order',
-      'include',
-    ];
+//     // Fields to exclude
+//     const removeFields = [
+//       'attributes',
+//       'limit',
+//       'offset',
+//       'page',
+//       'order',
+//       'include',
+//     ];
 
-    // Loop over removeFields and delete them from req.query
-    removeFields.forEach((param) => delete req.query[param]);
-    query['where'] = req.query;
-  }
+//     // Loop over removeFields and delete them from req.query
+//     removeFields.forEach((param) => delete req.query[param]);
+//     query['where'] = req.query;
+//   }
 
-  if (reqQuery.attributes) {
-    // Turn attributes values from string into array
-    const attributesArr = reqQuery.attributes[0].split(',');
-    query['attributes'] = attributesArr;
-  }
+//   if (reqQuery.attributes) {
+//     // Turn attributes values from string into array
+//     const attributesArr = reqQuery.attributes[0].split(',');
+//     query['attributes'] = attributesArr;
+//   }
 
-  if (reqQuery.order) {
-    // Turn order values from string into array
-    const orderArr = reqQuery.order[0].split(',');
-    query['order'] = [[orderArr]];
-  }
+//   if (reqQuery.order) {
+//     // Turn order values from string into array
+//     const orderArr = reqQuery.order[0].split(',');
+//     query['order'] = [[orderArr]];
+//   }
 
-  // Pagination
-  const page = parseInt(reqQuery.page, 10) || 1;
-  const limit = parseInt(reqQuery.limit, 10) || 10;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await model.count();
+//   // Pagination
+//   const page = parseInt(reqQuery.page, 10) || 1;
+//   const limit = parseInt(reqQuery.limit, 10) || 10;
+//   const startIndex = (page - 1) * limit;
+//   const endIndex = page * limit;
+//   const total = await model.count();
 
-  // Pagination result
-  const pagination = {};
+//   // Pagination result
+//   const pagination = {};
 
-  // Add limit and offset to query being returned for pagination\
-  if (reqQuery.offset || reqQuery.limit) {
-    query.subQuery = false;
-    query['offset'] = startIndex;
-    query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
-  }
+//   // Add limit and offset to query being returned for pagination\
+//   if (reqQuery.offset || reqQuery.limit) {
+//     query.subQuery = false;
+//     query['offset'] = startIndex;
+//     query['limit'] = reqQuery.limit ? reqQuery.limit : 10;
+//   }
 
-  if (reqQuery.include) {
-    query['include'] = { all: true };
-  }
+//   if (reqQuery.include) {
+//     query['include'] = { all: true };
+//   }
 
-  query = model.findAll(query);
+//   query = model.findAll(query);
 
-  const results = await query;
+//   const results = await query;
 
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
+//   if (endIndex < total) {
+//     pagination.next = {
+//       page: page + 1,
+//       limit,
+//     };
+//   }
 
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
+//   if (startIndex > 0) {
+//     pagination.prev = {
+//       page: page - 1,
+//       limit,
+//     };
+//   }
 
-  res.advancedQuerySearch = {
-    success: true,
-    count: results.length,
-    pagination,
-    data: results,
-  };
+//   res.advancedQuerySearch = {
+//     success: true,
+//     count: results.length,
+//     pagination,
+//     data: results,
+//   };
 
-  next();
-};
+//   next();
+// };
 
-module.exports = advancedQuerySearch;
+// module.exports = advancedQuerySearch;

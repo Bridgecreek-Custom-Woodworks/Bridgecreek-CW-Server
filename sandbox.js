@@ -5,7 +5,7 @@ let uuid1 = uuidv4();
 let uuid2 = uuidv4();
 let uuid3 = uuidv4();
 
-// console.log(uuid1, uuid2, uuid3);
+console.log(uuid1, uuid2, uuid3);
 
 // How generate next day
 const date = new Date();
@@ -46,7 +46,7 @@ let Model = {
 };
 
 const modelAssociations = Object.keys(Model.associations);
-console.log(modelAssociations);
+// console.log(modelAssociations);
 
 // let array = ['User', 'Product', 'Cart'];
 
@@ -62,7 +62,7 @@ const shouldInclude = modelAssociations.map((element) => {
 
 query['include'] = shouldInclude.flat(1);
 
-console.log('query', query);
+// console.log('query', query);
 
 // console.log('include', include);
 

@@ -58,7 +58,6 @@ exports.newUser = {
   password: 'admin1234',
   zipCode: '28227',
   email: 'samjones@gmail.com',
-  // activeStatus: 'active', // <== Remove after test is written for email verification
 };
 exports.updateDeleteUser = {
   userId: 'e2059294-5a76-4484-8ec1-ea9bdc3a64a0',
@@ -72,6 +71,22 @@ exports.updateDeleteUser = {
   password: 'admin1234',
   zipCode: '28227',
   email: 'leogetzs@gmail.com',
+};
+
+exports.activeUser = {
+  userId: '5ad14528-3809-4886-95c8-833c19754493',
+  firstName: 'Active',
+  lastName: 'User',
+  street: '426 South St',
+  city: 'Columbia',
+  state: 'SC',
+  homePhone: '555-342-9236',
+  cellPhone: '555-420-1583',
+  password: 'admin1234',
+  zipCode: '29226',
+  email: 'activeuser@gmail.com',
+  activeStatus: 'pending',
+  role: 'user',
 };
 
 exports.userKeys = [

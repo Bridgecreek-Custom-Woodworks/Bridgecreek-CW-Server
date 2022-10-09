@@ -73,7 +73,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Email could not be sent', 400));
   }
 
-  // Move this if block into the verify password route once it's completed!!
   if (existingUser && existingUser.activeStatus === 'pending') {
     // Set expire to 24 hours from now
     const date = new Date();

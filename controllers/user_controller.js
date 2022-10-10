@@ -83,7 +83,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       { resetPasswordExpire: nextDay },
       { where: { email: existingUser.email } }
     );
-    return sendTokenResponse(existingUser, 201, res);
+    return sendTokenResponse(existingUser, 200, res);
   }
 
   user.activeStatus = 'pending';

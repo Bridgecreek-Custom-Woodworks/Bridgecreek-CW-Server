@@ -95,6 +95,7 @@ describe('USER WORKFLOW TEST ===>', function () {
       .send(newUser)
       .end((err, res) => {
         updateDeleteToken = res.body.token;
+
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;
         expect(res.body.data).to.be.an('object');

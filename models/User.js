@@ -7,8 +7,8 @@ const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
 const Cart = require('../models/Cart');
 const CartItems = require('../models/CartItem');
-const ErrorResponse = require('../utils/errorResponse');
 const crypto = require('crypto');
+// const ErrorResponse = require('../utils/errorResponse');
 
 const User = sequelize.define(
   'Users',
@@ -136,6 +136,7 @@ const User = sequelize.define(
       validate: {
         isIn: {
           args: [['not active', 'pending', 'active']],
+          msg: 'Active Status can only have a status of not active, pending, active',
         },
       },
     },

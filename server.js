@@ -20,6 +20,7 @@ const admin = require('./routes/admin_routes');
 const reviews = require('./routes/review_routes');
 const cart = require('./routes/cart_route');
 const cartItem = require('./routes/cartItem_routes');
+const orders = require('./routes/orders_routes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/v1/admin', admin);
 app.use('/api/v1/reviews', reviews);
 app.use('/api/v1/carts', cart);
 app.use('/api/v1/cartitems', cartItem);
+app.use('/api/v1/orders', orders);
 
 app.use(errorHandler);
 

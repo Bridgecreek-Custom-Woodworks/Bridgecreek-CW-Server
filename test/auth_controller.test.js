@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const User = require('../models/User');
-const { user } = require('./utils');
+const { user, newUser } = require('./utils');
 
 describe('PASSWORD RESET FLOW ==>', function () {
   this.beforeEach(async () => {
@@ -19,6 +19,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
 
   let token;
   let originalPassword;
+  let newUserToken;
 
   it('Verify error if user is not found', (done) => {
     chai
@@ -99,6 +100,8 @@ describe('PASSWORD RESET FLOW ==>', function () {
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
         expect(res.body.success).to.be.false;
+        expect(err).to.be.null;
+
         done();
       });
   });
@@ -121,6 +124,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
         expect(resetPasswordToken).to.be.null;
         expect(resetPasswordExpire).to.be.null;
         expect(err).to.be.null;
+        expect(res.error).to.be.false;
 
         done();
       });
@@ -139,6 +143,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
         expect(res.body.success).to.be.false;
+        expect(err).to.be.null;
 
         done();
       });
@@ -157,6 +162,8 @@ describe('PASSWORD RESET FLOW ==>', function () {
       .end((err, res) => {
         expect(res.status).to.be.equal(401);
         expect(res.body.success).to.be.false;
+        expect(err).to.be.null;
+
         done();
       });
   });
@@ -181,7 +188,76 @@ describe('PASSWORD RESET FLOW ==>', function () {
         expect(oldPassword).to.not.be.equal(newPassword);
         expect(res.body.token.length).to.be.equal(192);
         expect(err).to.be.null;
+        expect(res.error).to.be.false;
 
+        done();
+      });
+  });
+
+  it('Register new user to check account activation route ', (done) => {
+    chai
+      .request(server)
+      .post(`/api/v1/users`)
+      .send(newUser)
+      .end((err, res) => {
+        newUserToken = res.body.token;
+
+        expect(res.status).to.be.equal(201);
+        expect(res.body.success).to.be.true;
+        expect(res.body.data.activeStatus).to.be.equal('pending');
+        expect(err).to.be.null;
+        expect(res.error).to.be.false;
+
+        chai
+          .request(server)
+          .put(
+            '/api/v1/auth/accountactivation/5be140016fed3d0ad2b2a329129fb9fde5af92ce'
+          )
+          .set({ Authorization: `Bearer ${newUserToken}` })
+          .end((err, res) => {
+            expect(res.status).to.be.equal(400);
+            expect(res.body.error).to.be.equal('Invalid token');
+            expect(err).to.be.null;
+
+            done();
+          });
+      });
+  });
+
+  it('Check if activation token is set correctly', (done) => {
+    chai
+      .request(server)
+      .put(`/api/v1/auth/accountactivation/${process.env.ACTIVATION_TOKEN}`)
+      .set({ Authorization: `Bearer ${newUserToken}` })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data.activeStatus).to.be.equal('active');
+        expect(err).to.be.null;
+        expect(res.error).to.be.false;
+
+        chai
+          .request(server)
+          .delete('/api/v1/users/deleteme')
+          .set({ Authorization: `Bearer ${newUserToken}` })
+          .end((err, res) => {
+            expect(res.status).to.be.equal(200);
+            expect(res.body.success).to.be.true;
+            expect(err).to.be.null;
+            expect(res.error).to.be.false;
+
+            done();
+          });
+      });
+  });
+
+  it.skip('Check resetPasswordToken', (done) => {
+    chai
+      .request(server)
+      .put(`/api/v1/auth/accountactivation/`)
+      .set()
+      .send()
+      .end((err, res) => {
         done();
       });
   });

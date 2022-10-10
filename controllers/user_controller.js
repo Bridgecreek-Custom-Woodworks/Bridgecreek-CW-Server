@@ -73,7 +73,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Email could not be sent', 400));
   }
 
-  // Move this if block into the verify password route once it's completed!!
   if (existingUser && existingUser.activeStatus === 'pending') {
     // Set expire to 24 hours from now
     const date = new Date();
@@ -84,7 +83,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       { resetPasswordExpire: nextDay },
       { where: { email: existingUser.email } }
     );
-    return sendTokenResponse(existingUser, 201, res);
+    return sendTokenResponse(existingUser, 200, res);
   }
 
   user.activeStatus = 'pending';

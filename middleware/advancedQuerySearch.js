@@ -143,35 +143,3 @@ const advancedQuerySearch = (Model) => async (req, res, next) => {
 };
 
 module.exports = advancedQuerySearch;
-
-// let str = JSON.stringify(req.query);
-// let match = str.match(/[a-z]*(lte|gte|lt|gt)/i);
-
-// if (match) {
-//   return next((query = queryGt_e_Lt_e(query, req.query, match, next)));
-// }
-
-// Still working on implementing this. *************
-const queryGt_e_Lt_e = (query, reqQuery, match, next) => {
-  let queryField;
-  let fieldValue;
-
-  console.log('Match', match);
-  console.log('Query', reqQuery);
-
-  queryField = match[0].replace(match[1], '');
-
-  fieldValue = reqQuery[match[0]];
-
-  if (match[1] === 'gte') {
-    console.log('QueryField', queryField);
-
-    return next((query['where'] = { [queryField]: { [Op.gte]: fieldValue } }));
-  } else if (match[1] === 'gt') {
-    return (query['where'] = { [queryField]: { [Op.gt]: fieldValue } });
-  } else if (match[1] === 'lte') {
-    return (query['where'] = { [queryField]: { [Op.lte]: fieldValue } });
-  } else if (match[1] === 'lt') {
-    return (query['where'] = { [queryField]: { [Op.lt]: fieldValue } });
-  }
-};

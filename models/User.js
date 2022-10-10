@@ -272,8 +272,8 @@ User.prototype.emailVerification = async function (req) {
     email = this.email;
   }
 
-  // Set reset token in env for testing reset passwordPassword route.
-  process.env.RESET_PASSWORD = resetToken;
+  // Set activate password token in env for testing register route.
+  process.env.ACTIVATION_TOKEN = resetToken;
 
   const resetUrl = `${req.protocol}://${req.get(
     'host'

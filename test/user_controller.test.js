@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 const sinon = require('sinon');
 const server = require('../server');
 const User = require('../models/User');
-const { user, newUser, userKeys } = require('./utils');
+const { user, newUser, activeUser, userKeys } = require('./utils');
 
 describe('USER WORKFLOW TEST ===>', function () {
   this.beforeEach(async () => {
@@ -95,6 +95,7 @@ describe('USER WORKFLOW TEST ===>', function () {
       .send(newUser)
       .end((err, res) => {
         updateDeleteToken = res.body.token;
+
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;
         expect(res.body.data).to.be.an('object');
@@ -107,13 +108,32 @@ describe('USER WORKFLOW TEST ===>', function () {
       });
   });
 
-  it.skip('Verify email to activate account', (done) => {
+  it('Verify email to activate account', (done) => {
     chai
       .request(server)
-      .post()
-      .send()
+      .post('/api/v1/users')
+      .send(activeUser)
       .end((err, res) => {
-        done();
+        activeUserToken = res.body.token;
+        expect(res.status).to.be.equal(201);
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data.activeStatus).to.be.equal('pending');
+        expect(res.body.data.resetPasswordToken).to.be.a('string');
+        expect(res.body.data.resetPasswordExpire).to.be.a('string');
+        expect(err).to.be.null;
+        expect(res.error).to.be.false;
+
+        chai
+          .request(server)
+          .delete('/api/v1/users/deleteme')
+          .set({ Authorization: `Bearer ${activeUserToken}` })
+          .end((err, res) => {
+            expect(res.status).to.be.equal(200);
+            expect(res.body.success).to.be.true;
+            expect(err).to.be.null;
+
+            done();
+          });
       });
   });
 
@@ -124,8 +144,6 @@ describe('USER WORKFLOW TEST ===>', function () {
       .set({ Authorization: `Bearer ${updateDeleteToken}` })
       .send({ firstName: 'Sam-Updated', city: 'Charlotte-Updated' })
       .end((err, res) => {
-        console.log(res.body);
-
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data.firstName).to.be.equal('Sam-Updated');

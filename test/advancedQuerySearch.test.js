@@ -89,7 +89,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Inlude query returns model associations', (done) => {
+  it('Check if include query returns all model associations', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allusers?include=true')
@@ -125,7 +125,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Price gte query returns correct data', (done) => {
+  it('Check if price gte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/products?pricegte=40')
@@ -143,7 +143,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Price lte query returns correct data', (done) => {
+  it('Check if price lte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/products?pricelte=40')
@@ -161,7 +161,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Weight gte query returns correct data', (done) => {
+  it('Check if weight gte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/products?weightgte=10')
@@ -179,7 +179,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Weight lte query returns correct data', (done) => {
+  it('Check if weight lte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/products?weightlte=10')
@@ -197,7 +197,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Avg Rating gte query returns correct data', (done) => {
+  it('Check if avg rating gte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/products?avgRatinggte=4')
@@ -215,7 +215,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Avg Rating lte query returns correct data', (done) => {
+  it('Check if avg rating lte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/products?avgRatinglte=2')
@@ -233,7 +233,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Rating gte query returns correct data', (done) => {
+  it('Check if rating gte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allreviews?ratinggte=5')
@@ -251,7 +251,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Rating lte query returns correct data', (done) => {
+  it('Check if rating lte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allreviews?ratinglte=4')
@@ -269,7 +269,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Total gte query returns correct data', (done) => {
+  it('Check if total gte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allcarts?totalgte=300')
@@ -286,7 +286,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Total lte query returns correct data', (done) => {
+  it('Check if total lte query returns correct data', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allcarts?totallte=300')
@@ -297,6 +297,26 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.body.data[0]).to.be.an('object');
         expect(res.body.data.length).to.be.gte(2);
         expect(Number(res.body.data[0].total)).to.be.lte(300);
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Check if all selected model associations are returned with query', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/users/admin/allusers?include=model,products,carts,reviews')
+      .set({ Authorization: `Bearer ${token}` })
+      .end((err, res) => {
+        const { data } = res.body;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data).to.be.a('array');
+        expect(data[0]).to.have.any.keys('Products');
+        expect(data[0].Products[0]).to.have.any.keys('Wishlists');
+        expect(data[0]).to.have.any.keys('Cart');
+        expect(data[0]).to.have.any.keys('Reviews');
         expect(err).to.be.null;
 
         done();

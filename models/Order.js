@@ -201,10 +201,6 @@ const getOrderTotal = async (order, req, res) => {
     Number(orderDiscount);
 
   order.dataValues.total = total;
-
-  console.log(taxAmount);
-  console.log(Number(taxAmount) + Number(subTotal));
-  console.log(total);
 };
 
 Order.beforeCreate(getOrderTotal);

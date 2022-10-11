@@ -43,16 +43,14 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   req.body = req.user.dataValues;
   req.body.subTotal = Cart.dataValues.total;
 
-  // Check if user activeStatus is active
-  // Set order status to pending at the bottom of this route
-
-  console.log(req.body);
+  if (!req.user.dataValues.activeStatus === 'active') {
+    return next(new ErrorResponse('Please active your account first', 400));
+  }
 
   const order = await Orders.build(req.body);
 
-  console.log(req.user.dataValues);
-  console.log(Cart.dataValues.total);
-
-  order.save();
+  order.orderStatus = 'pending';
+  await order.save();
+  //   await order.destroy();
   res.status(200).json({ success: true, data: order });
 });

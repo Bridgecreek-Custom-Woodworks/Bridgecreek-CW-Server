@@ -92,7 +92,7 @@ describe('CART WORKFLOW TEST ==>', function () {
       .request(server)
       .post('/api/v1/cartItems/68c70732-98ff-40cc-86ce-04ceef2eb623')
       .set({ Authorization: `Bearer ${token}` })
-      .send({ quantity: 2, discount: 10 })
+      .send({ quantity: 2, discount: 0.1 })
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.a('object');

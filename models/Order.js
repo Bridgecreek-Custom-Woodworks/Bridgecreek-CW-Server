@@ -44,7 +44,7 @@ const Order = sequelize.define(
     },
     tax: {
       type: Sequelize.DECIMAL,
-      defaultValue: 0.6,
+      defaultValue: 0.06,
       allowNull: false,
       unique: false,
       validate: {
@@ -67,7 +67,7 @@ const Order = sequelize.define(
 
       // Customer to provide shipping cost
     },
-    discount: {
+    orderDiscount: {
       type: Sequelize.DECIMAL,
       allowNull: false,
       defaultValue: 0,
@@ -188,5 +188,26 @@ const Order = sequelize.define(
 );
 
 // sequelize.sync({ force: true });
+
+const getOrderTotal = async (order, req, res) => {
+  const { tax, subTotal, shipping, orderDiscount } = order.dataValues;
+
+  const taxAmount = Number(tax) * Number(subTotal);
+
+  const total =
+    Number(taxAmount) +
+    Number(shipping) +
+    Number(subTotal) -
+    Number(orderDiscount);
+
+  order.dataValues.total = total;
+
+  console.log(taxAmount);
+  console.log(Number(taxAmount) + Number(subTotal));
+  console.log(total);
+};
+
+Order.beforeCreate(getOrderTotal);
+// Order.afterCreate(getOrderTotal);
 
 module.exports = Order;

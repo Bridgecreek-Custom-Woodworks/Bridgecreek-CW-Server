@@ -7,6 +7,7 @@ const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
 const Cart = require('../models/Cart');
 const CartItems = require('../models/CartItem');
+const Orders = require('../models/Order');
 const crypto = require('crypto');
 // const ErrorResponse = require('../utils/errorResponse');
 
@@ -190,6 +191,9 @@ Cart.belongsTo(User, { foreignKey: 'userId' });
 
 User.hasOne(Wishlist, { foreignKey: 'userId' });
 Wishlist.belongsTo(User, { foreignKey: 'userId' });
+
+User.hasMany(Orders, { foreignKey: 'userId' });
+Orders.belongsTo(User, { foreignKey: 'userId' });
 
 Products.hasMany(Wishlist, { foreignKey: 'productId' });
 Wishlist.belongsTo(Products, { foreignKey: 'productId' });

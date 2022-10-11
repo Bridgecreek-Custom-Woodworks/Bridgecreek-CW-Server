@@ -53,7 +53,21 @@ const CartItems = sequelize.define(
     },
 
     discount: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.DECIMAL,
+      defaultValue: 0.0,
+      allowNull: true,
+      unique: false,
+      validate: {
+        max: {
+          args: [0.1],
+          msg: 'Discount can be more than ten percent',
+        },
+      },
+    },
+
+    discountTotal: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0,
       allowNull: true,
       unique: false,
     },
@@ -94,9 +108,18 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
     where: { productId: cartItems.dataValues.productId },
   });
 
+  // Getting item price by multiplying cartItem quantity times product price
   let price = Number(product.dataValues.price) * cartItems.dataValues.quantity;
 
+  // Setting cartItem total to value of price
   cartItems.dataValues.total = price;
+
+  // Getting discount dollar amount
+  const discountAmount =
+    cartItems.dataValues.total * cartItems.dataValues.discount;
+
+  // Setting cartItem discountTotal dollar amount
+  cartItems.dataValues.discountTotal = discountAmount;
 
   const getCartTotal = await CartItems.findAll({
     attributes: [
@@ -110,6 +133,7 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
     raw: true,
   });
 
+  // Setting cartTotal variable with conditional
   try {
     let cartTotal;
 
@@ -120,8 +144,16 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
       cartTotal = 0;
     }
 
-    const cartTotalNumber = Number(cartTotal).toFixed(2);
+    let cartTotalNumber;
+    cartTotalNumber =
+      Number(cartTotal).toFixed(2) - Number(discountAmount).toFixed(2);
 
+    // Sets Cart model total field to sum of cartItems total field after delete
+    if (req.type === 'BULKDELETE') {
+      cartTotalNumber = cartTotal;
+    }
+
+    // Updating Cart model total field
     await sequelize
       .model('Carts')
       .update(

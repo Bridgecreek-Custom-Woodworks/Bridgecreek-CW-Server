@@ -70,7 +70,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
   it('Get a single users cartItems', (done) => {
     chai
       .request(server)
-      .get(`/api/v1/cartItems/${cartItemId}`)
+      .get(`/api/v1/cartitems/${cartItemId}`)
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const { cartItemId, productId } = res.body.data;
@@ -89,9 +89,9 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
   it('Create a cart Item', (done) => {
     chai
       .request(server)
-      .post(`/api/v1/cartItems/${product.productId}`)
+      .post(`/api/v1/cartitems/${product.productId}`)
       .set({ Authorization: `Bearer ${userToken}` })
-      .send({ quantity: 3, discount: 10 })
+      .send({ quantity: 3, discount: 0.1 })
       .end((err, res) => {
         newCartItemId = res.body.data.cartItemId;
         newCartId = res.body.data.cartId;
@@ -99,7 +99,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.a('object');
         expect(res.body.data.quantity).to.be.equal(3);
-        expect(res.body.data.discount).to.be.equal(10);
+        expect(res.body.data.discount).to.be.equal('0.1');
         expect(res.body.data.total).to.be.equal(135);
         expect(err).to.be.null;
 

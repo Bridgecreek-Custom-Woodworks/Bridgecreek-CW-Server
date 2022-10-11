@@ -17,7 +17,12 @@ const router = express.Router();
 router.use('/admin', orderRouter);
 
 // Route = /api/v1/orders
-router.get('/getmyorders', protect, advancedQuerySearch(Orders), getMyOrders);
+router.get(
+  '/getmyorders',
+  protect,
+  advancedQuerySearch(Orders, true),
+  getMyOrders
+);
 router.get('/getorder/:orderId', protect, getOrder);
 router.post('/', protect, createOrder);
 

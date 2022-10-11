@@ -18,9 +18,9 @@ exports.getAllOrders = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/orders/getmyorders
 // access Private
 exports.getMyOrders = asyncHandler(async (req, res, next) => {
-  const order = await Orders.findAll({
-    where: { userId: req.user.userId },
-  });
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
+  }
 
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
@@ -30,8 +30,12 @@ exports.getMyOrders = asyncHandler(async (req, res, next) => {
 // access Private
 exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Orders.findOne({
-    where: {},
+    where: { orderId: req.params.orderId },
   });
+
+  if (!order) {
+    return next(new ErrorResponse(`Order ${req.params.orderId} was not found`));
+  }
   res.status(200).json({ success: true, data: order });
 });
 
@@ -40,7 +44,11 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 // access Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
   const { Cart } = req.user.dataValues;
+
+  //  Setting user values to the body of the req for the order
   req.body = req.user.dataValues;
+
+  //   Setting the Cart total to the body of the req subTotal for the order
   req.body.subTotal = Cart.dataValues.total;
 
   if (!req.user.dataValues.activeStatus === 'active') {

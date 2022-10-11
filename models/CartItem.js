@@ -157,7 +157,7 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
     await sequelize
       .model('Carts')
       .update(
-        { total: cartTotalNumber },
+        { total: Number(cartTotalNumber).toFixed(2) },
         { where: { cartId: cartItems.dataValues.cartId } }
       );
   } catch (error) {

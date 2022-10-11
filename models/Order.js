@@ -200,9 +200,8 @@ const getOrderTotal = async (order, req, res) => {
     Number(subTotal) -
     Number(orderDiscount);
 
-  order.dataValues.total = total;
+  order.dataValues.total = Number(total).toFixed(2);
 };
-
 Order.beforeCreate(getOrderTotal);
 // Order.afterCreate(getOrderTotal);
 

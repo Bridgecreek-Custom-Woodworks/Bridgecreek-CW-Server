@@ -111,7 +111,7 @@ describe('CART WORKFLOW TEST ==>', function () {
             expect(res.status).to.be.equal(200);
             expect(res.body.data).to.be.an('array');
             expect(cartId).to.be.a('string');
-            expect(total).to.be.equal('466.98');
+            expect(total).to.be.equal('436.78');
             expect(res.body.data[0]).to.have.all.keys(userCartKeys);
             expect(err).to.be.null;
 

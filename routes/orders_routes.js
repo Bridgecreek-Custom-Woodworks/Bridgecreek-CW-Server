@@ -3,6 +3,8 @@ const {
   getMyOrders,
   getOrder,
   createOrder,
+  updateOrder,
+  deleteOrder,
 } = require('../controllers/order_controller');
 const { protect } = require('../middleware/auth_middleware');
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
@@ -25,5 +27,7 @@ router.get(
 );
 router.get('/getorder/:orderId', protect, getOrder);
 router.post('/', protect, createOrder);
+router.put('/update/:orderId', protect, updateOrder);
+router.delete('/delete/:orderId', protect, deleteOrder);
 
 module.exports = router;

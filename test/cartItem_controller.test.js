@@ -91,7 +91,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
       .request(server)
       .post(`/api/v1/cartitems/${product.productId}`)
       .set({ Authorization: `Bearer ${userToken}` })
-      .send({ quantity: 3, discount: 0.1 })
+      .send({ quantity: 3 })
       .end((err, res) => {
         newCartItemId = res.body.data.cartItemId;
         newCartId = res.body.data.cartId;
@@ -99,7 +99,6 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.a('object');
         expect(res.body.data.quantity).to.be.equal(3);
-        expect(res.body.data.discount).to.be.equal('0.1');
         expect(res.body.data.total).to.be.equal(135);
         expect(err).to.be.null;
 

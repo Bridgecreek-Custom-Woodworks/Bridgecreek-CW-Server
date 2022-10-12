@@ -38,7 +38,6 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
             'productId',
             'cartItemId',
             'quantity',
-            'discount',
             'updatedAt',
             'createdAt',
           ],

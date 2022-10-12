@@ -24,6 +24,19 @@ const Product = sequelize.define(
       allowNull: false,
       unique: false,
     },
+
+    discount: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0.1,
+      allowNull: true,
+      unique: false,
+      validate: {
+        max: {
+          args: [0.1],
+          msg: 'Discount can be more than ten percent',
+        },
+      },
+    },
     weight: {
       type: Sequelize.DECIMAL,
       defaultValue: 0.0,

@@ -52,19 +52,6 @@ const CartItems = sequelize.define(
       },
     },
 
-    discount: {
-      type: Sequelize.DECIMAL,
-      defaultValue: 0.0,
-      allowNull: true,
-      unique: false,
-      validate: {
-        max: {
-          args: [0.1],
-          msg: 'Discount can be more than ten percent',
-        },
-      },
-    },
-
     discountTotal: {
       type: Sequelize.DECIMAL,
       defaultValue: 0,
@@ -104,7 +91,7 @@ const CartItems = sequelize.define(
 
 const getCartAndCartItemTotals = async (cartItems, req, res) => {
   const product = await Products.findOne({
-    attributes: ['price'],
+    attributes: ['price', 'discount'],
     where: { productId: cartItems.dataValues.productId },
   });
 
@@ -116,7 +103,7 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
 
   // Getting discount dollar amount
   const discountAmount =
-    cartItems.dataValues.total * cartItems.dataValues.discount;
+    cartItems.dataValues.total * product.dataValues.discount;
 
   // Setting cartItem discountTotal dollar amount
   cartItems.dataValues.discountTotal = discountAmount;

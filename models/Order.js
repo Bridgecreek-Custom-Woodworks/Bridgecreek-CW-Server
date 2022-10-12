@@ -57,11 +57,16 @@ const Order = sequelize.define(
           msg: 'Tax must be 1 or less',
         },
       },
-      //
+    },
+    taxTotal: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0,
+      allowNull: false,
+      unique: false,
     },
     shipping: {
       type: Sequelize.DECIMAL,
-      defaultValue: 10,
+      defaultValue: 10, // <== Change this back to 0 after testing *****
       allowNull: false,
       unique: false,
 
@@ -200,6 +205,7 @@ const getOrderTotal = async (order, req, res) => {
     Number(subTotal) -
     Number(orderDiscount);
 
+  order.dataValues.taxTotal = Number(taxAmount).toFixed(2);
   order.dataValues.total = Number(total).toFixed(2);
 };
 Order.beforeCreate(getOrderTotal);

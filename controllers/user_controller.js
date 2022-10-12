@@ -34,7 +34,8 @@ exports.getUser = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: user });
+  // res.status(200).json({ success: true, data: user });
+  res.status(200).json(res.advancedQuerySearch);
 });
 
 // @desc Create user

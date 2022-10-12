@@ -74,6 +74,9 @@ Products.belongsToMany(Carts, {
   onDelete: 'NO ACTION',
 });
 
+Carts.hasMany(CartItems, { foreignKey: 'cartId' });
+CartItems.belongsTo(Carts, { foreignKey: 'cartId' });
+
 Carts.prototype.removeCartItems = async function (cartId) {
   await CartItems.destroy({
     where: {

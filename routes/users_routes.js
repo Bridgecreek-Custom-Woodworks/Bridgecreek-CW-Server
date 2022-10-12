@@ -7,6 +7,9 @@ const {
 } = require('../controllers/user_controller');
 
 const { protect } = require('../middleware/auth_middleware');
+const advancedQuerySearch = require('../middleware/advancedQuerySearch');
+
+const Users = require('../models/User');
 
 const userRouter = require('./admin_routes');
 
@@ -16,7 +19,7 @@ const router = express.Router();
 router.use('/admin', userRouter);
 
 // Route = /api/v1/users
-router.get('/getme', protect, getUser);
+router.get('/getme', protect, advancedQuerySearch(Users, true), getUser);
 router.post('/', registerUser);
 router.put('/updateme', protect, updateUser);
 router.delete('/deleteme', protect, deleteUser);

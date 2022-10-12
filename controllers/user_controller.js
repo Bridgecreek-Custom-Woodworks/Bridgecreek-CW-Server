@@ -21,20 +21,11 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/users/getme
 // access Private
 exports.getUser = asyncHandler(async (req, res, next) => {
-  const user = await Users.findOne({
-    where: { userId: req.user.userId },
-  });
-
-  if (!user) {
-    return next(
-      new ErrorResponse(
-        `User not found with the id of ${req.params.userId}`,
-        404
-      )
-    );
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
   }
 
-  res.status(200).json({ success: true, data: user });
+  res.status(200).json(res.advancedQuerySearch);
 });
 
 // @desc Create user

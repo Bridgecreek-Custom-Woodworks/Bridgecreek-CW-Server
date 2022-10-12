@@ -5,7 +5,7 @@ let uuid1 = uuidv4();
 let uuid2 = uuidv4();
 let uuid3 = uuidv4();
 
-console.log(uuid1, uuid2, uuid3);
+// console.log(uuid1, uuid2, uuid3);
 
 // How generate next day
 const date = new Date();
@@ -98,3 +98,30 @@ const queryGt_e_Lt_e = (query, reqQuery, match, next) => {
     return (query['where'] = { [queryField]: { [Op.lt]: fieldValue } });
   }
 };
+
+// Converting dependency objects into a string
+// modelAssociations = JSON.stringify(modelAssociations[0], function (key, value) {
+//   return (modelAssociations[value] = value);
+// });
+
+let cartArray = [
+  (Cart = { activeStatus: 'New' }),
+  (Cart = { activeStatus: 'Paid' }),
+  (Cart = { activeStatus: 'Completed' }),
+  (Cart = { activeStatus: 'Checkout' }),
+];
+
+let newArray;
+for (let i = 0; i < cartArray.length; i++) {
+  if (cartArray[i].activeStatus === 'Checkout') {
+    newArray = cartArray[i];
+    break;
+  } else if (cartArray[i].activeStatus === 'New') {
+    newArray = cartArray[i];
+  }
+}
+
+if (newArray) {
+  console.log('Object has a property');
+}
+console.log(newArray);

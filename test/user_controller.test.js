@@ -79,9 +79,9 @@ describe('USER WORKFLOW TEST ===>', function () {
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data.userId).to.be.equal(user.userId);
-        expect(res.body.data).to.have.all.keys(userKeys);
+        expect(res.body.data[0]).to.be.an('object');
+        expect(res.body.data[0].userId).to.be.equal(user.userId);
+        expect(res.body.data[0]).to.have.all.keys(userKeys);
         expect(err).to.be.null;
 
         done();

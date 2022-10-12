@@ -106,7 +106,7 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
     cartItems.dataValues.total * product.dataValues.discount;
 
   // Setting cartItem discountTotal dollar amount
-  cartItems.dataValues.discountTotal = discountAmount;
+  cartItems.dataValues.discountTotal = Number(discountAmount).toFixed(2);
 
   const getCartTotal = await CartItems.findAll({
     attributes: [

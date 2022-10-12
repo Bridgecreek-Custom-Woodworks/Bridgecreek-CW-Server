@@ -1,5 +1,6 @@
 const CartItem = require('../models/CartItem');
 const Carts = require('../models/Cart');
+const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 
@@ -19,6 +20,7 @@ exports.getAllCartItems = asyncHandler(async (req, res, next) => {
 exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
   const cartItem = await CartItem.findOne({
     where: { cartItemId: req.params.cartItemId },
+    include: [{ model: Products }],
   });
 
   if (!cartItem) {
@@ -35,11 +37,24 @@ exports.createCartItem = asyncHandler(async (req, res, next) => {
   req.body.productId = req.params.productId;
   req.body.userId = req.user.userId;
 
-  if (req.user.Cart === null) {
+  let usersCart;
+
+  // Getting users cart that is not already in paid or completed status
+  for (let i = 0; i < req.user.Carts.length; i++) {
+    if (req.user.Carts[i].dataValues.cartStatus === 'Checkout') {
+      usersCart = req.user.Carts[i];
+      break;
+    } else if (req.user.Carts[i].dataValues.cartStatus === 'New') {
+      usersCart = req.user.Carts[i];
+    }
+  }
+
+  if (!usersCart) {
     let cart = await Carts.create(req.body);
+
     req.body.cartId = cart.dataValues.cartId;
   } else {
-    req.body.cartId = req.user.Cart.dataValues.cartId;
+    req.body.cartId = usersCart.cartId;
   }
 
   const cartItem = await CartItem.create(req.body);

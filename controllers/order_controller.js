@@ -31,8 +31,6 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
     where: { orderId: req.params.orderId },
   });
 
-  // console.log(req.user.dataValues.Cart); ****
-
   if (!order) {
     return next(new ErrorResponse(`Order ${req.params.orderId} was not found`));
   }
@@ -43,13 +41,25 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/order
 // access Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
-  const { Cart } = req.user.dataValues;
+  const { Carts } = req.user.dataValues;
+
+  let usersCart;
+
+  // Getting users cart that is not already in paid or completed status
+  for (let i = 0; i < Carts.length; i++) {
+    if (Carts[i].dataValues.cartStatus === 'Checkout') {
+      usersCart = Carts[i];
+      break;
+    } else if (Carts[i].dataValues.cartStatus === 'New') {
+      usersCart = Carts[i];
+    }
+  }
 
   //  Setting user values to the body of the req for the order
   req.body = req.user.dataValues;
 
   //  Setting the Cart total to the body of the req subTotal for the order
-  req.body.subTotal = Cart.dataValues.total;
+  req.body.subTotal = usersCart.dataValues.total;
 
   if (!req.user.dataValues.activeStatus === 'active') {
     return next(new ErrorResponse('Please active your account first', 400));
@@ -57,9 +67,14 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   const order = await Orders.build(req.body);
 
+  // Changing cart status to checkout
+  usersCart.cartStatus = 'Checkout';
+  await usersCart.save();
+
+  // Changing orders status to pending
   order.orderStatus = 'pending';
   await order.save();
-  //   await order.destroy();
+
   res.status(200).json({ success: true, data: order });
 });
 

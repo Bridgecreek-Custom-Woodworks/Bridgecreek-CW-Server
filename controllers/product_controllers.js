@@ -7,7 +7,6 @@ const Reviews = require('../models/Reviews');
 // @route GET /api/v1/products
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
-  // console.log('Model Assc ==>', res.advancedQuerySearch.modelAssociations);
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 

@@ -1,4 +1,4 @@
-const Cart = require('../models/Cart');
+const Carts = require('../models/Cart');
 const User = require('../models/User');
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
@@ -19,7 +19,7 @@ exports.getAllCarts = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/carts/mycart
 // access Private/Guest
 exports.getMyCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findAll({
+  const cart = await Carts.findAll({
     where: {
       [Op.and]: [
         { userId: req.user.userId },
@@ -60,7 +60,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
 // THIS ROUTE MAT NOT BE NECESSARY AS THE CART IS CREATED AT THE TIME THE CUSTOMER ADDS A PRODUCT.
 exports.createCart = asyncHandler(async (req, res, next) => {
   req.body.userId = req.user.userId;
-  const cart = await Cart.create(req.body);
+  const cart = await Carts.create(req.body);
 
   if (!cart) {
     return next(
@@ -77,7 +77,7 @@ exports.createCart = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/carts/mycart/update/:cartId
 // access Private/Guest
 exports.updateMyCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.update(req.body, {
+  const cart = await Carts.update(req.body, {
     where: {
       cartId: req.params.cartId,
     },
@@ -99,7 +99,7 @@ exports.updateMyCart = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/admin/deletecart/:cartId
 // access Private/Admin
 exports.deleteCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({
+  const cart = await Carts.findOne({
     where: { cartId: req.params.cartId },
   });
 

@@ -17,6 +17,8 @@ const { deleteCart } = require('../controllers/cart_controller');
 
 const { getAllCartItems } = require('../controllers/cartItem_controller');
 
+const { getAllOrders } = require('../controllers/order_controller');
+
 const router = express.Router({ mergeParams: true });
 
 const { protect, authorize } = require('../middleware/auth_middleware');
@@ -28,6 +30,7 @@ const Carts = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const Reviews = require('../models/Reviews');
 const Wishlist = require('../models/Wishlist');
+const Orders = require('../models/Order');
 
 // Route  = /api/v1/admin
 
@@ -80,6 +83,15 @@ router.get(
   authorize('admin'),
   advancedQuerySearch(CartItems),
   getAllCartItems
+);
+
+// Admin Orders Routes
+router.get(
+  '/allorders',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(Orders),
+  getAllOrders
 );
 
 module.exports = router;

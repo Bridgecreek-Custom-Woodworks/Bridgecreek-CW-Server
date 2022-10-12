@@ -92,7 +92,7 @@ describe('CART WORKFLOW TEST ==>', function () {
       .request(server)
       .post('/api/v1/cartItems/68c70732-98ff-40cc-86ce-04ceef2eb623')
       .set({ Authorization: `Bearer ${token}` })
-      .send({ quantity: 2, discount: 10 })
+      .send({ quantity: 2 })
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.a('object');
@@ -111,7 +111,7 @@ describe('CART WORKFLOW TEST ==>', function () {
             expect(res.status).to.be.equal(200);
             expect(res.body.data).to.be.an('array');
             expect(cartId).to.be.a('string');
-            expect(total).to.be.equal('466.98');
+            expect(total).to.be.equal('436.78');
             expect(res.body.data[0]).to.have.all.keys(userCartKeys);
             expect(err).to.be.null;
 

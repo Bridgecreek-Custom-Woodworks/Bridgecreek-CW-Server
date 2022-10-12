@@ -349,7 +349,7 @@ exports.cartItemKeys = [
   'productId',
   'cartId',
   'quantity',
-  // 'discount',
+  'Product',
   'discountTotal',
   'updatedAt',
   'createdAt',

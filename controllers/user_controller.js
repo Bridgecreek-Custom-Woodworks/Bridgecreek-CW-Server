@@ -6,7 +6,6 @@ const { verifyPassword } = require('../utils/functions');
 const sendEmail = require('../utils/sendEmail');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-// const { parse, stringify } = require('flatted/cjs');
 
 // @desc Get all users
 // @route GET /api/v1/users/admin/allusers

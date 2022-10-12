@@ -1,5 +1,6 @@
 const CartItem = require('../models/CartItem');
 const Carts = require('../models/Cart');
+const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 
@@ -19,6 +20,7 @@ exports.getAllCartItems = asyncHandler(async (req, res, next) => {
 exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
   const cartItem = await CartItem.findOne({
     where: { cartItemId: req.params.cartItemId },
+    include: [{ model: Products }],
   });
 
   if (!cartItem) {

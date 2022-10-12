@@ -29,10 +29,9 @@ exports.getMyOrders = asyncHandler(async (req, res, next) => {
 exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Orders.findOne({
     where: { orderId: req.params.orderId },
-    include: { all: true },
   });
 
-  console.log(req.user.dataValues.Cart);
+  // console.log(req.user.dataValues.Cart); ****
 
   if (!order) {
     return next(new ErrorResponse(`Order ${req.params.orderId} was not found`));

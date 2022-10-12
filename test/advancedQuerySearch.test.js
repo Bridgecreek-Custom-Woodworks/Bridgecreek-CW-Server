@@ -101,7 +101,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.body.data).to.be.an('array');
         expect(data[0]).to.have.any.keys('Products');
         expect(data[0]).to.have.any.keys('Reviews');
-        expect(data[0]).to.have.any.keys('Cart');
+        expect(data[0]).to.have.any.keys('Carts');
         expect(data[0]).to.have.any.keys('Wishlist');
         expect(err).to.be.null;
 
@@ -315,7 +315,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.body.data).to.be.a('array');
         expect(data[0]).to.have.any.keys('Products');
         expect(data[0].Products[0]).to.have.any.keys('Wishlists');
-        expect(data[0]).to.have.any.keys('Cart');
+        expect(data[0]).to.have.any.keys('Carts');
         expect(data[0]).to.have.any.keys('Reviews');
         expect(err).to.be.null;
 

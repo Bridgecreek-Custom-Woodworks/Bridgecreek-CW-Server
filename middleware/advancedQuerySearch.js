@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const User = require('../models/User');
-const Cart = require('../models/Cart');
+const Carts = require('../models/Cart');
 const CartItem = require('../models/CartItem');
 const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
@@ -90,9 +90,9 @@ const advancedQuerySearch =
 
     if (reqQuery.include === 'true') {
       query['include'] = { all: true };
+    } else if (reqQuery.include === 'nested') {
+      query['include'] = { all: true, nested: true };
     }
-
-    // Working on more advanced and selective include query. Remove after testing  ***********
 
     if (reqQuery.include && reqQuery.include.startsWith('model')) {
       query['include'] = [];
@@ -102,7 +102,7 @@ const advancedQuerySearch =
         if (includeArry[i] === 'users') {
           query['include'].push({ model: User });
         } else if (includeArry[i] === 'carts') {
-          query['include'].push({ model: Cart });
+          query['include'].push({ model: Carts });
         } else if (includeArry[i] === 'cartitems') {
           query['include'].push({ model: CartItem });
         } else if (includeArry[i] === 'products') {
@@ -135,16 +135,14 @@ const advancedQuerySearch =
       };
     }
 
-    // Need to work on returning the model associations to the client for dynamic drop down (include: model)
-    let modelAssociations = Object.values(Model.associations);
-    req.modelAssociations = modelAssociations;
+    let modelAssociations = Object.keys(Model.associations);
 
     res.advancedQuerySearch = {
       success: true,
       count: results.length,
       pagination,
       data: results,
-      // modelAssociations,
+      modelAssociations,
     };
 
     next();

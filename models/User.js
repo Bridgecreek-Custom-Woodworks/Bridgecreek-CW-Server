@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const Wishlist = require('../models/Wishlist');
 const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
-const Cart = require('../models/Cart');
+const Carts = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const Orders = require('../models/Order');
 const crypto = require('crypto');
@@ -186,8 +186,8 @@ Products.belongsToMany(User, {
 User.hasMany(Reviews, { foreignKey: 'userId' });
 Reviews.belongsTo(User, { foreignKey: 'userId' });
 
-User.hasOne(Cart, { foreignKey: 'userId' }); // Might need to change this to hasMany
-Cart.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Carts, { foreignKey: 'userId' });
+Carts.belongsTo(User, { foreignKey: 'userId' });
 
 User.hasOne(Wishlist, { foreignKey: 'userId' });
 Wishlist.belongsTo(User, { foreignKey: 'userId' });
@@ -201,8 +201,8 @@ Wishlist.belongsTo(Products, { foreignKey: 'productId' });
 Products.hasMany(CartItems, { foreignKey: 'productId' });
 CartItems.belongsTo(Products, { foreignKey: 'productId' });
 
-Cart.hasMany(CartItems, { foreignKey: 'cartId' });
-CartItems.belongsTo(Cart, { foreignKey: 'cartId' });
+Carts.hasMany(CartItems, { foreignKey: 'cartId' });
+CartItems.belongsTo(Carts, { foreignKey: 'cartId' });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

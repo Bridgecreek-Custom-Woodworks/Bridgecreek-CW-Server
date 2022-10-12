@@ -87,6 +87,45 @@ describe('CART WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Update cart', (done) => {
+    chai
+      .request(server)
+      .put(`/api/v1/carts/mycart/update/${createdCartId}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ total: 40, cartStatus: 'Checkout' })
+      .end((err, res) => {
+        const { cartId, userId, total, cartStatus } = res.body.data[1][0];
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data[1]).to.be.a('array');
+        expect(res.body.data[1][0]).to.have.all.keys(cartKeys);
+        expect(cartId).to.be.a('string');
+        expect(userId).to.be.a('string');
+        expect(total).to.be.equal('40');
+        expect(cartStatus).to.be.equal('Checkout');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Delete cart', (done) => {
+    chai
+      .request(server)
+      .delete(`/api/v1/admin/deletecart/${createdCartId}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .end((err, res) => {
+        const afterdeletedCount = count - 1;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body.success).to.be.true;
+        expect(afterdeletedCount).to.be.equal(3);
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Check if cart total is being added and subtracted correctly', (done) => {
     chai
       .request(server)
@@ -138,45 +177,6 @@ describe('CART WORKFLOW TEST ==>', function () {
                   });
               });
           });
-      });
-  });
-
-  it('Update cart', (done) => {
-    chai
-      .request(server)
-      .put(`/api/v1/carts/mycart/update/${createdCartId}`)
-      .set({ Authorization: `Bearer ${token}` })
-      .send({ total: 40, cartStatus: 'Checkout' })
-      .end((err, res) => {
-        const { cartId, userId, total, cartStatus } = res.body.data[1][0];
-
-        expect(res.status).to.be.equal(200);
-        expect(res.body.data[1]).to.be.a('array');
-        expect(res.body.data[1][0]).to.have.all.keys(cartKeys);
-        expect(cartId).to.be.a('string');
-        expect(userId).to.be.a('string');
-        expect(total).to.be.equal('40');
-        expect(cartStatus).to.be.equal('Checkout');
-        expect(err).to.be.null;
-
-        done();
-      });
-  });
-
-  it('Delete cart', (done) => {
-    chai
-      .request(server)
-      .delete(`/api/v1/admin/deletecart/${createdCartId}`)
-      .set({ Authorization: `Bearer ${token}` })
-      .end((err, res) => {
-        const afterdeletedCount = count - 1;
-
-        expect(res.status).to.be.equal(200);
-        expect(res.body.success).to.be.true;
-        expect(afterdeletedCount).to.be.equal(3);
-        expect(err).to.be.null;
-
-        done();
       });
   });
 });

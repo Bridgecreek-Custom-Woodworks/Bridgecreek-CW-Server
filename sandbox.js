@@ -124,4 +124,3 @@ for (let i = 0; i < cartArray.length; i++) {
 if (newArray) {
   console.log('Object has a property');
 }
-console.log(newArray);

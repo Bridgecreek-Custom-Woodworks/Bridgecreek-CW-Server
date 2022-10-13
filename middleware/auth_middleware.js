@@ -1,5 +1,6 @@
 const Users = require('../models/User');
 const Cart = require('../models/Cart');
+const Orders = require('../models/Order');
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('./async_middleware');
 const ErrorResponse = require('../utils/errorResponse');
@@ -29,7 +30,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     // Adding user to the req object for all protected routes
     req.user = await Users.findOne({
       where: { userId: decoded.userId },
-      include: [{ model: Cart }],
+      include: [{ model: Cart }, { model: Orders }],
     });
 
     next();

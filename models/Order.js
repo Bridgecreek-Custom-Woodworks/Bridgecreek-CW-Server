@@ -14,7 +14,7 @@ const Order = sequelize.define(
     userId: {
       type: Sequelize.UUID,
       allowNull: false,
-      unique: true,
+      unique: false,
       references: {
         type: Sequelize.UUID,
         model: 'Users',
@@ -141,7 +141,7 @@ const Order = sequelize.define(
     },
     email: {
       type: Sequelize.STRING,
-      unique: true,
+      unique: false,
       allowNull: false,
       validate: {
         isEmail: {

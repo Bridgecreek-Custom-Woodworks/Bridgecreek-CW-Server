@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           cartId: 'e4e71f3b-6523-4c97-980e-2c80be8dc352',
-          cartStatus: 'New',
+          cartStatus: 'Checkout',
           userId: '1024cf0f-9c88-4af3-8eb3-928a0a0b844e',
           total: 165.0,
           createdAt: new Date(),
@@ -15,7 +15,7 @@ module.exports = {
         },
         {
           cartId: '85081ddb-1fdb-4a17-9466-70473bde7218',
-          cartStatus: 'New',
+          cartStatus: 'Checkout',
           userId: '15242016-6385-4ef3-9c9a-0ec1bf595515',
           total: 316.98,
           createdAt: new Date(),

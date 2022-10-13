@@ -41,9 +41,10 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/orders
 // access Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
-  const { Carts, activeStatus } = req.user.dataValues;
+  const { Carts, activeStatus, Orders: existingOrders } = req.user.dataValues;
 
   let usersCart;
+  let newOrPendingOrders;
 
   // Getting users cart that is not already in paid or completed status
   for (let i = 0; i < Carts.length; i++) {
@@ -61,8 +62,28 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   //  Setting the Cart total to the body of the req subTotal for the order
   req.body.subTotal = usersCart.dataValues.total;
 
+  // Verifying that the customer's account is active
   if (activeStatus === 'pending' || activeStatus === 'not active') {
     return next(new ErrorResponse('Please active your account first', 400));
+  }
+
+  // Getting users order that is not already in paid or shipped status
+  for (let i = 0; i < existingOrders.length; i++) {
+    if (existingOrders[i].dataValues.orderStatus === 'pending') {
+      newOrPendingOrders = existingOrders[i];
+      break;
+    } else if (existingOrders[i].dataValues.orderStatus === 'new order') {
+      newOrPendingOrders = existingOrders[i];
+    }
+  }
+
+  if (newOrPendingOrders) {
+    return next(
+      new ErrorResponse(
+        'Cannot create new order if new or pending order exist',
+        400
+      )
+    );
   }
 
   const order = await Orders.build(req.body);

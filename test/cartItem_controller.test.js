@@ -77,7 +77,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
 
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('object');
-        expect(cartItemId).to.be.a('number');
+        expect(cartItemId).to.be.a('string');
         expect(productId).to.be.a('string');
         expect(res.body.data).to.have.all.keys(cartItemKeys);
         expect(err).to.be.null;

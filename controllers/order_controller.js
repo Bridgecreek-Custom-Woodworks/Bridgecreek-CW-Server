@@ -77,24 +77,26 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     }
   }
 
-  if (newOrPendingOrders) {
-    return next(
-      new ErrorResponse(
-        'Cannot create new order if new or pending order exist',
-        400
-      )
-    );
-  }
+  // if (newOrPendingOrders) {
+  //   return next(
+  //     new ErrorResponse(
+  //       'Cannot create new order if new or pending order exist',
+  //       400
+  //     )
+  //   );
+  // }
 
   const order = await Orders.build(req.body);
 
+  order.createOrderItems(req);
+
   // Changing cart status to checkout
   usersCart.cartStatus = 'checkout';
-  await usersCart.save();
+  // await usersCart.save();   <=== Uncomment after testing *******
 
   // Changing orders status to pending
   order.orderStatus = 'pending';
-  await order.save();
+  // await order.save();  <=== Uncomment after testing *******
 
   res.status(201).json({ success: true, data: order });
 });

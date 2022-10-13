@@ -1,5 +1,8 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
+const Carts = require('../models/Cart');
+const CartItems = require('../models/CartItem');
+const Products = require('../models/Product');
 
 const Order = sequelize.define(
   'Orders',
@@ -208,6 +211,20 @@ const getOrderTotal = async (order, req, res) => {
   order.dataValues.taxTotal = Number(taxAmount).toFixed(2);
   order.dataValues.total = Number(total).toFixed(2);
 };
+
+Order.prototype.createOrderItems = async function (req) {
+  const cart = await Carts.findOne({
+    where: {
+      userId: req.user.userId,
+    },
+    include: [{ model: CartItems }, { model: Products }],
+  });
+
+  // console.log(this.orderId);
+  // console.log(cart.dataValues.Products);
+  // console.log(req.user.dataValues.Carts);
+};
+
 Order.beforeCreate(getOrderTotal);
 // Order.afterCreate(getOrderTotal);
 

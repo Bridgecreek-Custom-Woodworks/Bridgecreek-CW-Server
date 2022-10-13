@@ -38,10 +38,10 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Create order
-// @route POST /api/v1/order
+// @route POST /api/v1/orders
 // access Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
-  const { Carts } = req.user.dataValues;
+  const { Carts, activeStatus } = req.user.dataValues;
 
   let usersCart;
 
@@ -61,7 +61,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   //  Setting the Cart total to the body of the req subTotal for the order
   req.body.subTotal = usersCart.dataValues.total;
 
-  if (!req.user.dataValues.activeStatus === 'active') {
+  if (activeStatus === 'pending' || activeStatus === 'not active') {
     return next(new ErrorResponse('Please active your account first', 400));
   }
 
@@ -75,7 +75,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   order.orderStatus = 'pending';
   await order.save();
 
-  res.status(200).json({ success: true, data: order });
+  res.status(201).json({ success: true, data: order });
 });
 
 // @desc Update order

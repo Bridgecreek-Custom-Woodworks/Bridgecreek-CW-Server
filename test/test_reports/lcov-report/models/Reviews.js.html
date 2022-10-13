@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.23% </span>
+                <span class="strong">52.94% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/17</span>
+                <span class='fraction'>9/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.23% </span>
+                <span class="strong">52.94% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/17</span>
+                <span class='fraction'>9/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -269,33 +269,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -392,8 +392,8 @@ const Reviews = sequelize.define(
 &nbsp;
 // sequelize.sync({ alter: true });
 &nbsp;
-const getAverageRating = async (review, req, res) =&gt; {
-  const avg = await Reviews.findAll({
+const getAverageRating = <span class="fstat-no" title="function not covered" >as</span>ync (review, req, res) =&gt; {
+  const avg = <span class="cstat-no" title="statement not covered" >await Reviews.findAll({</span>
     attributes: [
       'productId',
       [sequelize.fn('avg', sequelize.col('rating')), 'avgRating'],
@@ -404,22 +404,22 @@ const getAverageRating = async (review, req, res) =&gt; {
     raw: true,
   });
 &nbsp;
-  try {
+<span class="cstat-no" title="statement not covered" >  try {</span>
     let avgRating;
 &nbsp;
     // If there are no reviews on a product when the user posts a review, then this ternary prevents and error by seting avg to the single user's review.
-    avgRating =
-      (await avg.length) === 0 ? <span class="branch-0 cbranch-no" title="branch not covered" >review.dataValues.rating </span>: avg[0].avgRating;
+<span class="cstat-no" title="statement not covered" >    avgRating =</span>
+      (await avg.length) === 0 ? review.dataValues.rating : avg[0].avgRating;
 &nbsp;
     // If there are no reviews left once a user deletes a review then this set the product review avg back to zero
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (!avg[0] &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >req.type)</span> {
+<span class="cstat-no" title="statement not covered" >    if (!avg[0] &amp;&amp; req.type) {</span>
 <span class="cstat-no" title="statement not covered" >      avgRating = 0;</span>
     }
 &nbsp;
-    const newAvg = Number(avgRating).toFixed(2);
+    const newAvg = <span class="cstat-no" title="statement not covered" >Number(avgRating).toFixed(2);</span>
 &nbsp;
     // This is the syntax for updating another model from inside a hook.
-    await sequelize.model('Products').update(
+<span class="cstat-no" title="statement not covered" >    await sequelize.model('Products').update(</span>
       { avgRating: newAvg },
       {
         where: { productId: review.dataValues.productId },
@@ -442,7 +442,7 @@ module.exports = Reviews;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-10-12T00:19:34.509Z
+                at 2022-10-13T16:54:45.638Z
             </div>
         <script src="../prettify.js"></script>
         <script>

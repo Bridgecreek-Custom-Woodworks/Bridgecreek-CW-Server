@@ -11,8 +11,6 @@ const User = require('../models/User');
 const colors = require('colors');
 const sequelize = require('../config/db');
 
-// console.log(process);
-
 const deleteData = async () => {
   await sequelize.sync({ force: true });
   const count = await User.count();
@@ -367,5 +365,32 @@ exports.getFirstLetterOfFirstName = (arr) => {
     const firstLetter = arr[i].firstName[0].toUpperCase();
     letterArray.push(firstLetter);
   }
+
   return letterArray;
 };
+
+// ORDER INFO *************************************************************
+
+exports.orderKeys = [
+  'orderId',
+  'userId',
+  'orderStatus',
+  'subTotal',
+  'tax',
+  'taxTotal',
+  'shipping',
+  'orderDiscount',
+  'total',
+  'firstName',
+  'lastName',
+  'street',
+  'city',
+  'state',
+  'zipCode',
+  'email',
+  'homePhone',
+  'cellPhone',
+  'comments',
+  'createdAt',
+  'updatedAt',
+];

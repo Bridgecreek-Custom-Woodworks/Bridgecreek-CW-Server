@@ -48,10 +48,10 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   // Getting users cart that is not already in paid or completed status
   for (let i = 0; i < Carts.length; i++) {
-    if (Carts[i].dataValues.cartStatus === 'Checkout') {
+    if (Carts[i].dataValues.cartStatus === 'checkout') {
       usersCart = Carts[i];
       break;
-    } else if (Carts[i].dataValues.cartStatus === 'New') {
+    } else if (Carts[i].dataValues.cartStatus === 'new') {
       usersCart = Carts[i];
     }
   }
@@ -89,7 +89,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   const order = await Orders.build(req.body);
 
   // Changing cart status to checkout
-  usersCart.cartStatus = 'Checkout';
+  usersCart.cartStatus = 'checkout';
   await usersCart.save();
 
   // Changing orders status to pending

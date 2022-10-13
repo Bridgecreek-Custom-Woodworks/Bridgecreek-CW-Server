@@ -41,10 +41,10 @@ exports.createCartItem = asyncHandler(async (req, res, next) => {
 
   // Getting users cart that is not already in paid or completed status
   for (let i = 0; i < req.user.Carts.length; i++) {
-    if (req.user.Carts[i].dataValues.cartStatus === 'Checkout') {
+    if (req.user.Carts[i].dataValues.cartStatus === 'checkout') {
       usersCart = req.user.Carts[i];
       break;
-    } else if (req.user.Carts[i].dataValues.cartStatus === 'New') {
+    } else if (req.user.Carts[i].dataValues.cartStatus === 'new') {
       usersCart = req.user.Carts[i];
     }
   }

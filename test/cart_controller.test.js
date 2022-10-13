@@ -92,7 +92,7 @@ describe('CART WORKFLOW TEST ==>', function () {
       .request(server)
       .put(`/api/v1/carts/mycart/update/${createdCartId}`)
       .set({ Authorization: `Bearer ${token}` })
-      .send({ total: 40, cartStatus: 'Checkout' })
+      .send({ total: 40, cartStatus: 'checkout' })
       .end((err, res) => {
         const { cartId, userId, total, cartStatus } = res.body.data[1][0];
 
@@ -102,7 +102,7 @@ describe('CART WORKFLOW TEST ==>', function () {
         expect(cartId).to.be.a('string');
         expect(userId).to.be.a('string');
         expect(total).to.be.equal('40');
-        expect(cartStatus).to.be.equal('Checkout');
+        expect(cartStatus).to.be.equal('checkout');
         expect(err).to.be.null;
 
         done();

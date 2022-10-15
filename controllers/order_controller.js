@@ -1,6 +1,8 @@
 const Orders = require('../models/Order');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
+const OrderItems = require('../models/OrderItems');
+const Product = require('../models/Product');
 
 // @desc Get all orders
 // @route GET /api/v1/orders/admin/allorders
@@ -29,6 +31,13 @@ exports.getMyOrders = asyncHandler(async (req, res, next) => {
 exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Orders.findOne({
     where: { orderId: req.params.orderId },
+    include: [
+      {
+        model: Product,
+        // attributes: ['price'],
+        // through: { OrderItems, attributes: ['price'] },
+      },
+    ],
   });
 
   if (!order) {
@@ -77,14 +86,14 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     }
   }
 
-  // if (newOrPendingOrders) {
-  //   return next(
-  //     new ErrorResponse(
-  //       'Cannot create new order if new or pending order exist',
-  //       400
-  //     )
-  //   );
-  // }
+  if (newOrPendingOrders) {
+    return next(
+      new ErrorResponse(
+        'Cannot create new order if new or pending order exist',
+        400
+      )
+    );
+  }
 
   const order = await Orders.build(req.body);
 
@@ -108,16 +117,31 @@ exports.updateOrder = asyncHandler(async (req, res, next) => {
   if (!req.user) {
     return next(new ErrorResponse('Please log in', 400));
   }
+  const { Carts } = req.user.dataValues;
 
-  const order = await Orders.update(req.body, {
+  let usersCart;
+
+  // Getting users cart that is not already in paid or completed status
+  for (let i = 0; i < Carts.length; i++) {
+    if (Carts[i].dataValues.cartStatus === 'checkout') {
+      usersCart = Carts[i];
+      break;
+    } else if (Carts[i].dataValues.cartStatus === 'new') {
+      usersCart = Carts[i];
+    }
+  }
+
+  let order = await Orders.findOne({
     where: { orderId: req.params.orderId },
-    returning: true,
   });
 
   if (!order) {
     return next(new ErrorResponse('Your order was not updated', 404));
   }
 
+  req.body.subTotal = usersCart.dataValues.total;
+
+  order = await order.update(req.body);
   res.status(200).json({ success: true, data: order });
 });
 

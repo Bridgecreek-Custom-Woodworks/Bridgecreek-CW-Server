@@ -23,6 +23,8 @@ const router = express.Router({ mergeParams: true });
 
 const { protect, authorize } = require('../middleware/auth_middleware');
 
+const { getAllOrderItems } = require('../controllers/orderItem_controller');
+
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
@@ -31,6 +33,7 @@ const CartItems = require('../models/CartItem');
 const Reviews = require('../models/Reviews');
 const Wishlist = require('../models/Wishlist');
 const Orders = require('../models/Order');
+const OrderItems = require('../models/OrderItems');
 
 // Route  = /api/v1/admin
 
@@ -92,6 +95,16 @@ router.get(
   authorize('admin'),
   advancedQuerySearch(Orders),
   getAllOrders
+);
+
+// Admin OrderItems Routes
+
+router.get(
+  '/allorderitems',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(OrderItems),
+  getAllOrderItems
 );
 
 module.exports = router;

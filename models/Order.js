@@ -232,38 +232,35 @@ Order.prototype.createOrderItems = async function (req) {
     },
     include: [{ model: CartItems }, { model: Products }],
   });
-  const {
-    productId,
-    price,
-    discount,
-    CartItems: cartItems,
-  } = cart.dataValues.Products[0].dataValues;
 
-  // console.log(productId); // productId
-  // console.log(this.orderId); // orderId
-  // console.log(price); // price
-  // console.log(discount * price); // discountTotal
-  // console.log(cartItems.dataValues.quantity); // quantity
-  // console.log(cartItems.dataValues.total); // total
-  //
-  // console.log(cart.dataValues.Products);
-  // console.log(cart.dataValues.Products);
-  // console.log(req.user.dataValues.Carts);
-  // console.log(cartItems);
+  for (let i = 0; i < cart.dataValues.Products.length; i++) {
+    const {
+      productId,
+      price,
+      discount,
+      CartItems: cartItems,
+    } = cart.dataValues.Products[i].dataValues;
 
-  const orderItemFields = {
-    productId: productId,
-    orderId: this.orderId,
-    price: price,
-    discountTotal: Number(discount * price).toFixed(2),
-    quantity: Number(cartItems.dataValues.quantity),
-    total: cartItems.dataValues.total,
-  };
+    // console.log(productId);
+    // console.log(this.orderId);
+    // console.log(price);
+    // console.log(discount * price);
+    // console.log(cartItems.dataValues.quantity);
+    // console.log(cartItems.dataValues.total);
+    const orderItemFields = {
+      productId: productId,
+      orderId: this.orderId,
+      price: price,
+      discountTotal: Number(discount * price).toFixed(2),
+      quantity: Number(cartItems.dataValues.quantity),
+      total: cartItems.dataValues.total,
+    };
 
-  const orderitems = await OrderItems.create(orderItemFields);
+    await OrderItems.create(orderItemFields);
+  }
 };
 
 Order.beforeCreate(getOrderTotal);
-// Order.afterCreate(getOrderTotal);
+Order.beforeUpdate(getOrderTotal);
 
 module.exports = Order;

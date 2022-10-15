@@ -4,7 +4,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const Orders = require('../models/Order');
-const { user, orderKeys, badToken } = require('./utils');
+const { user, orderKeys, createOrderKeys, badToken } = require('./utils');
 
 describe('ORDER WORKFLOW TEST ==>', function () {
   this.afterEach(async () => {
@@ -94,7 +94,7 @@ describe('ORDER WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('object');
         expect(res.body.data.orderStatus).to.be.equal('pending');
-        expect(res.body.data).to.have.all.keys(orderKeys);
+        expect(res.body.data).to.have.all.keys(createOrderKeys);
         expect(total).to.be.equal(String(orderTotal.toFixed(2))); // <== Move this to create order test
         expect(err).to.be.null;
 
@@ -168,10 +168,10 @@ describe('ORDER WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${createOrderToken}` })
       .send({ firstName: 'Not', lastName: 'Debrah', city: 'Charlotte' })
       .end((err, res) => {
-        const { firstName, lastName, city } = res.body.data[1][0];
+        const { firstName, lastName, city } = res.body.data;
 
         expect(res.status).to.be.equal(200);
-        expect(res.body.data[1][0]).to.be.a('object');
+        expect(res.body.data).to.be.a('object');
         expect(firstName).to.be.equal('Not');
         expect(lastName).to.be.equal('Debrah');
         expect(city).to.be.equal('Charlotte');

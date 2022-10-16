@@ -38,6 +38,7 @@ exports.createOrderItem = asyncHandler(async (req, res, next) => {
 
   let usersOrder;
 
+  // Getting existing order
   for (let i = 0; i < Orders.length; i++) {
     if (Orders[i].dataValues.orderStatus === 'pending') {
       usersOrder = Orders[i];
@@ -51,19 +52,27 @@ exports.createOrderItem = asyncHandler(async (req, res, next) => {
     where: { productId: req.body.productId },
   });
 
-  //   console.log(usersOrder.dataValues);
-  console.log('Product Id', product.dataValues);
-  console.log(usersOrder.dataValues.orderId);
+  const { price, discount } = product.dataValues;
+  const { quantity, productId } = req.body;
+  const { orderId } = usersOrder.dataValues;
 
-  req.body = product.dataValues;
-  req.body.orderId = usersOrder.dataValues.orderId;
+  let discountTotal = Number(price) * Number(discount);
+  let total = Number(price) * quantity - Number(discountTotal);
 
-  //   const orderItem = await OrderItems.create(req.body);
+  req.body = {
+    productId: productId,
+    price: price,
+    quantity: quantity,
+    discountTotal: discountTotal.toFixed(2),
+    total: total.toFixed(2),
+    orderId: orderId,
+  };
 
-  //   if (!orderItem) {
-  //     return next(new ErrorResponse('Order was not created', 400));
-  //   }
+  const orderItem = await OrderItems.create(req.body);
 
-  res.status(200).json({ success: true, data: req.body });
-  //   res.status(200).json({ success: true, data: orderItem });
+  if (!orderItem) {
+    return next(new ErrorResponse('Order was not created', 400));
+  }
+
+  res.status(200).json({ success: true, data: orderItem });
 });

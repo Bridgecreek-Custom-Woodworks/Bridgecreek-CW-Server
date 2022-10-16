@@ -99,7 +99,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.a('object');
         expect(res.body.data.quantity).to.be.equal(3);
-        expect(res.body.data.total).to.be.equal(135);
+        expect(res.body.data.total).to.be.equal('121.50');
         expect(err).to.be.null;
 
         done();
@@ -118,7 +118,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('array');
         expect(quantity).to.be.equal(5);
-        expect(total).to.be.equal(225);
+        expect(total).to.be.equal('202.50');
         expect(err).to.be.null;
 
         done();

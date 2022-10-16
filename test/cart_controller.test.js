@@ -135,7 +135,7 @@ describe('CART WORKFLOW TEST ==>', function () {
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.a('object');
-        expect(res.body.data.total).to.be.equal(301.98);
+        expect(res.body.data.total).to.be.equal('271.78');
         expect(res.body.data.quantity).to.be.equal(2);
         expect(err).to.be.null;
         cartItemId = res.body.data.cartItemId;
@@ -150,7 +150,7 @@ describe('CART WORKFLOW TEST ==>', function () {
             expect(res.status).to.be.equal(200);
             expect(res.body.data).to.be.an('array');
             expect(cartId).to.be.a('string');
-            expect(total).to.be.equal('436.78');
+            expect(total).to.be.equal('420.28');
             expect(res.body.data[0]).to.have.all.keys(userCartKeys);
             expect(err).to.be.null;
 
@@ -170,7 +170,7 @@ describe('CART WORKFLOW TEST ==>', function () {
                   .end((err, res) => {
                     expect(res.status).to.be.equal(200);
                     expect(res.body.data).to.be.a('array');
-                    expect(res.body.data[0].total).to.be.equal('165.00');
+                    expect(res.body.data[0].total).to.be.equal('148.50');
                     expect(err).to.be.null;
 
                     done();

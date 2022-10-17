@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for models/Wishlist.js</title>
+    <title>Code coverage report for models/OrderItems.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> Wishlist.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">models</a> OrderItems.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -118,12 +118,52 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,21 +215,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
-const Users = require('../models/User');
-const Products = require('../models/Product');
+const Order = require('./Order');
 &nbsp;
-const Wishlist = sequelize.define(
-  'Wishlists',
+const OrderItems = sequelize.define(
+  'OrderItems',
   {
-    userId: {
+    orderItemId: {
       type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
       allowNull: false,
-      unique: false,
-      references: {
-        type: Sequelize.UUID,
-        model: 'Users',
-        key: 'userId',
-      },
+      unique: true,
     },
     productId: {
       type: Sequelize.UUID,
@@ -201,33 +237,57 @@ const Wishlist = sequelize.define(
         key: 'productId',
       },
     },
-&nbsp;
-    updatedAt: {
+    orderId: {
+      type: Sequelize.UUID,
       allowNull: false,
-      type: Sequelize.DATE,
+      unique: false,
+      references: {
+        type: Sequelize.UUID,
+        model: 'Orders',
+        key: 'orderId',
+      },
     },
-    createdAt: {
+    price: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0,
       allowNull: false,
-      type: Sequelize.DATE,
+      unique: false,
+    },
+    discountTotal: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0,
+      allowNull: false,
+      unique: false,
+    },
+    quantity: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      unique: false,
+      validate: {
+        min: {
+          args: [1],
+          msg: 'Quantity must be at least one',
+        },
+        max: {
+          args: [5],
+          msg: 'Quantity can not be greater than 5',
+        },
+      },
+    },
+    total: {
+      type: Sequelize.DECIMAL,
+      defaultValue: 0,
+      allowNull: false,
+      unique: false,
     },
   },
   {
     sequelize,
-    modelName: 'Wishlists',
-  },
-  {
-    indexes: [
-      {
-        unique: true,
-        fields: ['productId', 'userId'],
-      },
-    ],
+    modelName: 'OrderItems',
   }
 );
 &nbsp;
-// sequelize.sync({ alter: true });
-&nbsp;
-module.exports = Wishlist;
+module.exports = OrderItems;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

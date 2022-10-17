@@ -225,4 +225,72 @@ describe('ORDER WORKFLOW TEST ==>', function () {
         done();
       });
   });
+
+  it('Check if new cart is located via for loop', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/carts/mycart/update/e4e71f3b-6523-4c97-980e-2c80be8dc352')
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ cartStatus: 'new' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data[1][0].cartStatus).to.be.equal('new');
+        expect(err).to.be.null;
+
+        // Checking if else if condition is functioning
+        chai
+          .request(server)
+          .put('/api/v1/orders/update/76e35ec6-de02-432a-aa01-e58703d407f6')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({ comments: 'I love this product!!' })
+          .end((err, res) => {
+            expect(res.status).to.be.equal(200);
+            expect(res.body.data).to.be.an('object');
+            expect(err).to.be.null;
+
+            // Setting cart status back to checkout
+            chai
+              .request(server)
+              .put(
+                '/api/v1/carts/mycart/update/e4e71f3b-6523-4c97-980e-2c80be8dc352'
+              )
+              .set({ Authorization: `Bearer ${token}` })
+              .send({ cartStatus: 'checkout' })
+              .end((err, res) => {
+                expect(res.status).to.be.equal(200);
+                expect(res.body.data[1][0].cartStatus).to.be.equal('checkout');
+                expect(err).to.be.null;
+
+                done();
+              });
+          });
+      });
+  });
+
+  it('Check for error if order is not found', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/orders/update/6bb6fcb9-a7c1-4f88-bd94-7813a69ca804')
+      .set({ Authorization: `Bearer ${token}` })
+      .send()
+      .end((err, res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res.body.error).to.be.equal('Your order was not found');
+        expect(err).to.be.null;
+
+        chai
+          .request(server)
+          .delete('/api/v1/orders/delete/6bb6fcb9-a7c1-4f88-bd94-7813a69ca804')
+          .set({ Authorization: `Bearer ${token}` })
+          .end((err, res) => {
+            expect(res.status).to.be.equal(404);
+            expect(res.body.error).to.be.equal(
+              'Order with id 6bb6fcb9-a7c1-4f88-bd94-7813a69ca804 not found'
+            );
+            expect(err).to.be.null;
+
+            done();
+          });
+      });
+  });
 });

@@ -14,7 +14,7 @@ exports.getAllOrderItems = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
-// @desc Get a single orderitem
+// @desc Get a single order item
 // @route GET /api/v1/orders/getorderitem/:orderItemId
 // access Private
 exports.getOrderItem = asyncHandler(async (req, res, next) => {
@@ -24,7 +24,10 @@ exports.getOrderItem = asyncHandler(async (req, res, next) => {
 
   if (!orderItem) {
     return next(
-      new ErrorResponse(`Order Item ${req.params.orderItemId} was not found`)
+      new ErrorResponse(
+        `Order Item ${req.params.orderItemId} was not found`,
+        404
+      )
     );
   }
 
@@ -94,7 +97,7 @@ exports.updateOrderItem = asyncHandler(async (req, res, next) => {
 
   if (!orderItem) {
     return next(
-      new ErrorResponse(`Order Item ${req.body.params} was not found`)
+      new ErrorResponse(`Order item ${req.body.params} was not found`, 404)
     );
   }
 
@@ -117,7 +120,7 @@ exports.deleteOrderItem = asyncHandler(async (req, res, next) => {
 
   if (!orderItem) {
     return next(
-      new ErrorResponse(`Order item with ${req.body.params} was not found`)
+      new ErrorResponse(`Order item ${req.body.params} was not found`, 404)
     );
   }
 

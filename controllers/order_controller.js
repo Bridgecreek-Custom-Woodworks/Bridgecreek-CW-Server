@@ -86,18 +86,11 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     }
   }
 
-  if (newOrPendingOrders) {
-    return next(
-      new ErrorResponse(
-        'Cannot create new order if new or pending order exist',
-        400
-      )
-    );
+  if (req.user.dataValues.Orders.length > 0) {
+    await newOrPendingOrders.destroy();
   }
 
   const order = await Orders.build(req.body);
-
-  order.createOrderItems(req);
 
   // Changing cart status to checkout
   usersCart.cartStatus = 'checkout';
@@ -106,6 +99,8 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   // Changing orders status to pending
   order.orderStatus = 'pending';
   await order.save(); // <=== Uncomment after testing *******
+
+  order.createOrderItems(req);
 
   res.status(201).json({ success: true, data: order });
 });
@@ -121,7 +116,7 @@ exports.updateOrder = asyncHandler(async (req, res, next) => {
 
   let usersCart;
 
-  // Getting users cart that is not already in paid or completed status
+  // Getting users cart that is associated with this order.
   for (let i = 0; i < Carts.length; i++) {
     if (Carts[i].dataValues.cartStatus === 'checkout') {
       usersCart = Carts[i];

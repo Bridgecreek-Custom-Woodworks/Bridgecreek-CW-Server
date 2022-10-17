@@ -1,4 +1,5 @@
 const OrderItems = require('../models/OrderItems');
+const Orders = require('../models/Order');
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
@@ -72,6 +73,52 @@ exports.createOrderItem = asyncHandler(async (req, res, next) => {
 
   if (!orderItem) {
     return next(new ErrorResponse('Order was not created', 400));
+  }
+
+  res.status(200).json({ success: true, data: orderItem });
+});
+
+// @desc Update order item
+// @route PUT /api/v1/orderitems/update/:orderitemId
+// access Private
+exports.updateOrderItem = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
+  }
+
+  const orderItem = await OrderItems.findOne({
+    where: { orderItemId: req.params.orderitemId },
+    include: { model: Orders },
+    returning: true,
+  });
+
+  if (!orderItem) {
+    return next(
+      new ErrorResponse(`Order Item ${req.body.params} was not found`)
+    );
+  }
+
+  orderItem.update(req.body);
+
+  res.status(200).json({ success: true, data: orderItem });
+});
+
+// @desc Delete order item
+// @route DELETE /api/v1/orderitems/delete/:orderitemId
+// access Private
+exports.deleteOrderItem = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Please log in', 400));
+  }
+
+  const orderItem = await OrderItems.destroy({
+    where: { orderItemId: req.params.orderitemId },
+  });
+
+  if (!orderItem) {
+    return next(
+      new ErrorResponse(`Order item with ${req.body.params} was not found`)
+    );
   }
 
   res.status(200).json({ success: true, data: orderItem });

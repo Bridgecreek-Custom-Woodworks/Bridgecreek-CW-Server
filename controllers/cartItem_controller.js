@@ -97,6 +97,8 @@ exports.deleteCartItem = asyncHandler(async (req, res, next) => {
     individualHooks: true,
   });
 
+  console.log(cartItem);
+
   if (!cartItem) {
     return next(
       new ErrorResponse(

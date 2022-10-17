@@ -4,6 +4,7 @@ const Carts = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const Products = require('../models/Product');
 const OrderItems = require('../models/OrderItems');
+const { Op } = require('sequelize');
 
 const Order = sequelize.define(
   'Orders',
@@ -210,6 +211,9 @@ Products.belongsToMany(Order, {
   otherKey: 'orderId',
 });
 
+Order.hasMany(OrderItems, { foreignKey: 'orderId' });
+OrderItems.belongsTo(Order, { foreignKey: 'orderId' });
+
 const getOrderTotal = async (order, req, res) => {
   const { tax, subTotal, shipping, orderDiscount } = order.dataValues;
 
@@ -229,6 +233,7 @@ Order.prototype.createOrderItems = async function (req) {
   const cart = await Carts.findOne({
     where: {
       userId: req.user.userId,
+      cartStatus: { [Op.or]: ['checkout', 'new'] },
     },
     include: [{ model: CartItems }, { model: Products }],
   });
@@ -241,15 +246,9 @@ Order.prototype.createOrderItems = async function (req) {
       CartItems: cartItems,
     } = cart.dataValues.Products[i].dataValues;
 
-    // console.log(productId);
-    // console.log(this.orderId);
-    // console.log(price);
-    // console.log(discount * price);
-    // console.log(cartItems.dataValues.quantity);
-    // console.log(cartItems.dataValues.total);
     const orderItemFields = {
       productId: productId,
-      orderId: this.orderId,
+      orderId: await this.orderId,
       price: price,
       discountTotal: Number(discount * price).toFixed(2),
       quantity: Number(cartItems.dataValues.quantity),

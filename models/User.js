@@ -8,8 +8,8 @@ const Reviews = require('../models/Reviews');
 const Carts = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const Orders = require('../models/Order');
+const CartOrderAccess = require('../models/CartOrderAccess');
 const crypto = require('crypto');
-// const ErrorResponse = require('../utils/errorResponse');
 
 const User = sequelize.define(
   'Users',
@@ -21,7 +21,16 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
     },
-
+    cartOrderAccessId: {
+      type: Sequelize.UUID,
+      allowNull: false,
+      unique: false,
+      references: {
+        type: Sequelize.UUID,
+        model: 'CartOrderAccess',
+        key: 'cartOrderAccessId',
+      },
+    },
     firstName: {
       type: Sequelize.STRING,
       unique: false,
@@ -202,6 +211,9 @@ CartItems.belongsTo(Products, { foreignKey: 'productId' });
 
 Carts.hasMany(CartItems, { foreignKey: 'cartId' });
 CartItems.belongsTo(Carts, { foreignKey: 'cartId' });
+
+CartOrderAccess.hasMany(User, { foreignKey: 'cartOrderAccessId' });
+User.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

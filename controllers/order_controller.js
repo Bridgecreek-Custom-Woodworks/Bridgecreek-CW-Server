@@ -123,6 +123,9 @@ exports.updateOrder = asyncHandler(async (req, res, next) => {
       break;
     } else if (Carts[i].dataValues.cartStatus === 'new') {
       usersCart = Carts[i];
+      usersCart.dataValues.cartStatus = 'checkout';
+      usersCart.save();
+      break;
     }
   }
 
@@ -131,7 +134,7 @@ exports.updateOrder = asyncHandler(async (req, res, next) => {
   });
 
   if (!order) {
-    return next(new ErrorResponse('Your order was not updated', 404));
+    return next(new ErrorResponse('Your order was not found', 404));
   }
 
   req.body.subTotal = usersCart.dataValues.total;

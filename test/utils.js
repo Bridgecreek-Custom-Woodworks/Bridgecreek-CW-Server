@@ -418,3 +418,40 @@ exports.createOrderKeys = [
   'updatedAt',
   'Products',
 ];
+
+// ORDER ITEM INFO *************************************************************
+
+exports.orderItemKeys = [
+  'orderItemId',
+  'productId',
+  'orderId',
+  'price',
+  'discountTotal',
+  'quantity',
+  'total',
+  'createdAt',
+  'updatedAt',
+];
+
+exports.orderItem = {
+  productId: '68c70732-98ff-40cc-86ce-04ceef2eb623',
+  price: '150.99',
+  quantity: 3,
+  discountTotal: '15.10',
+  total: '437.87',
+  orderId: '76e35ec6-de02-432a-aa01-e58703d407f6',
+  updatedAt: '2022-10-16T02:34:57.656Z',
+  createdAt: '2022-10-16T02:34:57.656Z',
+};
+exports.updatedOrderItemKeys = [
+  'orderItemId',
+  'productId',
+  'orderId',
+  'price',
+  'discountTotal',
+  'quantity',
+  'total',
+  'createdAt',
+  'updatedAt',
+  'Order',
+];

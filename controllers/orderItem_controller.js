@@ -14,7 +14,7 @@ exports.getAllOrderItems = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
-// @desc Get a single orderitem
+// @desc Get a single order item
 // @route GET /api/v1/orders/getorderitem/:orderItemId
 // access Private
 exports.getOrderItem = asyncHandler(async (req, res, next) => {
@@ -24,7 +24,10 @@ exports.getOrderItem = asyncHandler(async (req, res, next) => {
 
   if (!orderItem) {
     return next(
-      new ErrorResponse(`Order Item ${req.params.orderItemId} was not found`)
+      new ErrorResponse(
+        `Order item ${req.params.orderItemId} was not found`,
+        404
+      )
     );
   }
 
@@ -46,6 +49,9 @@ exports.createOrderItem = asyncHandler(async (req, res, next) => {
       break;
     } else if (Orders[i].dataValues.orderStatus === 'new order') {
       usersOrder = Orders[i];
+      usersOrder.orderStatus = 'pending';
+      usersOrder.save();
+      break;
     }
   }
 
@@ -79,7 +85,7 @@ exports.createOrderItem = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update order item
-// @route PUT /api/v1/orderitems/update/:orderitemId
+// @route PUT /api/v1/orderitems/update/:orderItemId
 // access Private
 exports.updateOrderItem = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -87,14 +93,17 @@ exports.updateOrderItem = asyncHandler(async (req, res, next) => {
   }
 
   const orderItem = await OrderItems.findOne({
-    where: { orderItemId: req.params.orderitemId },
+    where: { orderItemId: req.params.orderItemId },
     include: { model: Orders },
     returning: true,
   });
 
   if (!orderItem) {
     return next(
-      new ErrorResponse(`Order Item ${req.body.params} was not found`)
+      new ErrorResponse(
+        `Order item ${req.params.orderItemId} was not found`,
+        404
+      )
     );
   }
 
@@ -104,7 +113,7 @@ exports.updateOrderItem = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete order item
-// @route DELETE /api/v1/orderitems/delete/:orderitemId
+// @route DELETE /api/v1/orderitems/delete/:orderItemId
 // access Private
 exports.deleteOrderItem = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -112,12 +121,15 @@ exports.deleteOrderItem = asyncHandler(async (req, res, next) => {
   }
 
   const orderItem = await OrderItems.destroy({
-    where: { orderItemId: req.params.orderitemId },
+    where: { orderItemId: req.params.orderItemId },
   });
 
   if (!orderItem) {
     return next(
-      new ErrorResponse(`Order item with ${req.body.params} was not found`)
+      new ErrorResponse(
+        `Order item ${req.params.orderItemId} was not found`,
+        404
+      )
     );
   }
 

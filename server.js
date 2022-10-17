@@ -5,12 +5,8 @@ const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
 
-// const models = require('./models/index.js');
-
 // Load env vars
 const PORT = process.env.PORT || 5000;
-
-const sequelize = require('./config/db');
 
 const users = require('./routes/users_routes');
 const auth = require('./routes/auth_routes');

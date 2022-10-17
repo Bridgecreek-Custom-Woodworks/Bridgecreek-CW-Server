@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get('/getorderitem/:orderItemId', protect, getOrderItem);
 router.post('/', protect, createOrderItem);
-router.put('/update/:orderitemId', protect, updateOrderItem);
-router.delete('/delete/:orderitemId', protect, deleteOrderItem);
+router.put('/update/:orderItemId', protect, updateOrderItem);
+router.delete('/delete/:orderItemId', protect, deleteOrderItem);
 
 module.exports = router;

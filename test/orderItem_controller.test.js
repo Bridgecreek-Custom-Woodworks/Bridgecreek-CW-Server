@@ -11,7 +11,7 @@ const {
   updatedOrderItemKeys,
 } = require('./utils');
 
-describe.only('ORDER_ITEM WORKFOLW TEST ==>', function () {
+describe('ORDER_ITEM WORKFOLW TEST ==>', function () {
   this.afterEach(async () => {
     count = await OrderItems.count();
   });
@@ -129,10 +129,9 @@ describe.only('ORDER_ITEM WORKFOLW TEST ==>', function () {
       .end((err, res) => {
         expect(res.status).to.be.equal(404);
         expect(res.body.error).to.be.equal(
-          'Order Item 498b7ab5-1c04-456f-891b-be90d5dd7db2 was not found'
+          'Order item 498b7ab5-1c04-456f-891b-be90d5dd7db2 was not found'
         );
         expect(err).to.be.null;
-        console.log(res.body);
 
         chai
           .request(server)
@@ -142,9 +141,69 @@ describe.only('ORDER_ITEM WORKFOLW TEST ==>', function () {
           .set({ Authorization: `Bearer ${token}` })
           .end((err, res) => {
             expect(res.status).to.be.equal(404);
-            console.log(res.body);
+            expect(res.body.error).to.be.equal(
+              'Order item 498b7ab5-1c04-456f-891b-be90d5dd7db2 was not found'
+            );
+            expect(err).to.be.null;
 
-            done();
+            chai
+              .request(server)
+              .put(
+                '/api/v1/orderitems/update/498b7ab5-1c04-456f-891b-be90d5dd7db2'
+              )
+              .set({ Authorization: `Bearer ${token}` })
+              .send({ quantity: 2 })
+              .end((err, res) => {
+                expect(res.status).to.be.equal(404);
+                expect(res.body.error).to.be.equal(
+                  'Order item 498b7ab5-1c04-456f-891b-be90d5dd7db2 was not found'
+                );
+                expect(err).to.be.null;
+
+                done();
+              });
+          });
+      });
+  });
+
+  it('Check if order is located via for loop', (done) => {
+    // Setting order status to 'new order' to check else if branch in for loop
+    chai
+      .request(server)
+      .put(`/api/v1/orders/update/76e35ec6-de02-432a-aa01-e58703d407f6`)
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ orderStatus: 'new order' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(err).to.be.null;
+
+        // Checking if else if condition is functioning
+        chai
+          .request(server)
+          .post('/api/v1/orderitems')
+          .set({ Authorization: `Bearer ${token}` })
+          .send({
+            productId: '33cf392c-087e-4143-858c-9e00c7c6a119',
+            quantity: 2,
+          })
+          .end((err, res) => {
+            let testOrderItemId = res.body.data.orderItemId;
+
+            expect(res.status).to.be.equal(200);
+            expect(err).to.be.null;
+
+            // Deleting test order item id from above
+            chai
+              .request(server)
+              .delete(`/api/v1/orderitems/delete/${testOrderItemId}`)
+              .set({ Authorization: `Bearer ${token}` })
+              .end((err, res) => {
+                expect(res.status).to.be.equal(200);
+                expect(res.body.data).to.be.equal(1);
+                expect(err).to.be.null;
+
+                done();
+              });
           });
       });
   });

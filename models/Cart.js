@@ -34,11 +34,11 @@ const Carts = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
       unique: false,
-      defaultValue: 'New',
+      defaultValue: 'new',
       validate: {
         isIn: {
-          args: [['New', 'Checkout', 'Paid', 'Completed']],
-          msg: 'Cart status can only have a values of New, Checkout, Paid, Completed',
+          args: [['new', 'checkout', 'paid', 'completed']],
+          msg: 'Cart status can only have a values of new, checkout, paid, completed',
         },
       },
     },

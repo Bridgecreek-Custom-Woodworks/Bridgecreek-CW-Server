@@ -95,15 +95,16 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
     where: { productId: cartItems.dataValues.productId },
   });
 
-  // Getting item price by multiplying cartItem quantity times product price
-  let price = Number(product.dataValues.price) * cartItems.dataValues.quantity;
-
-  // Setting cartItem total to value of price
-  cartItems.dataValues.total = price;
+  // Getting items total price by multiplying cartItem quantity times product price
+  let totalPrice =
+    Number(product.dataValues.price) * cartItems.dataValues.quantity;
 
   // Getting discount dollar amount
-  const discountAmount =
-    cartItems.dataValues.total * product.dataValues.discount;
+  const discountAmount = totalPrice * product.dataValues.discount;
+
+  // Setting cartItem total to value of price
+  let total = totalPrice - discountAmount;
+  cartItems.dataValues.total = Number(total).toFixed(2);
 
   // Setting cartItem discountTotal dollar amount
   cartItems.dataValues.discountTotal = Number(discountAmount).toFixed(2);
@@ -131,20 +132,11 @@ const getCartAndCartItemTotals = async (cartItems, req, res) => {
       cartTotal = 0;
     }
 
-    let cartTotalNumber;
-    cartTotalNumber =
-      Number(cartTotal).toFixed(2) - Number(discountAmount).toFixed(2);
-
-    // Sets Cart model total field to sum of cartItems total field after delete
-    if (req.type === 'BULKDELETE') {
-      cartTotalNumber = cartTotal;
-    }
-
-    // Updating Cart model total field
+    // Updating Cart models total field
     await sequelize
       .model('Carts')
       .update(
-        { total: Number(cartTotalNumber).toFixed(2) },
+        { total: Number(cartTotal).toFixed(2) },
         { where: { cartId: cartItems.dataValues.cartId } }
       );
   } catch (error) {

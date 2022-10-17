@@ -1,5 +1,10 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
+const Carts = require('../models/Cart');
+const CartItems = require('../models/CartItem');
+const Products = require('../models/Product');
+const OrderItems = require('../models/OrderItems');
+const { Op } = require('sequelize');
 
 const Order = sequelize.define(
   'Orders',
@@ -14,7 +19,7 @@ const Order = sequelize.define(
     userId: {
       type: Sequelize.UUID,
       allowNull: false,
-      unique: true,
+      unique: false,
       references: {
         type: Sequelize.UUID,
         model: 'Users',
@@ -141,7 +146,7 @@ const Order = sequelize.define(
     },
     email: {
       type: Sequelize.STRING,
-      unique: true,
+      unique: false,
       allowNull: false,
       validate: {
         isEmail: {
@@ -194,6 +199,21 @@ const Order = sequelize.define(
 
 // sequelize.sync({ force: true });
 
+Order.belongsToMany(Products, {
+  through: OrderItems,
+  foreignKey: 'orderId',
+  otherKey: 'productId',
+});
+
+Products.belongsToMany(Order, {
+  through: OrderItems,
+  foreignKey: 'productId',
+  otherKey: 'orderId',
+});
+
+Order.hasMany(OrderItems, { foreignKey: 'orderId' });
+OrderItems.belongsTo(Order, { foreignKey: 'orderId' });
+
 const getOrderTotal = async (order, req, res) => {
   const { tax, subTotal, shipping, orderDiscount } = order.dataValues;
 
@@ -208,7 +228,38 @@ const getOrderTotal = async (order, req, res) => {
   order.dataValues.taxTotal = Number(taxAmount).toFixed(2);
   order.dataValues.total = Number(total).toFixed(2);
 };
+
+Order.prototype.createOrderItems = async function (req) {
+  const cart = await Carts.findOne({
+    where: {
+      userId: req.user.userId,
+      cartStatus: { [Op.or]: ['checkout', 'new'] },
+    },
+    include: [{ model: CartItems }, { model: Products }],
+  });
+
+  for (let i = 0; i < cart.dataValues.Products.length; i++) {
+    const {
+      productId,
+      price,
+      discount,
+      CartItems: cartItems,
+    } = cart.dataValues.Products[i].dataValues;
+
+    const orderItemFields = {
+      productId: productId,
+      orderId: await this.orderId,
+      price: price,
+      discountTotal: Number(discount * price).toFixed(2),
+      quantity: Number(cartItems.dataValues.quantity),
+      total: cartItems.dataValues.total,
+    };
+
+    await OrderItems.create(orderItemFields);
+  }
+};
+
 Order.beforeCreate(getOrderTotal);
-// Order.afterCreate(getOrderTotal);
+Order.beforeUpdate(getOrderTotal);
 
 module.exports = Order;

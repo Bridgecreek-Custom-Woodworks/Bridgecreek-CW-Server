@@ -105,18 +105,18 @@ const queryGt_e_Lt_e = (query, reqQuery, match, next) => {
 // });
 
 let cartArray = [
-  (Cart = { activeStatus: 'New' }),
-  (Cart = { activeStatus: 'Paid' }),
-  (Cart = { activeStatus: 'Completed' }),
-  (Cart = { activeStatus: 'Checkout' }),
+  (Cart = { activeStatus: 'new' }),
+  (Cart = { activeStatus: 'paid' }),
+  (Cart = { activeStatus: 'completed' }),
+  (Cart = { activeStatus: 'checkout' }),
 ];
 
 let newArray;
 for (let i = 0; i < cartArray.length; i++) {
-  if (cartArray[i].activeStatus === 'Checkout') {
+  if (cartArray[i].activeStatus === 'checkout') {
     newArray = cartArray[i];
     break;
-  } else if (cartArray[i].activeStatus === 'New') {
+  } else if (cartArray[i].activeStatus === 'new') {
     newArray = cartArray[i];
   }
 }
@@ -124,4 +124,3 @@ for (let i = 0; i < cartArray.length; i++) {
 if (newArray) {
   console.log('Object has a property');
 }
-console.log(newArray);

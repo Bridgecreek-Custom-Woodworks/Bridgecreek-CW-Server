@@ -23,7 +23,7 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
     where: {
       [Op.and]: [
         { userId: req.user.userId },
-        { cartStatus: ['New', 'Checkout'] },
+        { cartStatus: ['new', 'checkout'] },
       ],
     },
     include: [

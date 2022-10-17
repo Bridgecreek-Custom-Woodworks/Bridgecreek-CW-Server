@@ -169,7 +169,6 @@ const User = sequelize.define(
   }
 );
 
-// sequelize.sync({ alter: true });
 // sequelize.sync({ force: true });
 
 User.belongsToMany(Products, {

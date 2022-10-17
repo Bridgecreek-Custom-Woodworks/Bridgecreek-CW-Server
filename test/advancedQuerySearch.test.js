@@ -272,14 +272,14 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if total gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allcarts?totalgte=300')
+      .get('/api/v1/admin/allcarts?totalgte=280')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
         expect(res.body.data[0]).to.be.an('object');
         expect(res.body.data.length).to.be.gte(1);
-        expect(Number(res.body.data[0].total)).to.be.gte(300);
+        expect(Number(res.body.data[0].total)).to.be.gte(285.29);
         expect(err).to.be.null;
 
         done();

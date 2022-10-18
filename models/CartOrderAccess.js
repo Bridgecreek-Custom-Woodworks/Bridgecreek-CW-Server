@@ -1,24 +1,34 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
 const Guests = require('../models/Guests');
-const Users = require('../models/User');
 
 const CartOrderAccess = sequelize.define(
   'CartOrderAccess',
   {
     cartOrderAccessId: {
       type: Sequelize.UUID,
-      defaultValues: Sequelize.UUIDV4,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
-    createdAt: {
+    customerId: {
       type: Sequelize.STRING,
       allowNull: false,
+      unique: false,
     },
-    updateAt: {
+    userName: {
       type: Sequelize.STRING,
+      defaultValue: 'guest',
+      allowNull: false,
+      unique: false,
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
       allowNull: false,
     },
   },
@@ -29,7 +39,7 @@ const CartOrderAccess = sequelize.define(
   }
 );
 
-sequelize.sync({ force: true });
+// sequelize.sync({ force: true });
 
 CartOrderAccess.hasMany(Guests, { foreignKey: 'cartOrderAccessId' });
 Guests.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });

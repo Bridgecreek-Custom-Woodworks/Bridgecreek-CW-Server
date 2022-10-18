@@ -104,6 +104,7 @@ exports.userKeys = [
   'updatedAt',
   'userId',
   'activeStatus',
+  'cartOrderAccessId',
 ];
 
 exports.hashedPassword =

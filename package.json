@@ -11,8 +11,8 @@
     "mocha:dev": "cross-env NODE_ENV=development mocha --exit",
     "mocha:seed:test": "npm run seed:test && cross-env NODE_ENV=test mocha --watch",
     "mocha:seed:dev": "npm run seed:dev && cross-env NODE_ENV=development mocha --exit",
-    "seed:dev": "node test/utils.js -dev && npx sequelize-cli db:seed --seed 20220826162419-demo-user.js 20220917224907-test-product.js 20220917230626-test-wishlist.js 20220924192533-test-reviews.js 20220929190113-test-cart.js  20220929190057-test-cartItem.js 20221013125753-test-orders.js 20221017135315-test-orderItem.js --env development",
-    "seed:test": "node test/utils.js -test && npx sequelize-cli db:seed --seed 20220917221820-test-user.js 20220917224907-test-product.js 20220917230626-test-wishlist.js 20220924192533-test-reviews.js 20220929190113-test-cart.js  20220929190057-test-cartItem.js 20221013125753-test-orders.js 20221017135315-test-orderItem.js --env test",
+    "seed:dev": "node test/utils.js -dev && npx sequelize-cli db:seed --seed 20221017214507-test-cartOrderAccess.js 20220826162419-demo-user.js 20220917224907-test-product.js 20220917230626-test-wishlist.js 20220924192533-test-reviews.js 20220929190113-test-cart.js  20220929190057-test-cartItem.js 20221013125753-test-orders.js 20221017135315-test-orderItem.js --env development",
+    "seed:test": "node test/utils.js -test && npx sequelize-cli db:seed --seed 20221017214507-test-cartOrderAccess.js 20220917221820-test-user.js 20220917224907-test-product.js 20220917230626-test-wishlist.js 20220924192533-test-reviews.js 20220929190113-test-cart.js  20220929190057-test-cartItem.js 20221013125753-test-orders.js 20221017135315-test-orderItem.js --env test",
     "coverage": "nyc --reporter=lcov --reporter=text npm run mocha:test"
   },
   "keywords": [],

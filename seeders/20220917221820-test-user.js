@@ -9,6 +9,7 @@ module.exports = {
     await queryInterface.bulkInsert('Users', [
       {
         userId: '1024cf0f-9c88-4af3-8eb3-928a0a0b844e',
+        cartOrderAccessId: '3075ab56-e614-4b64-8874-94d33e825914',
         firstName: `Otto-Test-DB`,
         lastName: 'Jones',
         street: '124 Main St',
@@ -26,6 +27,7 @@ module.exports = {
       },
       {
         userId: '15242016-6385-4ef3-9c9a-0ec1bf595515',
+        cartOrderAccessId: '512edbde-a938-4216-8181-0ef9ba456e2f',
         firstName: 'Mike',
         lastName: 'Strange',
         street: '107 Juanita Dr',
@@ -43,6 +45,7 @@ module.exports = {
       },
       {
         userId: 'aa1b2829-6807-4d6e-b6bd-f5debeb93577',
+        cartOrderAccessId: '09f8af99-3a84-41c5-bcc2-70fd5807dbf8',
         firstName: 'Debrah',
         lastName: 'Johnson',
         street: '14327 Old Dubbin Dr',
@@ -60,6 +63,7 @@ module.exports = {
       },
       {
         userId: 'cfbe9359-0b14-430a-ad6c-0aef1a36152f',
+        cartOrderAccessId: 'a0eee4f6-f248-4b12-8486-3a27d0f20cf6',
         firstName: 'Jordan',
         lastName: 'Peters',
         street: '12307 Kayak Dr',
@@ -77,6 +81,7 @@ module.exports = {
       },
       {
         userId: 'e857a4a6-b506-4e20-b214-1ce57773bc46',
+        cartOrderAccessId: '20d07cfc-fcd7-43af-84ae-998ccef52cd6',
         firstName: 'Some',
         lastName: 'Body',
         street: '5908 Queens Cove Ct',

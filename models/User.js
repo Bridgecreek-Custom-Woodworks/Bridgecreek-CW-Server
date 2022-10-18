@@ -311,6 +311,17 @@ User.prototype.emailVerification = async function (req) {
   return options;
 };
 
+User.prototype.createCartOrderAccess = async function (req) {
+  let customer = {
+    userName: `${this.firstName} ${this.lastName}`,
+    customerId: this.userId,
+  };
+
+  const cartOrderAccess = await CartOrderAccess.create(customer);
+
+  this.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;
+};
+
 User.beforeCreate(saltAndHashPassword);
 User.beforeUpdate(saltAndHashPassword);
 

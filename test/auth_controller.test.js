@@ -4,6 +4,7 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const User = require('../models/User');
+const CartOrderAccess = require('../models/CartOrderAccess');
 const { user, newUser } = require('./utils');
 
 describe('PASSWORD RESET FLOW ==>', function () {
@@ -17,9 +18,16 @@ describe('PASSWORD RESET FLOW ==>', function () {
     newPassword = 'admin4321';
   });
 
+  this.afterAll(async () => {
+    await CartOrderAccess.destroy({
+      where: { cartOrderAccessId: newUserId },
+    });
+  });
+
   let token;
   let originalPassword;
   let newUserToken;
+  let newUserId;
 
   it('Verify error if user is not found', (done) => {
     chai
@@ -201,6 +209,7 @@ describe('PASSWORD RESET FLOW ==>', function () {
       .send(newUser)
       .end((err, res) => {
         newUserToken = res.body.token;
+        newUserId = res.body.data.cartOrderAccessId;
 
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;

@@ -16,14 +16,14 @@ const Order = sequelize.define(
       allowNull: false,
       unique: true,
     },
-    userId: {
+    cartOrderAccessId: {
       type: Sequelize.UUID,
       allowNull: false,
       unique: false,
       references: {
         type: Sequelize.UUID,
-        model: 'Users',
-        key: 'userId',
+        model: 'CartOrderAccess',
+        key: 'cartOrderAccessId',
       },
     },
     orderStatus: {
@@ -232,7 +232,7 @@ const getOrderTotal = async (order, req, res) => {
 Order.prototype.createOrderItems = async function (req) {
   const cart = await Carts.findOne({
     where: {
-      userId: req.user.userId,
+      cartOrderAccessId: req.user.dataValues.cartOrderAccessId,
       cartStatus: { [Op.or]: ['checkout', 'new'] },
     },
     include: [{ model: CartItems }, { model: Products }],

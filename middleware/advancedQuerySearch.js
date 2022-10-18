@@ -7,15 +7,25 @@ const Reviews = require('../models/Reviews');
 const Wishlist = require('../models/Wishlist');
 const Orders = require('../models/Order');
 const OrderItems = require('../models/OrderItems');
+const CartOrderAccess = require('../models/CartOrderAccess');
 
 const advancedQuerySearch =
   (Model, searchUserInfo) => async (req, res, next) => {
     let query = {};
     query['subQuery'] = true;
 
-    if (searchUserInfo) {
+    // console.log(req.user.dataValues.cartOrderAccessId);
+    // console.log(Model);
+
+    if (searchUserInfo && req.user.userId) {
       query['where'] = { userId: req.user.userId };
     }
+
+    // if (searchUserInfo) {
+    //   query['where'] = {
+    //     cartOrderAccessId: req.user.dataValues.cartOrderAccessId,
+    //   };
+    // }
 
     let queryField;
     let fieldValue;
@@ -116,6 +126,8 @@ const advancedQuerySearch =
           query['include'].push({ model: Orders });
         } else if (includeArry[i] === 'orderitems') {
           query['include'].push({ model: OrderItems });
+        } else if (includeArry[i] === 'cartorderaccess') {
+          query['include'].push({ model: CartOrderAccess });
         }
       }
     }

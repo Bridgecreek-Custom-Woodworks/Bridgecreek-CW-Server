@@ -36,6 +36,7 @@ exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
 exports.createCartItem = asyncHandler(async (req, res, next) => {
   req.body.productId = req.params.productId;
   req.body.userId = req.user.userId;
+  req.body.cartOrderAccessId = req.user.dataValues.cartOrderAccessId;
 
   let usersCart;
 
@@ -51,7 +52,6 @@ exports.createCartItem = asyncHandler(async (req, res, next) => {
 
   if (!usersCart) {
     let cart = await Carts.create(req.body);
-
     req.body.cartId = cart.dataValues.cartId;
   } else {
     req.body.cartId = usersCart.cartId;

@@ -13,14 +13,14 @@ const Carts = sequelize.define(
       allowNull: false,
       unique: true,
     },
-    userId: {
+    cartOrderAccessId: {
       type: Sequelize.UUID,
       allowNull: false,
       unique: false,
       references: {
         type: Sequelize.UUID,
-        model: 'Users',
-        key: 'userId',
+        model: 'CartOrderAccess',
+        key: 'cartOrderAccessId',
       },
       onDelete: 'NO ACTION',
     },

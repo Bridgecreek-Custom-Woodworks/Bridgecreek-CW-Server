@@ -94,13 +94,14 @@ describe('CART WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${token}` })
       .send({ total: 40, cartStatus: 'checkout' })
       .end((err, res) => {
-        const { cartId, userId, total, cartStatus } = res.body.data[1][0];
+        const { cartId, cartOrderAccessId, total, cartStatus } =
+          res.body.data[1][0];
 
         expect(res.status).to.be.equal(200);
         expect(res.body.data[1]).to.be.a('array');
         expect(res.body.data[1][0]).to.have.all.keys(cartKeys);
         expect(cartId).to.be.a('string');
-        expect(userId).to.be.a('string');
+        expect(cartOrderAccessId).to.be.a('string');
         expect(total).to.be.equal('40');
         expect(cartStatus).to.be.equal('checkout');
         expect(err).to.be.null;

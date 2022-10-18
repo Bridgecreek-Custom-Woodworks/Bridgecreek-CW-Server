@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
 const Guests = require('../models/Guests');
+const Carts = require('../models/Cart');
+const Orders = require('../models/Order');
 
 const CartOrderAccess = sequelize.define(
   'CartOrderAccess',
@@ -43,5 +45,11 @@ const CartOrderAccess = sequelize.define(
 
 CartOrderAccess.hasMany(Guests, { foreignKey: 'cartOrderAccessId' });
 Guests.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
+
+CartOrderAccess.hasMany(Orders, { foreignKey: 'cartOrderAccessId' });
+Orders.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
+
+CartOrderAccess.hasMany(Carts, { foreignKey: 'cartOrderAccessId' });
+Carts.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
 
 module.exports = CartOrderAccess;

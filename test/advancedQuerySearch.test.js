@@ -101,7 +101,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.body.data).to.be.an('array');
         expect(data[0]).to.have.any.keys('Products');
         expect(data[0]).to.have.any.keys('Reviews');
-        expect(data[0]).to.have.any.keys('Carts');
+        expect(data[0]).to.have.any.keys('CartOrderAccess');
         expect(data[0]).to.have.any.keys('Wishlist');
         expect(err).to.be.null;
 
@@ -109,7 +109,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Check if Field (Key) query returns correct results', (done) => {
+  it('Check if field (Key) query returns correct results', (done) => {
     chai
       .request(server)
       .get('/api/v1/admin/allusers?firstName=Mike')
@@ -306,7 +306,9 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if all selected model associations are returned with query', (done) => {
     chai
       .request(server)
-      .get('/api/v1/users/admin/allusers?include=model,products,carts,reviews')
+      .get(
+        '/api/v1/users/admin/allusers?include=model,products,reviews,wishlist,cartorderaccess'
+      )
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const { data } = res.body;
@@ -315,7 +317,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
         expect(res.body.data).to.be.a('array');
         expect(data[0]).to.have.any.keys('Products');
         expect(data[0].Products[0]).to.have.any.keys('Wishlists');
-        expect(data[0]).to.have.any.keys('Carts');
+        expect(data[0]).to.have.any.keys('CartOrderAccess');
         expect(data[0]).to.have.any.keys('Reviews');
         expect(err).to.be.null;
 

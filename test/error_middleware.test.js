@@ -72,8 +72,8 @@ describe('ERROR MIDDLEWARE WORKFLOW TEST ==>', function () {
         expect(res).to.have.any.key('error');
         expect(res.body.success).to.be.false;
         expect(res.body.error).to.be.a('string');
+        expect(res.body.error).to.be.equal('Validation isUrl on url failed');
 
-        console.log('Error ==>', res.body.error);
         done();
       });
   });

@@ -84,6 +84,9 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${badToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(401);
+        expect(res.body.error).to.be.equal(
+          'Not authorized to access this route'
+        );
         expect(res.body.success).to.be.false;
         done();
       });

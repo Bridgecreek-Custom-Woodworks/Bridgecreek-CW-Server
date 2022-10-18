@@ -323,18 +323,18 @@ exports.unauthorizedUser = {
 
 exports.userCartKeys = [
   'cartId',
-  'userId',
+  'cartOrderAccessId',
   'total',
   'cartStatus',
   'createdAt',
   'updatedAt',
-  'User',
+  'CartOrderAccess',
   'Products',
 ];
 
 exports.cartKeys = [
+  'cartOrderAccessId',
   'cartId',
-  'userId',
   'total',
   'cartStatus',
   'createdAt',
@@ -374,7 +374,7 @@ exports.getFirstLetterOfFirstName = (arr) => {
 
 exports.orderKeys = [
   'orderId',
-  'userId',
+  'cartOrderAccessId',
   'orderStatus',
   'subTotal',
   'tax',
@@ -397,7 +397,7 @@ exports.orderKeys = [
 ];
 exports.createOrderKeys = [
   'orderId',
-  'userId',
+  'cartOrderAccessId',
   'orderStatus',
   'subTotal',
   'tax',

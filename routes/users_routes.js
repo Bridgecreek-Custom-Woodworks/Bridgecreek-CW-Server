@@ -19,9 +19,9 @@ const router = express.Router();
 router.use('/admin', userRouter);
 
 // Route = /api/v1/users
-router.get('/getme', protect, advancedQuerySearch(Users, true), getUser);
+router.get('/getme', protect(Users), advancedQuerySearch(Users, true), getUser);
 router.post('/', registerUser);
-router.put('/updateme', protect, updateUser);
-router.delete('/deleteme', protect, deleteUser);
+router.put('/updateme', protect(Users), updateUser);
+router.delete('/deleteme', protect(Users), deleteUser);
 
 module.exports = router;

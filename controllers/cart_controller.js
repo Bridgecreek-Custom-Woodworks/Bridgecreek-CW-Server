@@ -4,6 +4,7 @@ const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const { Op } = require('sequelize');
+const CartOrderAccess = require('../models/CartOrderAccess');
 
 // @desc Get all carts
 // @route GET /api/v1/admin/allcarts
@@ -22,13 +23,13 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
   const cart = await Carts.findAll({
     where: {
       [Op.and]: [
-        { userId: req.user.userId },
+        { cartOrderAccessId: req.user.dataValues.cartOrderAccessId },
         { cartStatus: ['new', 'checkout'] },
       ],
     },
     include: [
       {
-        model: User,
+        model: CartOrderAccess,
         required: true,
       },
       {
@@ -59,7 +60,8 @@ exports.getMyCart = asyncHandler(async (req, res, next) => {
 // access Private/Guest
 // THIS ROUTE MAT NOT BE NECESSARY AS THE CART IS CREATED AT THE TIME THE CUSTOMER ADDS A PRODUCT.
 exports.createCart = asyncHandler(async (req, res, next) => {
-  req.body.userId = req.user.userId;
+  req.body.cartOrderAccessId = req.user.dataValues.cartOrderAccessId;
+
   const cart = await Carts.create(req.body);
 
   if (!cart) {

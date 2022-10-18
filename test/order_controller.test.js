@@ -59,17 +59,21 @@ describe('ORDER WORKFLOW TEST ==>', function () {
       });
   });
 
-  it('Get single user orders', (done) => {
+  it('Get single users orders', (done) => {
     chai
       .request(server)
       .get('/api/v1/orders/getmyorders')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
-        expect(res.body.data).to.be.a('array'); // <== This may change after refactor
-        expect(res.body.data[0]).to.be.a('object'); // <== This may change after refactor
+        expect(res.body.data).to.be.a('array');
+        expect(res.body.data[0]).to.be.a('object');
         expect(res.body.data[0]).to.have.all.keys(orderKeys);
-        expect(res.body.modelAssociations).to.include('User');
+        expect(res.body.modelAssociations).to.include(
+          'Products',
+          'OrderItems',
+          'CartOrderAccess'
+        );
         expect(err).to.be.null;
 
         done();

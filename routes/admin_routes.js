@@ -25,6 +25,8 @@ const { protect, authorize } = require('../middleware/auth_middleware');
 
 const { getAllOrderItems } = require('../controllers/orderItem_controller');
 
+const { getAllGuest } = require('../controllers/guest_controller');
+
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
@@ -34,6 +36,7 @@ const Reviews = require('../models/Reviews');
 const Wishlist = require('../models/Wishlist');
 const Orders = require('../models/Order');
 const OrderItems = require('../models/OrderItems');
+const Guests = require('../models/Guests');
 
 // Route  = /api/v1/admin
 
@@ -107,4 +110,12 @@ router.get(
   getAllOrderItems
 );
 
+// Admin Guest Routes
+router.get(
+  '/allguests',
+  protect,
+  authorize('admin'),
+  advancedQuerySearch(Guests),
+  getAllGuest
+);
 module.exports = router;

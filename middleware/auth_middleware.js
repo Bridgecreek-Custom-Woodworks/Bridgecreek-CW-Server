@@ -1,4 +1,5 @@
 const Users = require('../models/User');
+const Guests = require('../models/Guests');
 const Cart = require('../models/Cart');
 const Orders = require('../models/Order');
 const jwt = require('jsonwebtoken');
@@ -9,6 +10,12 @@ const ErrorResponse = require('../utils/errorResponse');
 
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
+
+  // if (Model === Users) {
+  //   console.log('Users');
+  // } else if (Model === Guests) {
+  //   console.log('Guests');
+  // }
 
   if (
     req.headers.authorization &&

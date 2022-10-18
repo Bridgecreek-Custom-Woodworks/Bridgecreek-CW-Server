@@ -7,7 +7,6 @@ const {
 } = require('../controllers/cartItem_controller');
 
 const { protect } = require('../middleware/auth_middleware');
-const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const router = express.Router();
 

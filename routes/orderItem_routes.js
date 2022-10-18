@@ -7,14 +7,23 @@ const {
 } = require('../controllers/orderItem_controller');
 
 const { protect } = require('../middleware/auth_middleware');
+const CartOrderAccess = require('../models/CartOrderAccess');
 
 const router = express.Router();
 
 // Route = '/api/v1/orderitems'
 
-router.get('/getorderitem/:orderItemId', protect, getOrderItem);
-router.post('/', protect, createOrderItem);
-router.put('/update/:orderItemId', protect, updateOrderItem);
-router.delete('/delete/:orderItemId', protect, deleteOrderItem);
+router.get(
+  '/getorderitem/:orderItemId',
+  protect(CartOrderAccess),
+  getOrderItem
+);
+router.post('/', protect(CartOrderAccess), createOrderItem);
+router.put('/update/:orderItemId', protect(CartOrderAccess), updateOrderItem);
+router.delete(
+  '/delete/:orderItemId',
+  protect(CartOrderAccess),
+  deleteOrderItem
+);
 
 module.exports = router;

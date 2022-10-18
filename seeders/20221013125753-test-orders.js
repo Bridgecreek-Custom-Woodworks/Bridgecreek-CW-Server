@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           orderId: '76e35ec6-de02-432a-aa01-e58703d407f6',
-          userId: '1024cf0f-9c88-4af3-8eb3-928a0a0b844e',
+          cartOrderAccessId: '3075ab56-e614-4b64-8874-94d33e825914',
           orderStatus: 'pending',
           subTotal: '148.5',
           tax: '0.06',
@@ -15,7 +15,7 @@ module.exports = {
           shipping: '10',
           orderDiscount: '0',
           total: '167.41',
-          firstName: 'Otto-Development-DB',
+          firstName: 'Otto',
           lastName: 'Jones',
           street: '124 Main St',
           city: 'Columbia',
@@ -30,7 +30,7 @@ module.exports = {
         },
         {
           orderId: '3dd7bd5d-436f-4087-8550-324722bc43c5',
-          userId: '15242016-6385-4ef3-9c9a-0ec1bf595515',
+          cartOrderAccessId: '512edbde-a938-4216-8181-0ef9ba456e2f',
           orderStatus: 'pending',
           subTotal: '285.29',
           tax: '0.06',
@@ -53,7 +53,7 @@ module.exports = {
         },
         // {
         //   orderId: '35162a24-face-4b83-8914-3c93f4639597',
-        //   userId: 'aa1b2829-6807-4d6e-b6bd-f5debeb93577',
+        //   cartOrderAccessId: '09f8af99-3a84-41c5-bcc2-70fd5807dbf8',
         //   orderStatus: 'pending',
         //   subTotal: '225',
         //   tax: '0.06',

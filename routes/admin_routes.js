@@ -37,13 +37,14 @@ const Wishlist = require('../models/Wishlist');
 const Orders = require('../models/Order');
 const OrderItems = require('../models/OrderItems');
 const Guests = require('../models/Guests');
+const CartOrderAccess = require('../models/CartOrderAccess');
 
 // Route  = /api/v1/admin
 
 // Admin Review Routes
 router.get(
   '/allreviews',
-  protect,
+  protect(Users),
   authorize('admin'),
   advancedQuerySearch(Reviews),
   getAllReviews
@@ -52,7 +53,7 @@ router.get(
 // Admin Wishlist Routes
 router.get(
   '/allwishlist',
-  protect,
+  protect(Users),
   authorize('admin'),
   advancedQuerySearch(Wishlist),
   getAllWishlist
@@ -61,31 +62,37 @@ router.get(
 // Admin Users Routes
 router.get(
   '/allusers',
-  protect,
+  protect(Users),
   authorize('admin'),
   advancedQuerySearch(Users),
   getAllUsers
 );
 
 // Admin Product Routes
-router.post('/', protect, authorize('admin'), createProducts);
-router.put('/admin', protect, authorize('admin'), updateProduct);
-router.delete('/admin', protect, authorize('admin'), deleteProduct);
+router.post('/', protect(Users), authorize('admin'), createProducts);
+router.put('/admin', protect(Users), authorize('admin'), updateProduct);
+router.delete('/admin', protect(Users), authorize('admin'), deleteProduct);
 
 // Admin Cart Routes
 router.get(
   '/allcarts',
-  protect,
+  protect(CartOrderAccess),
   authorize('admin'),
   advancedQuerySearch(Carts),
   getAllCarts
 );
-router.delete('/deletecart/:cartId', protect, authorize('admin'), deleteCart);
+
+router.delete(
+  '/deletecart/:cartId',
+  protect(Users),
+  authorize('admin'),
+  deleteCart
+);
 
 // Admin CartItems Routes
 router.get(
   '/allcartitems',
-  protect,
+  protect(Users),
   authorize('admin'),
   advancedQuerySearch(CartItems),
   getAllCartItems
@@ -94,7 +101,8 @@ router.get(
 // Admin Orders Routes
 router.get(
   '/allorders',
-  protect,
+  protect(CartOrderAccess),
+
   authorize('admin'),
   advancedQuerySearch(Orders),
   getAllOrders
@@ -104,7 +112,7 @@ router.get(
 
 router.get(
   '/allorderitems',
-  protect,
+  protect(Users),
   authorize('admin'),
   advancedQuerySearch(OrderItems),
   getAllOrderItems
@@ -113,9 +121,10 @@ router.get(
 // Admin Guest Routes
 router.get(
   '/allguests',
-  protect,
+  protect(Users),
   authorize('admin'),
   advancedQuerySearch(Guests),
   getAllGuest
 );
+
 module.exports = router;

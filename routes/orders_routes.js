@@ -12,6 +12,7 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 const Orders = require('../models/Order');
 
 const orderRouter = require('./admin_routes');
+const CartOrderAccess = require('../models/CartOrderAccess');
 
 const router = express.Router();
 
@@ -21,13 +22,14 @@ router.use('/admin', orderRouter);
 // Route = /api/v1/orders
 router.get(
   '/getmyorders',
-  protect,
+  protect(CartOrderAccess),
   advancedQuerySearch(Orders, true),
   getMyOrders
 );
-router.get('/getorder/:orderId', protect, getOrder);
-router.post('/', protect, createOrder);
-router.put('/update/:orderId', protect, updateOrder);
-router.delete('/delete/:orderId', protect, deleteOrder);
+
+router.get('/getorder/:orderId', protect(CartOrderAccess), getOrder);
+router.post('/', protect(CartOrderAccess), createOrder);
+router.put('/update/:orderId', protect(CartOrderAccess), updateOrder);
+router.delete('/delete/:orderId', protect(CartOrderAccess), deleteOrder);
 
 module.exports = router;

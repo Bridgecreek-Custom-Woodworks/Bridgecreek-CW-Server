@@ -38,30 +38,12 @@ exports.getOrderItem = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/ordersitems
 // access Private
 exports.createOrderItem = asyncHandler(async (req, res, next) => {
-  const { Orders } = req.user.dataValues;
-
-  let usersOrder;
-
-  // Getting existing order
-  for (let i = 0; i < Orders.length; i++) {
-    if (Orders[i].dataValues.orderStatus === 'pending') {
-      usersOrder = Orders[i];
-      break;
-    } else if (Orders[i].dataValues.orderStatus === 'new order') {
-      usersOrder = Orders[i];
-      usersOrder.orderStatus = 'pending';
-      usersOrder.save();
-      break;
-    }
-  }
-
   const product = await Products.findOne({
     where: { productId: req.body.productId },
   });
 
   const { price, discount } = product.dataValues;
-  const { quantity, productId } = req.body;
-  const { orderId } = usersOrder.dataValues;
+  const { quantity, productId, orderId } = req.body;
 
   let discountTotal = Number(price) * Number(discount);
   let total = Number(price) * quantity - Number(discountTotal);

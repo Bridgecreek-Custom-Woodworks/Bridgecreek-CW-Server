@@ -6,14 +6,14 @@ const {
 } = require('../controllers/cart_controller');
 const { protect } = require('../middleware/auth_middleware');
 
-// Include other resource routers
-
 const router = express.Router();
+
+const CartOrderAccess = require('../models/CartOrderAccess');
 
 // Route = /api/v1/carts
 
-router.get('/mycart', protect, getMyCart);
-router.post('/', protect, createCart); // <== This route may not be necessary
-router.put('/mycart/update/:cartId', protect, updateMyCart);
+router.get('/mycart', protect(CartOrderAccess), getMyCart);
+router.post('/', protect(CartOrderAccess), createCart);
+router.put('/mycart/update/:cartId', protect(CartOrderAccess), updateMyCart);
 
 module.exports = router;

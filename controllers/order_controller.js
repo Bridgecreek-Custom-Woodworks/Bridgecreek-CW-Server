@@ -50,7 +50,8 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/orders
 // access Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
-  const { Carts, activeStatus, Orders: existingOrders } = req.user.dataValues;
+  const { Carts, Orders: existingOrders } = req.user.dataValues;
+  const { activeStatus } = req.user.dataValues.Users[0].dataValues;
 
   let usersCart;
   let newOrPendingOrders;
@@ -66,7 +67,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   }
 
   //  Setting user values to the body of the req for the order
-  req.body = req.user.dataValues;
+  req.body = req.user.dataValues.Users[0].dataValues;
 
   //  Setting the Cart total to the body of the req subTotal for the order
   req.body.subTotal = usersCart.dataValues.total;

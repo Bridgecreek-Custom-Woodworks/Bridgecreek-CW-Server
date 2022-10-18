@@ -8,7 +8,7 @@ module.exports = {
         {
           cartId: 'e4e71f3b-6523-4c97-980e-2c80be8dc352',
           cartStatus: 'checkout',
-          userId: '1024cf0f-9c88-4af3-8eb3-928a0a0b844e',
+          cartOrderAccessId: '3075ab56-e614-4b64-8874-94d33e825914',
           total: 148.5,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -16,7 +16,7 @@ module.exports = {
         {
           cartId: '85081ddb-1fdb-4a17-9466-70473bde7218',
           cartStatus: 'checkout',
-          userId: '15242016-6385-4ef3-9c9a-0ec1bf595515',
+          cartOrderAccessId: '512edbde-a938-4216-8181-0ef9ba456e2f',
           total: 285.29,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -24,7 +24,7 @@ module.exports = {
         {
           cartId: 'ed4bf152-50cf-459f-8040-191dc6d136f3',
           cartStatus: 'new',
-          userId: 'aa1b2829-6807-4d6e-b6bd-f5debeb93577',
+          cartOrderAccessId: '09f8af99-3a84-41c5-bcc2-70fd5807dbf8',
           total: 205.5,
           createdAt: new Date(),
           updatedAt: new Date(),

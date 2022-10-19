@@ -26,6 +26,17 @@ const Order = sequelize.define(
         key: 'cartOrderAccessId',
       },
     },
+    billingAddressId: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      unique: false,
+      // references: {
+      //   type: Sequelize.UUID,
+      //   model: 'BillingAddress',
+      //   key: 'billingAddressId',
+      // },
+    },
+    // The orderStatus will be set and updated during the flow ('new order', 'pending', 'paid') and shipped will be set manually by admin
     orderStatus: {
       type: Sequelize.STRING,
       defaultValue: 'new order',
@@ -37,15 +48,14 @@ const Order = sequelize.define(
           msg: 'Order can only have a status of new order, pending, paid, or shipped',
         },
       },
-      // The orderStatus will be set and updated during the flow ('new order', 'pending', 'paid') and shipped will be set manually by admin
     },
+
+    // The subTotal will come from the cart
     subTotal: {
       type: Sequelize.DECIMAL,
       defaultValue: 0,
       allowNull: false,
       unique: false,
-
-      // The subTotal will come from the cart
     },
     tax: {
       type: Sequelize.DECIMAL,
@@ -74,21 +84,18 @@ const Order = sequelize.define(
       defaultValue: 10, // <== Change this back to 0 after testing *****
       allowNull: false,
       unique: false,
-
-      // Customer to provide shipping cost
     },
     orderDiscount: {
       type: Sequelize.DECIMAL,
-      allowNull: false,
       defaultValue: 0,
+      allowNull: false,
+      unique: false,
       validate: {
         max: {
           args: [0.1],
           msg: 'Discount can be more than ten percent',
         },
       },
-
-      //
     },
     total: {
       type: Sequelize.DECIMAL,
@@ -98,8 +105,9 @@ const Order = sequelize.define(
     },
     firstName: {
       type: Sequelize.STRING,
-      unique: false,
+      defaultValue: 'First Name',
       allowNull: false,
+      unique: false,
       validate: {
         len: {
           args: [2, 50],
@@ -109,8 +117,9 @@ const Order = sequelize.define(
     },
     lastName: {
       type: Sequelize.STRING,
-      unique: false,
+      defaultValue: 'Last Name',
       allowNull: false,
+      unique: false,
       validate: {
         len: {
           args: [2, 50],
@@ -120,21 +129,25 @@ const Order = sequelize.define(
     },
     street: {
       type: Sequelize.STRING,
+      defaultValue: 'Address',
       allowNull: true,
       unique: false,
     },
     city: {
       type: Sequelize.STRING,
+      defaultValue: 'City',
       allowNull: true,
       unique: false,
     },
     state: {
       type: Sequelize.STRING,
+      defaultValue: 'State',
       allowNull: true,
       unique: false,
     },
     zipCode: {
       type: Sequelize.STRING,
+      defaultValue: 'Zip Code',
       allowNull: true,
       unique: false,
       validate: {
@@ -146,14 +159,9 @@ const Order = sequelize.define(
     },
     email: {
       type: Sequelize.STRING,
+      defaultValue: 'Email',
+      allowNull: true,
       unique: false,
-      allowNull: false,
-      validate: {
-        isEmail: {
-          args: true,
-          msg: 'Please provide a valid email address',
-        },
-      },
     },
     homePhone: {
       type: Sequelize.STRING,
@@ -179,6 +187,7 @@ const Order = sequelize.define(
     },
     comments: {
       type: Sequelize.TEXT,
+      defaultValue: 'No comments',
       allowNull: true,
       unique: false,
     },

@@ -27,7 +27,7 @@ const Guests = sequelize.define(
     },
     guestName: {
       type: Sequelize.STRING,
-      defaultValue: 'Guest User',
+      defaultValue: 'Guest',
       allowNull: false,
       unique: false,
     },

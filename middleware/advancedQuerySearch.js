@@ -14,18 +14,9 @@ const advancedQuerySearch =
     let query = {};
     query['subQuery'] = true;
 
-    // console.log(req.user.dataValues.cartOrderAccessId);
-    // console.log(Model);
-
     if (searchUserInfo && req.user.userId) {
       query['where'] = { userId: req.user.userId };
     }
-
-    // if (searchUserInfo) {
-    //   query['where'] = {
-    //     cartOrderAccessId: req.user.dataValues.cartOrderAccessId,
-    //   };
-    // }
 
     let queryField;
     let fieldValue;

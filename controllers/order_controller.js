@@ -3,6 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const OrderItems = require('../models/OrderItems');
 const Product = require('../models/Product');
+const c = require('config');
 
 // @desc Get all orders
 // @route GET /api/v1/orders/admin/allorders
@@ -50,11 +51,19 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/orders
 // access Private
 exports.createOrder = asyncHandler(async (req, res, next) => {
-  const { Carts, Orders: existingOrders } = req.user.dataValues;
-  const { activeStatus } = req.user.dataValues.Users[0].dataValues;
-
+  const { Carts, Guests, Users, Orders: existingOrders } = req.user.dataValues;
   let usersCart;
   let newOrPendingOrders;
+  let activeStatus;
+
+  //  Setting user values to the body of the req for the order
+  if (Guests.length === 1) {
+    activeStatus = Guests[0].dataValues.activeStatus;
+    req.body = Guests[0].dataValues;
+  } else if (Users.length === 1) {
+    activeStatus = Users[0].dataValues.activeStatus;
+    req.body = Users[0].dataValues;
+  }
 
   // Getting users cart that is not already in paid or completed status
   for (let i = 0; i < Carts.length; i++) {
@@ -66,11 +75,10 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     }
   }
 
-  //  Setting user values to the body of the req for the order
-  req.body = req.user.dataValues.Users[0].dataValues;
-
   //  Setting the Cart total to the body of the req subTotal for the order
   req.body.subTotal = usersCart.dataValues.total;
+
+  console.log('Active Status', activeStatus);
 
   // Verifying that the customer's account is active
   if (activeStatus === 'pending' || activeStatus === 'not active') {
@@ -91,7 +99,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     await newOrPendingOrders.destroy();
   }
 
-  const order = await Orders.build(req.body);
+  let order = await Orders.build(req.body);
 
   // Changing cart status to checkout
   usersCart.cartStatus = 'checkout';

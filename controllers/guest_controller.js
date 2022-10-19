@@ -15,8 +15,12 @@ exports.getAllGuest = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/guests/getme
 // access Private/Guest
 exports.getGuest = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true, data: 'You got all the guests' });
-  // res.status(200).json(res.advancedQuerySearch);
+  const guest = req.user;
+
+  if (!guest) {
+    return next(new ErrorResponse('Guest was not found', 404));
+  }
+  res.status(200).json({ success: true, data: guest });
 });
 
 // @desc Create guest
@@ -25,15 +29,19 @@ exports.getGuest = asyncHandler(async (req, res, next) => {
 exports.createGuest = asyncHandler(async (req, res, next) => {
   const guest = await Guests.build(req.body);
   const password = await guest.saltAndHashPassword();
+  const { guestId } = guest.dataValues;
 
-  const { guestName, guestId } = guest.dataValues;
+  let guestName = guestId.split('-');
+  guestName = guestName[0];
+  guestName = `Guest ${guestName}`;
+
   let customer = {
     userName: guestName,
     customerId: guestId,
   };
 
   const cartOrderAccess = await CartOrderAccess.build(customer);
-
+  guest.guestName = guestName;
   guest.password = password;
   guest.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;
   guest.activeStatus = 'active';
@@ -48,4 +56,47 @@ exports.createGuest = asyncHandler(async (req, res, next) => {
   }
 
   sendTokenResponse(guest, 201, res);
+});
+
+// @desc Update guest
+// @route PUT /api/v1/guests/update/:guestId
+// access Private/Guest
+exports.updateGuest = asyncHandler(async (req, res, next) => {
+  const guest = await Guests.update(req.body, {
+    where: { guestId: req.params.guestId },
+    returning: true,
+  });
+
+  if (!guest) {
+    return next(
+      new ErrorResponse(
+        `Guest with id ${req.params.guestId} was not found`,
+        404
+      )
+    );
+  }
+
+  res.status(200).json({ success: true, data: guest });
+});
+
+// @desc Delete guest
+// @route DELETE /api/v1/guests/delete/:guestId
+// access Private/Guest
+exports.deleteGuest = asyncHandler(async (req, res, next) => {
+  const guest = await Guests.destroy({
+    where: {
+      guestId: req.params.guestId,
+    },
+  });
+
+  if (!guest) {
+    return next(
+      new ErrorResponse(
+        `Guest with id ${req.params.guestId} was not found`,
+        404
+      )
+    );
+  }
+
+  res.status(200).json({ success: true, data: guest });
 });

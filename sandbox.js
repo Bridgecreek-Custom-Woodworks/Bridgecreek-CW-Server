@@ -5,7 +5,7 @@ let uuid1 = uuidv4();
 let uuid2 = uuidv4();
 let uuid3 = uuidv4();
 
-console.log(uuid1, uuid2, uuid3);
+// console.log(uuid1, uuid2, uuid3);
 
 // How generate next day
 const date = new Date();
@@ -124,3 +124,7 @@ for (let i = 0; i < cartArray.length; i++) {
 // if (newArray) {
 //   console.log('Object has a property');
 // }
+
+let uuid4 = uuidv4();
+uuid4 = uuid4.split('-');
+console.log(uuid4[0]);

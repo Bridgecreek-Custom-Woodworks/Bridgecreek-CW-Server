@@ -194,14 +194,8 @@ Products.belongsToMany(User, {
 User.hasMany(Reviews, { foreignKey: 'userId' });
 Reviews.belongsTo(User, { foreignKey: 'userId' });
 
-// User.hasMany(Carts, { foreignKey: 'userId' });
-// Carts.belongsTo(User, { foreignKey: 'userId' });
-
 User.hasOne(Wishlist, { foreignKey: 'userId' });
 Wishlist.belongsTo(User, { foreignKey: 'userId' });
-
-// User.hasMany(Orders, { foreignKey: 'userId' });
-// Orders.belongsTo(User, { foreignKey: 'userId' });
 
 Products.hasMany(Wishlist, { foreignKey: 'productId' });
 Wishlist.belongsTo(Products, { foreignKey: 'productId' });

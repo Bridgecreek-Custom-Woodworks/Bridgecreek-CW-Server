@@ -32,15 +32,18 @@ exports.protect = (Model) =>
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+      let id = decoded.userId ? decoded.userId : decoded.guestId;
       // Adding user to the req object for all protected routes
       if (Model === Users) {
         req.user = await Users.findOne({
           where: { userId: decoded.userId },
         });
+
         req.user.role = req.user.role;
       } else if (Model === CartOrderAccess) {
         req.user = await CartOrderAccess.findOne({
-          where: { customerId: decoded.userId },
+          where: { customerId: id },
+
           include: [
             { model: Guests },
             { model: Users },
@@ -48,12 +51,16 @@ exports.protect = (Model) =>
             { model: Cart },
           ],
         });
-        // req.user.role = 'No User'
-        req.user.role = req.user.dataValues.Users[0].dataValues.role;
+
+        req.user.role =
+          req.user.dataValues.Guests.length === 1
+            ? req.user.dataValues.Guests[0].dataValues.role
+            : req.user.dataValues.Users[0].dataValues.role;
       }
 
       next();
     } catch (error) {
+      // console.log(error);
       return next(
         new ErrorResponse('Not authorized to access this route', 401)
       );

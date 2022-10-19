@@ -1,5 +1,5 @@
-exports.sendTokenResponse = async (user, statusCode, res, msg) => {
-  const token = await user.getSignedToken();
+exports.sendTokenResponse = async (Model, statusCode, res, msg) => {
+  const token = await Model.getSignedToken();
 
   const options = {
     expires: new Date(
@@ -15,5 +15,5 @@ exports.sendTokenResponse = async (user, statusCode, res, msg) => {
   res
     .status(statusCode)
     .cookie('token', token, options)
-    .json({ success: true, token, data: user, msg: msg });
+    .json({ success: true, token, data: Model, msg: msg });
 };

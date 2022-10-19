@@ -394,6 +394,7 @@ exports.orderKeys = [
   'comments',
   'createdAt',
   'updatedAt',
+  'billingAddressId',
 ];
 exports.createOrderKeys = [
   'orderId',
@@ -418,6 +419,7 @@ exports.createOrderKeys = [
   'createdAt',
   'updatedAt',
   'Products',
+  'billingAddressId',
 ];
 
 // ORDER ITEM INFO *************************************************************

@@ -10,6 +10,13 @@ chai.use(chaiHttp);
 const User = require('../models/User');
 const colors = require('colors');
 const sequelize = require('../config/db');
+const { v4: uuidv4 } = require('uuid');
+let uuid4 = uuidv4();
+uuid4 = uuid4.split('-');
+uuid4 = uuid4[1];
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
+const password = bcrypt.hashSync(uuid4, salt);
 
 const deleteData = async () => {
   await sequelize.sync({ force: true });
@@ -457,4 +464,26 @@ exports.updatedOrderItemKeys = [
   'createdAt',
   'updatedAt',
   'Order',
+];
+
+// GUESTS INFO *************************************************************
+
+exports.guest = {
+  guestId: '04f060c3-4624-4728-9314-0c8719941851',
+  // cartOrderAccessId: '',
+  guestName: 'Guest ',
+  password: password,
+  role: 'guest',
+  activeStatus: 'active',
+};
+
+exports.guestKeys = [
+  'guestId',
+  'cartOrderAccessId',
+  'guestName',
+  'password',
+  'role',
+  'activeStatus',
+  'createdAt',
+  'updatedAt',
 ];

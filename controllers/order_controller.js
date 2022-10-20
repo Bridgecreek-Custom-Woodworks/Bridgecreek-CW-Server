@@ -101,11 +101,11 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   // Changing cart status to checkout
   usersCart.cartStatus = 'checkout';
-  await usersCart.save(); // <=== Uncomment after testing *******
+  await usersCart.save();
 
   // Changing orders status to pending
   order.orderStatus = 'pending';
-  await order.save(); // <=== Uncomment after testing *******
+  await order.save();
 
   order.createOrderItems(req);
 

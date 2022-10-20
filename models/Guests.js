@@ -3,7 +3,6 @@ const sequelize = require('../config/db');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const CartOrderAccess = require('../models/CartOrderAccess');
 
 const Guests = sequelize.define(
   'Guests',

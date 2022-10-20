@@ -79,7 +79,7 @@ describe('ORDER_ITEM WORKFOLW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.all.keys(orderItemKeys);
-        expect(newOrderItemCount).to.be.equal(5);
+        expect(newOrderItemCount).to.be.equal(14);
         expect(err).to.be.null;
 
         done();
@@ -112,7 +112,7 @@ describe('ORDER_ITEM WORKFOLW TEST ==>', function () {
         let afterDeleteOrderItemCount = count - res.body.data;
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
-        expect(afterDeleteOrderItemCount).to.be.equal(4);
+        expect(afterDeleteOrderItemCount).to.be.equal(13);
         expect(err).to.be.null;
 
         done();

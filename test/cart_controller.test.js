@@ -80,7 +80,7 @@ describe('CART WORKFLOW TEST ==>', function () {
         expect(data).to.be.a('object');
         expect(data.cartId).to.be.a('string');
         expect(data).to.have.all.keys(cartKeys);
-        expect(addedCount).to.be.equal(4);
+        expect(addedCount).to.be.equal(9);
         expect(err).to.be.null;
 
         done();
@@ -120,7 +120,7 @@ describe('CART WORKFLOW TEST ==>', function () {
 
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
-        expect(afterdeletedCount).to.be.equal(3);
+        expect(afterdeletedCount).to.be.equal(8);
         expect(err).to.be.null;
 
         done();

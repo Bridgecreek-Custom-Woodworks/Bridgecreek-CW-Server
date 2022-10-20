@@ -135,7 +135,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
 
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
-        expect(afterDeletedCount).to.be.equal(5);
+        expect(afterDeletedCount).to.be.equal(14);
         expect(err).to.be.null;
 
         // Deletes cart that was created for the cart item

@@ -328,7 +328,16 @@
 <a name='L263'></a><a href='#L263'>263</a>
 <a name='L264'></a><a href='#L264'>264</a>
 <a name='L265'></a><a href='#L265'>265</a>
-<a name='L266'></a><a href='#L266'>266</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -337,6 +346,15 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -621,6 +639,17 @@ const Order = sequelize.define(
         key: 'cartOrderAccessId',
       },
     },
+    billingAddressId: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      unique: false,
+      // references: {
+      //   type: Sequelize.UUID,
+      //   model: 'BillingAddress',
+      //   key: 'billingAddressId',
+      // },
+    },
+    // The orderStatus will be set and updated during the flow ('new order', 'pending', 'paid') and shipped will be set manually by admin
     orderStatus: {
       type: Sequelize.STRING,
       defaultValue: 'new order',
@@ -632,15 +661,14 @@ const Order = sequelize.define(
           msg: 'Order can only have a status of new order, pending, paid, or shipped',
         },
       },
-      // The orderStatus will be set and updated during the flow ('new order', 'pending', 'paid') and shipped will be set manually by admin
     },
+&nbsp;
+    // The subTotal will come from the cart
     subTotal: {
       type: Sequelize.DECIMAL,
       defaultValue: 0,
       allowNull: false,
       unique: false,
-&nbsp;
-      // The subTotal will come from the cart
     },
     tax: {
       type: Sequelize.DECIMAL,
@@ -669,21 +697,18 @@ const Order = sequelize.define(
       defaultValue: 10, // &lt;== Change this back to 0 after testing *****
       allowNull: false,
       unique: false,
-&nbsp;
-      // Customer to provide shipping cost
     },
     orderDiscount: {
       type: Sequelize.DECIMAL,
-      allowNull: false,
       defaultValue: 0,
+      allowNull: false,
+      unique: false,
       validate: {
         max: {
           args: [0.1],
           msg: 'Discount can be more than ten percent',
         },
       },
-&nbsp;
-      //
     },
     total: {
       type: Sequelize.DECIMAL,
@@ -693,8 +718,9 @@ const Order = sequelize.define(
     },
     firstName: {
       type: Sequelize.STRING,
-      unique: false,
+      defaultValue: 'First Name',
       allowNull: false,
+      unique: false,
       validate: {
         len: {
           args: [2, 50],
@@ -704,8 +730,9 @@ const Order = sequelize.define(
     },
     lastName: {
       type: Sequelize.STRING,
-      unique: false,
+      defaultValue: 'Last Name',
       allowNull: false,
+      unique: false,
       validate: {
         len: {
           args: [2, 50],
@@ -715,21 +742,25 @@ const Order = sequelize.define(
     },
     street: {
       type: Sequelize.STRING,
+      defaultValue: 'Address',
       allowNull: true,
       unique: false,
     },
     city: {
       type: Sequelize.STRING,
+      defaultValue: 'City',
       allowNull: true,
       unique: false,
     },
     state: {
       type: Sequelize.STRING,
+      defaultValue: 'State',
       allowNull: true,
       unique: false,
     },
     zipCode: {
       type: Sequelize.STRING,
+      defaultValue: 'Zip Code',
       allowNull: true,
       unique: false,
       validate: {
@@ -741,14 +772,9 @@ const Order = sequelize.define(
     },
     email: {
       type: Sequelize.STRING,
+      defaultValue: 'Email',
+      allowNull: true,
       unique: false,
-      allowNull: false,
-      validate: {
-        isEmail: {
-          args: true,
-          msg: 'Please provide a valid email address',
-        },
-      },
     },
     homePhone: {
       type: Sequelize.STRING,
@@ -774,6 +800,7 @@ const Order = sequelize.define(
     },
     comments: {
       type: Sequelize.TEXT,
+      defaultValue: 'No comments',
       allowNull: true,
       unique: false,
     },
@@ -865,7 +892,7 @@ module.exports = Order;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-10-18T22:23:08.400Z
+                at 2022-10-20T18:07:57.846Z
             </div>
         <script src="../prettify.js"></script>
         <script>

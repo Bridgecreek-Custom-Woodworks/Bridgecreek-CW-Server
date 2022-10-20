@@ -32,7 +32,7 @@ exports.createGuest = asyncHandler(async (req, res, next) => {
   const { guestId } = guest.dataValues;
 
   let guestName = guestId.split('-');
-  guestName = guestName[0];
+  guestName = guestName[4];
   guestName = `Guest ${guestName}`;
 
   let customer = {
@@ -67,7 +67,7 @@ exports.updateGuest = asyncHandler(async (req, res, next) => {
     returning: true,
   });
 
-  if (!guest) {
+  if (guest[0] === 0 || guest[1].length === 0) {
     return next(
       new ErrorResponse(
         `Guest with id ${req.params.guestId} was not found`,

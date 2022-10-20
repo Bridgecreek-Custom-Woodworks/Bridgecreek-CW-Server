@@ -127,4 +127,4 @@ for (let i = 0; i < cartArray.length; i++) {
 
 let uuid4 = uuidv4();
 uuid4 = uuid4.split('-');
-console.log(uuid4[1]);
+// console.log(uuid4[1]);

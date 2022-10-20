@@ -158,7 +158,7 @@ describe('ORDER WORKFLOW TEST ==>', function () {
         expect(res.body.data.orderStatus).to.be.equal('pending');
         expect(res.body.data).to.have.all.keys(orderKeys);
         expect(total).to.be.equal(String(orderTotal.toFixed(2)));
-        expect(newOrderCountTotal).to.be.equal(3);
+        expect(newOrderCountTotal).to.be.equal(8);
         expect(err).to.be.null;
 
         done();
@@ -196,7 +196,7 @@ describe('ORDER WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
         expect(res.body.data).to.be.equal(1);
-        expect(newOrderCountTotal).to.be.equal(2);
+        expect(newOrderCountTotal).to.be.equal(7);
         expect(err).to.be.null;
 
         chai

@@ -40,6 +40,42 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        //
+        {
+          cartOrderAccessId: 'dea0721a-7646-4a6e-8d95-9ca1ec56e931',
+          userName: 'Guest ce53bd73',
+          customerId: 'ce53bd73-64ff-42f2-a3f7-92a7429e5880',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          cartOrderAccessId: '56a75180-52be-43a1-af2a-75c10b828d71',
+          customerId: '1262ba1b-047c-4ba0-bb16-11d5df461e26',
+          userName: 'Guest 1262ba1b',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          cartOrderAccessId: '141e87fa-9111-4a27-814b-9a5a22b572df',
+          customerId: '836d7cd6-abdf-450c-97f7-4f277fba43a0',
+          userName: 'Guest 836d7cd6',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          cartOrderAccessId: '8ec662d3-fac8-4ff6-93cb-6e36c3d51ef1',
+          customerId: '0cb63ee4-8a2c-4b12-8bf4-9f6766470ca1',
+          userName: 'Guest 0cb63ee4',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          cartOrderAccessId: '1e7130c8-4c2e-46ee-afbd-695eee66f945',
+          customerId: '7789a666-5129-413e-99e9-2c1570d55dcf',
+          userName: 'Guest 7789a666',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

@@ -72,7 +72,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if Order query is ordered correctly', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allusers?order[]=firstName,desc')
+      .get('/api/v1/users/admin/allusers?order[]=firstName,desc')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const descOrder = ['S', 'O', 'M', 'J', 'D'];
@@ -92,7 +92,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if include query returns all model associations', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allusers?include=true')
+      .get('/api/v1/users/admin/allusers?include=true')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const { data } = res.body;
@@ -112,7 +112,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if field (Key) query returns correct results', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allusers?firstName=Mike')
+      .get('/api/v1/users/admin/allusers?firstName=Mike')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -236,7 +236,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if rating gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allreviews?ratinggte=5')
+      .get('/api/v1/reviews/admin/allreviews?ratinggte=5')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -254,7 +254,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if rating lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allreviews?ratinglte=4')
+      .get('/api/v1/reviews/admin/allreviews?ratinglte=4')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -272,7 +272,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if total gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allcarts?totalgte=280')
+      .get('/api/v1/carts/admin/allcarts?totalgte=280')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -289,7 +289,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if total lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allcarts?totallte=300')
+      .get('/api/v1/carts/admin/allcarts?totallte=300')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);

@@ -36,7 +36,7 @@ describe('ORDER_ITEM WORKFOLW TEST ==>', function () {
   it('Get all order items', (done) => {
     chai
       .request(server)
-      .get('/api/v1/orders/admin/allorderitems')
+      .get('/api/v1/orderitems/admin/allorderitems')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         orderItemId = res.body.data[0].orderItemId;

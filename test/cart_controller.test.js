@@ -34,7 +34,7 @@ describe('CART WORKFLOW TEST ==>', function () {
   it('Should get all carts', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allcarts')
+      .get('/api/v1/carts/admin/allcarts')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -113,7 +113,7 @@ describe('CART WORKFLOW TEST ==>', function () {
   it('Delete cart', (done) => {
     chai
       .request(server)
-      .delete(`/api/v1/admin/deletecart/${createdCartId}`)
+      .delete(`/api/v1/carts/admin/deletecart/${createdCartId}`)
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const afterdeletedCount = count - 1;

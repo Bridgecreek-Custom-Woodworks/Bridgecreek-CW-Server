@@ -52,7 +52,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
   it('Should get all cartItems', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allcartitems')
+      .get('/api/v1/cartitems/admin/allcartitems')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         cartItemId = res.body.data[0].cartItemId;
@@ -141,7 +141,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         // Deletes cart that was created for the cart item
         chai
           .request(server)
-          .delete(`/api/v1/admin/deletecart/${newCartId}`)
+          .delete(`/api/v1/carts/admin/deletecart/${newCartId}`)
           .set({ Authorization: `Bearer ${token}` })
           .end((err, res) => {
             expect(res.status).to.be.equal(200);

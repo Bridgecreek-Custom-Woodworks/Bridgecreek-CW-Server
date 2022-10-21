@@ -36,7 +36,7 @@ describe('GUEST WORKFLOW TEST ===>', function () {
   it('Should get all guest', (done) => {
     chai
       .request(server)
-      .get('/api/v1/admin/allguests')
+      .get('/api/v1/guests/admin/allguests')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);

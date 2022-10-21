@@ -1,5 +1,6 @@
 const express = require('express');
 const {
+  getAllCartOrderAccess,
   getMyCartOrderAccess,
   createCartOrderAccess,
   updateCartOrderAccess,
@@ -15,19 +16,29 @@ const router = express.Router();
 const CartOrderAccess = require('../models/CartOrderAccess');
 
 // Route = '/api/v1/cartorderaccess'
+router.get(
+  '/admin/allcartorderaccess',
+  protect(CartOrderAccess),
+  authorize('admin'),
+  advancedQuerySearch(CartOrderAccess),
+  getAllCartOrderAccess
+);
 
 router.get('/getme', protect(CartOrderAccess), getMyCartOrderAccess);
+
 router.post(
   '/',
   protect(CartOrderAccess),
   authorize('admin'),
   createCartOrderAccess
 );
+
 router.put(
   '/update/:cartOrderAccessId',
   protect(CartOrderAccess),
   updateCartOrderAccess
 );
+
 router.delete(
   '/delete/:cartOrderAccessId',
   protect(CartOrderAccess),

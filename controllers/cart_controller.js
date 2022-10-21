@@ -1,10 +1,9 @@
 const Carts = require('../models/Cart');
-const User = require('../models/User');
 const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
+const CartOrderAccess = require('../models/CartOrderAccess');
 const asyncHandler = require('../middleware/async_middleware');
 const { Op } = require('sequelize');
-const CartOrderAccess = require('../models/CartOrderAccess');
 
 // @desc Get all carts
 // @route GET /api/v1/admin/allcarts
@@ -76,7 +75,7 @@ exports.createCart = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update cart
-// @route POST /api/v1/carts/mycart/update/:cartId
+// @route PUT /api/v1/carts/mycart/update/:cartId
 // access Private/Guest
 exports.updateMyCart = asyncHandler(async (req, res, next) => {
   const cart = await Carts.update(req.body, {

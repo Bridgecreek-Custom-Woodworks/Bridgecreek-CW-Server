@@ -58,6 +58,12 @@ const Guests = sequelize.define(
         },
       },
     },
+    createdBy: {
+      type: Sequelize.STRING,
+      defaultValue: 'guest',
+      allowNull: false,
+      uinque: false,
+    },
     createdAt: {
       type: Sequelize.DATE,
       allowNull: false,
@@ -75,6 +81,7 @@ const Guests = sequelize.define(
 
 Guests.prototype.saltAndHashPassword = async function () {
   let password = uuidv4();
+
   password = password.split('-');
   password[0];
   const salt = await bcrypt.genSalt(10);

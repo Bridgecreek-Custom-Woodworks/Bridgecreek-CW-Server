@@ -52,4 +52,13 @@ Orders.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
 CartOrderAccess.hasMany(Carts, { foreignKey: 'cartOrderAccessId' });
 Carts.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
 
+CartOrderAccess.prototype.saltAndHashPassword = async function () {
+  let password = uuidv4();
+  password = password.split('-');
+  password[0];
+  const salt = await bcrypt.genSalt(10);
+
+  return (password = await bcrypt.hash(password[0], salt));
+};
+
 module.exports = CartOrderAccess;

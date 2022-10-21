@@ -1,11 +1,12 @@
 const express = require('express');
-const { getAllWishlist } = require('../controllers/wishlist_controller');
 
 const {
   createProducts,
   updateProduct,
   deleteProduct,
 } = require('../controllers/product_controllers');
+
+const { getAllWishlist } = require('../controllers/wishlist_controller');
 
 const { getAllUsers } = require('../controllers/user_controller');
 
@@ -19,13 +20,17 @@ const { getAllCartItems } = require('../controllers/cartItem_controller');
 
 const { getAllOrders } = require('../controllers/order_controller');
 
-const router = express.Router({ mergeParams: true });
-
-const { protect, authorize } = require('../middleware/auth_middleware');
-
 const { getAllOrderItems } = require('../controllers/orderItem_controller');
 
 const { getAllGuest } = require('../controllers/guest_controller');
+
+const {
+  getAllCartOrderAccess,
+} = require('../controllers/cartOrderAccess_controller');
+
+const { protect, authorize } = require('../middleware/auth_middleware');
+
+const router = express.Router({ mergeParams: true });
 
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
@@ -125,6 +130,15 @@ router.get(
   authorize('admin'),
   advancedQuerySearch(Guests),
   getAllGuest
+);
+
+// Admin CartOrderAccess Routes
+router.get(
+  '/allcartorderaccess',
+  protect(CartOrderAccess),
+  authorize('admin'),
+  advancedQuerySearch(CartOrderAccess),
+  getAllCartOrderAccess
 );
 
 module.exports = router;

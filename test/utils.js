@@ -486,4 +486,5 @@ exports.guestKeys = [
   'activeStatus',
   'createdAt',
   'updatedAt',
+  'createdBy',
 ];

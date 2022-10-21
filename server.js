@@ -19,6 +19,7 @@ const cartItem = require('./routes/cartItem_routes');
 const orders = require('./routes/orders_routes');
 const orderItems = require('./routes/orderItem_routes');
 const guests = require('./routes/guest_routes');
+const cartOrderAccess = require('./routes/cartOrderAccess_routes');
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api/v1/cartitems', cartItem);
 app.use('/api/v1/orders', orders);
 app.use('/api/v1/orderitems', orderItems);
 app.use('/api/v1/guests', guests);
+app.use('/api/v1/cartorderaccess', cartOrderAccess);
 
 app.use(errorHandler);
 

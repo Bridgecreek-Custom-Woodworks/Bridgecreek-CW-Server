@@ -17,9 +17,6 @@ exports.getAllGuest = asyncHandler(async (req, res, next) => {
 exports.getGuest = asyncHandler(async (req, res, next) => {
   const guest = req.user;
 
-  if (!guest) {
-    return next(new ErrorResponse('Guest was not found', 404));
-  }
   res.status(200).json({ success: true, data: guest });
 });
 

@@ -106,12 +106,6 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   let updatedUser = user.flat(Infinity);
   user = updatedUser[1].dataValues;
 
-  // Need to figure out a way to remove the password from the return ***********.
-  // const fieldsToExclude = ['password'];
-  // const myfields = Object.keys(user.rawAttributes).filter(
-  //   (s) => !fieldsToExclude.includes(s)
-  // );
-
   res.status(200).json({
     success: true,
     data: user,

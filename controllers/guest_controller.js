@@ -5,7 +5,7 @@ const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
 
 // @desc Get all guest
-// @route GET /api/v1/admin/allguests
+// @route GET /api/v1/guests/admin/allguests
 // access Private/Admin
 exports.getAllGuest = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
@@ -22,12 +22,13 @@ exports.getGuest = asyncHandler(async (req, res, next) => {
 
 // @desc Create guest
 // @route POST /api/v1/guests
-// access Private/Guest
+// access Public
 exports.createGuest = asyncHandler(async (req, res, next) => {
   const guest = await Guests.build(req.body);
   const password = await guest.saltAndHashPassword();
   const { guestId } = guest.dataValues;
 
+  // Creating guestName for both guest and cart order accesss tables
   let guestName = guestId.split('-');
   guestName = guestName[4];
   guestName = `Guest ${guestName}`;
@@ -38,6 +39,8 @@ exports.createGuest = asyncHandler(async (req, res, next) => {
   };
 
   const cartOrderAccess = await CartOrderAccess.build(customer);
+
+  // Setting guest values before saving
   guest.guestName = guestName;
   guest.password = password;
   guest.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;

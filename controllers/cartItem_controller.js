@@ -4,8 +4,8 @@ const Products = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 
-// @desc Get all items
-// @route GET /api/v1/admin/allcartitems
+// @desc Get all cart items
+// @route GET /api/v1/cartitems/admin/allcartitems
 // access Private/Admin
 exports.getAllCartItems = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -14,7 +14,7 @@ exports.getAllCartItems = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
 });
 
-// @desc Get single product
+// @desc Get single cart item
 // @route GET /api/v1/cartItems/:cartItemId
 // access Private/Guest
 exports.getSingleCartItem = asyncHandler(async (req, res, next) => {
@@ -100,8 +100,8 @@ exports.deleteCartItem = asyncHandler(async (req, res, next) => {
   if (!cartItem) {
     return next(
       new ErrorResponse(
-        `This cart item with the id of ${req.params.cartItemId} has already been deleted`,
-        400
+        `This cart item with the id of ${req.params.cartItemId} was not found`,
+        404
       )
     );
   }

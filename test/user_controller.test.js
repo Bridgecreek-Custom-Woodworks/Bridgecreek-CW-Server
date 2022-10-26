@@ -15,6 +15,7 @@ describe('USER WORKFLOW TEST ===>', function () {
   let token;
   let updateDeleteToken;
   let count;
+  let activeUserToken;
 
   it('Should log in user', (done) => {
     chai

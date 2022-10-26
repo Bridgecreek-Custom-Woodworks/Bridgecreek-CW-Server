@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 const server = require('../server');
 const Reviews = require('../models/Reviews');
 const Product = require('../models/Product');
-const { Op } = require('sequelize');
+
 const {
   user,
   reviewKeys,
@@ -149,7 +149,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
   it('Should update a review', (done) => {
     chai
       .request(server)
-      .put(`/api/v1/reviews/${review.productId}`)
+      .put(`/api/v1/reviews/update/${review.productId}`)
       .set({ Authorization: `Bearer ${token}` })
       .send({ comments: 'Terrible Product', rating: 1 })
       .end((err, res) => {
@@ -171,7 +171,7 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
   it('Should delete a review', (done) => {
     chai
       .request(server)
-      .delete(`/api/v1/reviews/${review.productId}`)
+      .delete(`/api/v1/reviews/delete/${review.productId}`)
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const { success, msg } = res.body;

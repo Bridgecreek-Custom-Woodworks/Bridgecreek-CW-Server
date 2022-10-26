@@ -1,3 +1,7 @@
+const dotenv = require('dotenv');
+dotenv.config({ path: './config/config.env' });
+
+const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
 // Generate uuid for seeders
@@ -128,3 +132,92 @@ for (let i = 0; i < cartArray.length; i++) {
 let uuid4 = uuidv4();
 uuid4 = uuid4.split('-');
 // console.log(uuid4[1]);
+
+// Paytrace sandbox testing
+
+const fetchData = async () => {
+  let access_token;
+  let response;
+  console.log(process.env.PAYTRACE_USERNAME);
+  console.log(process.env.PAYTRACE_PASSWORD);
+  console.log(process.env.PAYTRACE_GRANT_TYPE);
+
+  const user = {
+    username: process.env.PAYTRACE_USERNAME,
+    password: process.env.PAYTRACE_PASSWORD,
+    grant_type: process.env.PAYTRACE_GRANT_TYPE,
+  };
+  let headers = {
+    'Access-Control-Allow-Origin': '*',
+  };
+
+  try {
+    response = await axios.post(
+      'https://api.paytrace.com/oauth/token',
+      user,
+      headers
+    );
+
+    access_token = response.data.access_token;
+    // console.log(access_token);
+  } catch (error) {
+    console.log(error.response.headers);
+  }
+
+  const fetchSetup = async () => {
+    let noData = '';
+    let headers = {
+      Authorization: `Bearer ${access_token}`,
+    };
+    let setup = await axios.post(
+      'https://api.paytrace.com/v1/payment_fields/token/create',
+      noData,
+      { headers }
+    );
+    console.log(setup.data);
+  };
+
+  if (response.status === 200) {
+    // console.log(response.status);
+    // console.log(access_token);
+    try {
+      const Setup = await fetchSetup();
+      // await fetchTransactionRes();
+      // console.log(Setup.data.clientKey);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  console.log(response.data);
+};
+
+fetchData();
+
+// const fetchTransactionRes = async () => {
+//   const cardInfo = {
+//     amount: 2.0,
+//     credit_card: {
+//       number: '	4012000098765439',
+//       expiration_month: '	12',
+//       expiration_year: '2014',
+//     },
+//     csc: 999,
+//     billing_address: {
+//       name: 'Steve Smith',
+//       street_address: '8320 E. West St',
+//       city: 'Spokane',
+//       state: 'WA',
+//       zip: '85284',
+//     },
+//   };
+
+//   let cardResponse = await axios.post(
+//     'https://api.paytrace.com/v1/transactions/sale/pt_protect',
+//     cardInfo,
+//     {
+//       Authorization: `Bearer ${access_token}`,
+//     }
+//   );
+
+//   console.log('Card Response', cardResponse);
+// };

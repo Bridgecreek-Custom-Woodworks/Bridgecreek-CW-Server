@@ -141,7 +141,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         // Deletes cart that was created for the cart item
         chai
           .request(server)
-          .delete(`/api/v1/carts/admin/deletecart/${newCartId}`)
+          .delete(`/api/v1/carts/admin/delete/${newCartId}`)
           .set({ Authorization: `Bearer ${token}` })
           .end((err, res) => {
             expect(res.status).to.be.equal(200);

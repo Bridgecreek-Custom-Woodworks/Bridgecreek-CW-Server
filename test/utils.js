@@ -156,6 +156,7 @@ exports.productKeys = [
   'avgRating',
   'createdAt',
   'updatedAt',
+  'displayStatus',
 ];
 
 exports.singleProductKeys = [
@@ -171,6 +172,7 @@ exports.singleProductKeys = [
   'createdAt',
   'updatedAt',
   'Reviews',
+  'displayStatus',
 ];
 
 // WISHLISTS INFO ****************************************************
@@ -484,6 +486,33 @@ exports.guestKeys = [
   'password',
   'role',
   'activeStatus',
+  'createdAt',
+  'updatedAt',
+  'createdBy',
+];
+
+// CART ORDER ACCESS INFO *************************************************************
+
+exports.cartOrderAccessKeys = [
+  'cartOrderAccessId',
+  'customerId',
+  'userName',
+  'createdAt',
+  'updatedAt',
+  'Guests',
+  'Users',
+  'Orders',
+  'Carts',
+  // 'createdBy',
+];
+
+exports.createdCartOrderAccessKeys = [
+  'cartOrderAccessId',
+  'guestId',
+  'guestName',
+  'role',
+  'activeStatus',
+  'password',
   'createdAt',
   'updatedAt',
   'createdBy',

@@ -6,7 +6,7 @@ const asyncHandler = require('../middleware/async_middleware');
 const { Op } = require('sequelize');
 
 // @desc Get all carts
-// @route GET /api/v1/admin/allcarts
+// @route GET /api/v1/carts/admin/allcarts
 // access Private/Admin
 exports.getAllCarts = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -97,7 +97,7 @@ exports.updateMyCart = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete cart
-// @route DELETE /api/v1/admin/deletecart/:cartId
+// @route DELETE /api/v1/admin/delete/:cartId
 // access Private/Admin
 exports.deleteCart = asyncHandler(async (req, res, next) => {
   const cart = await Carts.findOne({

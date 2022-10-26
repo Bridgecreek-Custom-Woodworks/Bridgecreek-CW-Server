@@ -3,17 +3,16 @@ const Guests = require('../models/Guests');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
-const { v4: uuidv4 } = require('uuid');
 
 // @desc Get all cartOrderAccess
-// @route GET /api/v1/admin/allcartOrderAccess
+// @route GET /api/v1/cartorderaccess/admin/allcartOrderAccess
 // access Private/Admin
 exports.getAllCartOrderAccess = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch);
 });
 
 // @desc Get a single cartOrderAccess
-// @route GET /api/v1/cartsorderaccess/getme
+// @route GET /api/v1/cartorderaccess/getme
 // access Private/Admin
 exports.getMyCartOrderAccess = asyncHandler(async (req, res, next) => {
   const cartOrderAccess = req.user;
@@ -23,7 +22,7 @@ exports.getMyCartOrderAccess = asyncHandler(async (req, res, next) => {
 
 // @desc Create cartOrderAccess
 // @route POST /api/v1/cartorderaccess
-// access Private/Admin NEED TO MOVE THIS ROUTE TO ADMIN ********************
+// access Private/Admin
 exports.createCartOrderAccess = asyncHandler(async (req, res, next) => {
   const { firstName, lastName, userId } =
     req.user.dataValues.Users[0].dataValues;
@@ -66,9 +65,13 @@ exports.createCartOrderAccess = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/cartorderaccess/update/:cartOrderAccessId
 // access Private/Admin
 exports.updateCartOrderAccess = asyncHandler(async (req, res, next) => {
-  const cartOrderAccess = await CartOrderAccess.update(req.body, {
+  let cartOrderAccess = await CartOrderAccess.update(req.body, {
     where: { cartOrderAccessId: req.params.cartOrderAccessId },
+    returning: true,
   });
+
+  let updatedCartOrderAccess = cartOrderAccess.flat(Infinity);
+  cartOrderAccess = updatedCartOrderAccess[1].dataValues;
 
   res.status(200).json({ success: true, data: cartOrderAccess });
 });

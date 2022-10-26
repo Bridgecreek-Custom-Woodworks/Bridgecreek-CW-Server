@@ -5,7 +5,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 
 // @desc Get all orders items
-// @route GET /api/v1/orders/admin/allordersitems
+// @route GET /api/v1/orderitems/admin/allordersitems
 // access Private/Admin
 exports.getAllOrderItems = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -15,7 +15,7 @@ exports.getAllOrderItems = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get a single order item
-// @route GET /api/v1/orders/getorderitem/:orderItemId
+// @route GET /api/v1/orderitems/getorderitem/:orderItemId
 // access Private
 exports.getOrderItem = asyncHandler(async (req, res, next) => {
   const orderItem = await OrderItems.findOne({

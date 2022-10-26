@@ -91,7 +91,7 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
   it('Delete wishlist item', (done) => {
     chai
       .request(server)
-      .delete(`/api/v1/wishlist/mywishlist/${newWishlistItem.productId}`)
+      .delete(`/api/v1/wishlist/delete/${newWishlistItem.productId}`)
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const deletedCount = count - res.body.data;

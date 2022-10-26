@@ -21,7 +21,7 @@ const Reviews = sequelize.define(
         model: 'Users',
         key: 'userId',
       },
-      onDelete: 'cascade',
+      onDelete: 'CASCADE',
     },
     productId: {
       type: Sequelize.UUID,
@@ -32,7 +32,6 @@ const Reviews = sequelize.define(
         model: 'Products',
         key: 'productId',
       },
-      onDelete: 'NO ACTION',
     },
     comments: {
       type: Sequelize.STRING,

@@ -33,7 +33,7 @@ exports.getReview = asyncHandler(async (req, res, next) => {
     include: [
       {
         model: Product,
-        attributes: ['productId', 'productName', 'price', 'avgRating'],
+        attributes: ['productId', 'productName', 'price', 'avgRating', 'url'],
         required: true,
       },
       {
@@ -106,7 +106,7 @@ exports.addReview = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update review
-// @route PUT /api/v1/reviews/:productId
+// @route PUT /api/v1/reviews/update/:productId
 // access Private
 exports.updateReview = asyncHandler(async (req, res, next) => {
   if (!req.user) {
@@ -147,7 +147,7 @@ exports.updateReview = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Remove review from product
-// @route DELETE /api/v1/reviews/:productId
+// @route DELETE /api/v1/reviews/delete/:productId
 // access Private
 exports.removeReview = asyncHandler(async (req, res, next) => {
   if (!req.user) {

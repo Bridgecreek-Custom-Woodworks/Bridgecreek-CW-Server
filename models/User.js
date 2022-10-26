@@ -7,7 +7,6 @@ const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
 const Carts = require('../models/Cart');
 const CartItems = require('../models/CartItem');
-const Orders = require('../models/Order');
 const CartOrderAccess = require('../models/CartOrderAccess');
 const crypto = require('crypto');
 
@@ -206,8 +205,14 @@ CartItems.belongsTo(Products, { foreignKey: 'productId' });
 Carts.hasMany(CartItems, { foreignKey: 'cartId' });
 CartItems.belongsTo(Carts, { foreignKey: 'cartId' });
 
-CartOrderAccess.hasMany(User, { foreignKey: 'cartOrderAccessId' });
-User.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
+CartOrderAccess.hasMany(User, {
+  foreignKey: 'cartOrderAccessId',
+  // onDelete: 'CASCADE',
+});
+User.belongsTo(CartOrderAccess, {
+  foreignKey: 'cartOrderAccessId',
+  // onDelete: 'CASCADE',
+});
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

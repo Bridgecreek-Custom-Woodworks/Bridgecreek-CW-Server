@@ -1,9 +1,7 @@
 const Orders = require('../models/Order');
+const Product = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
-const OrderItems = require('../models/OrderItems');
-const Product = require('../models/Product');
-const c = require('config');
 
 // @desc Get all orders
 // @route GET /api/v1/orders/admin/allorders
@@ -23,7 +21,14 @@ exports.getMyOrders = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Please log in', 400));
   }
 
-  res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
+  const { cartOrderAccessId } = req.user.dataValues;
+
+  const order = await Orders.findAll({
+    where: { cartOrderAccessId: cartOrderAccessId },
+    include: [{ model: Product }],
+  });
+
+  res.status(200).json({ success: true, data: order });
 });
 
 // @desc Get a single order
@@ -35,8 +40,9 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
     include: [
       {
         model: Product,
-        // attributes: ['price'],
-        // through: { OrderItems, attributes: ['price'] },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
       },
     ],
   });
@@ -93,7 +99,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
     }
   }
 
-  if (req.user.dataValues.Orders.length > 0) {
+  if (req.user.dataValues.Orders.length > 0 && newOrPendingOrders) {
     await newOrPendingOrders.destroy();
   }
 

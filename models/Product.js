@@ -68,6 +68,11 @@ const Product = sequelize.define(
       allowNull: true,
       unique: false,
     },
+    displayStatus: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
@@ -89,6 +94,6 @@ Product.hasMany(Reviews, {
   hooks: true,
 });
 
-Reviews.belongsTo(Product, { foreignKey: 'productId' });
+Reviews.belongsTo(Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
 
 module.exports = Product;

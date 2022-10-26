@@ -25,6 +25,6 @@ router.get(
 );
 router.get('/mywishlist', protect(Users), getUsersWishlist);
 router.post('/mywishlist', protect(Users), addItemToWishlist);
-router.delete('/mywishlist/:productId', protect(Users), removeItemFromWishlist);
+router.delete('/delete/:productId', protect(Users), removeItemFromWishlist);
 
 module.exports = router;

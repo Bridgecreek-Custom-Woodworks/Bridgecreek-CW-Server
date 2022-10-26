@@ -128,7 +128,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if price gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products?pricegte=40')
+      .get('/api/v1/products/allproducts?pricegte=40')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -146,7 +146,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if price lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products?pricelte=40')
+      .get('/api/v1/products/allproducts?pricelte=40')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -164,7 +164,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if weight gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products?weightgte=10')
+      .get('/api/v1/products/allproducts?weightgte=10')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -182,7 +182,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if weight lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products?weightlte=10')
+      .get('/api/v1/products/allproducts?weightlte=10')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -200,7 +200,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if avg rating gte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products?avgRatinggte=4')
+      .get('/api/v1/products/allproducts?avgRatinggte=4')
       .set({ Autorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -218,7 +218,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   it('Check if avg rating lte query returns correct data', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products?avgRatinglte=2')
+      .get('/api/v1/products/allproducts?avgRatinglte=2')
       .set({ Autorization: `Bearer ${token}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);

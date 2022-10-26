@@ -39,7 +39,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
   it('Should get all products', (done) => {
     chai
       .request(server)
-      .get('/api/v1/products')
+      .get('/api/v1/products/allproducts')
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -51,7 +51,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
       });
   });
 
-  it('Verify error of no product is found', (done) => {
+  it('Verify error if no product is found', (done) => {
     chai
       .request(server)
       .get(`/api/v1/products/2c7e9ccd-a521-4505-b03f-1ff24614fad0`) // <== Bad product id
@@ -63,10 +63,10 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
       });
   });
 
-  it('Verify error of no product is found (Admin product update route)', (done) => {
+  it('Verify error if no product is found (Admin product update route)', (done) => {
     chai
       .request(server)
-      .put(`/api/v1/products/2c7e9ccd-a521-4505-b03f-1ff24614fad0/admin`) // <== Bad product id
+      .put(`/api/v1/products/update/2c7e9ccd-a521-4505-b03f-1ff24614fad0/admin`) // <== Bad product id
       .set({ Authorization: `Bearer ${token}` })
       .send({ productName: '' })
       .end((err, res) => {
@@ -124,7 +124,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
   it('Update a product', (done) => {
     chai
       .request(server)
-      .put(`/api/v1/products/${newProduct.productId}/admin`)
+      .put(`/api/v1/products/update/${newProduct.productId}/admin`)
       .set({ Authorization: `Bearer ${token}` })
       .send({ productName: 'Updated Product', price: 20.2 })
       .end((err, res) => {
@@ -141,7 +141,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
   it('Delete product', (done) => {
     chai
       .request(server)
-      .delete(`/api/v1/products/${newProduct.productId}/admin`)
+      .delete(`/api/v1/products/delete/${newProduct.productId}/admin`)
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const deletedCount = count - res.body.data;

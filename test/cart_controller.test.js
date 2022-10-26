@@ -113,7 +113,7 @@ describe('CART WORKFLOW TEST ==>', function () {
   it('Delete cart', (done) => {
     chai
       .request(server)
-      .delete(`/api/v1/carts/admin/deletecart/${createdCartId}`)
+      .delete(`/api/v1/carts/admin/delete/${createdCartId}`)
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
         const afterdeletedCount = count - 1;

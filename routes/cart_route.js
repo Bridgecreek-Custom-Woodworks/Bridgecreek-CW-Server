@@ -28,7 +28,7 @@ router.get('/mycart', protect(CartOrderAccess), getMyCart);
 router.post('/', protect(CartOrderAccess), createCart);
 router.put('/mycart/update/:cartId', protect(CartOrderAccess), updateMyCart);
 router.delete(
-  '/admin/deletecart/:cartId',
+  '/admin/delete/:cartId',
   protect(Users),
   authorize('admin'),
   deleteCart

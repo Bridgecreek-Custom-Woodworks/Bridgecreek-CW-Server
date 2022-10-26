@@ -68,12 +68,8 @@ describe('ORDER WORKFLOW TEST ==>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('array');
         expect(res.body.data[0]).to.be.a('object');
-        expect(res.body.data[0]).to.have.all.keys(orderKeys);
-        expect(res.body.modelAssociations).to.include(
-          'Products',
-          'OrderItems',
-          'CartOrderAccess'
-        );
+        expect(res.body.data[0]).to.have.all.keys(createOrderKeys);
+        expect(res.body.data[0].firstName).to.be.equal('Otto');
         expect(err).to.be.null;
 
         done();
@@ -86,20 +82,11 @@ describe('ORDER WORKFLOW TEST ==>', function () {
       .get('/api/v1/orders/getorder/76e35ec6-de02-432a-aa01-e58703d407f6')
       .set({ Authorization: `Bearer ${token}` })
       .end((err, res) => {
-        const { subTotal, taxTotal, shipping, orderDiscount, total } =
-          res.body.data;
-
-        let orderTotal =
-          Number(subTotal) +
-          Number(taxTotal) +
-          Number(shipping) -
-          Number(orderDiscount);
-
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('object');
         expect(res.body.data.orderStatus).to.be.equal('pending');
         expect(res.body.data).to.have.all.keys(createOrderKeys);
-        expect(total).to.be.equal(String(orderTotal.toFixed(2))); // <== Move this to create order test
+
         expect(err).to.be.null;
 
         done();
@@ -294,6 +281,98 @@ describe('ORDER WORKFLOW TEST ==>', function () {
             expect(err).to.be.null;
 
             done();
+          });
+      });
+  });
+
+  it('Verify additional orders can be created if all other orders are paid/shipped', (done) => {
+    // Setting order status to paid for test
+    chai
+      .request(server)
+      .put('/api/v1/orders/update/76e35ec6-de02-432a-aa01-e58703d407f6')
+      .set({ Authorization: `Bearer ${token}` })
+      .send({ orderStatus: 'paid' })
+      .end((err, res) => {
+        expect(res.status).to.be.equal(200);
+        expect(res.body.data.orderStatus).to.be.equal('paid');
+        expect(err).to.be.null;
+
+        // Setting cart status to paid for test
+        chai
+          .request(server)
+          .put(
+            '/api/v1/carts/mycart/update/e4e71f3b-6523-4c97-980e-2c80be8dc352'
+          )
+          .set({ Authorization: `Bearer ${token}` })
+          .send({ cartStatus: 'paid' })
+          .end((err, res) => {
+            expect(res.status).to.be.equal(200);
+            expect(res.body.data[1][0].cartStatus).to.be.equal('paid');
+            expect(err).to.be.null;
+
+            // Creating cart Item for order
+            chai
+              .request(server)
+              .post('/api/v1/cartitems/700b2eb1-3de0-4d9d-a0b7-a9d48c67f1ac')
+              .set({ Authorization: `Bearer ${token}` })
+              .send({ quantity: 5 })
+              .end((err, res) => {
+                let cartId = res.body.data.cartId;
+
+                expect(res.status).to.be.equal(201);
+                expect(err).to.be.null;
+
+                // Creating order
+                chai
+                  .request(server)
+                  .post('/api/v1/orders')
+                  .set({ Authorization: `Bearer ${token}` })
+                  .send()
+                  .end((err, res) => {
+                    let orderId = res.body.data.orderId;
+                    const addOrderCount = 1 + count;
+                    expect(res.status).to.be.equal(201);
+                    expect(res.body.data).to.be.a('object');
+                    expect(res.body.data.orderStatus).to.be.equal('pending');
+                    expect(res.body.data).to.have.all.keys(orderKeys);
+                    expect(addOrderCount).to.be.equal(8);
+                    expect(err).to.be.null;
+
+                    chai
+                      .request(server)
+                      .delete(`/api/v1/orders/delete/${orderId}`)
+                      .set({ Authorization: `Bearer ${token}` })
+                      .end((err, res) => {
+                        expect(res.status).to.be.equal(200);
+                        expect(count).to.be.equal(7);
+                        expect(err).to.be.null;
+
+                        // Setting order status to pending for cleanup
+                        chai
+                          .request(server)
+                          .put(
+                            '/api/v1/orders/update/76e35ec6-de02-432a-aa01-e58703d407f6'
+                          )
+                          .set({ Authorization: `Bearer ${token}` })
+                          .send({ orderStatus: 'pending' })
+                          .end((err, res) => {
+                            expect(res.status).to.be.equal(200);
+                            expect(err).to.be.null;
+
+                            chai
+                              .request(server)
+                              .delete(`/api/v1/carts/admin/delete/${cartId}`)
+                              .set({ Authorization: `Bearer ${token}` })
+                              .end((err, res) => {
+                                expect(res.status).to.be.equal(200);
+                                expect(err).to.be.null;
+
+                                done();
+                              });
+                          });
+                      });
+                  });
+              });
           });
       });
   });

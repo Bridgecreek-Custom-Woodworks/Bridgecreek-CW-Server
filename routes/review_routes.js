@@ -28,7 +28,7 @@ router.get(
 router.get('/product/review/:productId', getReview);
 router.get('/product/myreviews', protect(Users), getMyReviews);
 router.post('/', protect(Users), addReview);
-router.put('/:productId', protect(Users), updateReview);
-router.delete('/:productId', protect(Users), removeReview);
+router.put('/update/:productId', protect(Users), updateReview);
+router.delete('/delete/:productId', protect(Users), removeReview);
 
 module.exports = router;

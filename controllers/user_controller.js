@@ -132,7 +132,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   }
   await user.removeUsersReviews(req.user.userId);
 
-  user.destroy();
+  await user.destroy();
 
   res.status(200).json({
     success: true,

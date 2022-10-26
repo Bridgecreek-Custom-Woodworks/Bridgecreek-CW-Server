@@ -59,7 +59,7 @@ exports.addItemToWishlist = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Remove item from wishlist
-// @route DELETE /api/v1/wishlist/mywishlist
+// @route DELETE /api/v1/wishlist/delete/:productId
 // access Private
 exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
   const wishlistItem = await Wishlist.destroy({
@@ -72,7 +72,12 @@ exports.removeItemFromWishlist = asyncHandler(async (req, res, next) => {
   });
 
   if (!wishlistItem) {
-    return next(new ErrorResponse(`User not authorized`));
+    return next(
+      new ErrorResponse(
+        `Wishlist with the id of ${req.params.productId} was not found`,
+        404
+      )
+    );
   }
 
   const count = await Wishlist.count({

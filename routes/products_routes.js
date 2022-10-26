@@ -17,17 +17,17 @@ const Products = require('../models/Product');
 const router = express.Router();
 
 // Route = /api/v1/products
-router.get('/', advancedQuerySearch(Products), getAllProducts);
+router.get('/allproducts', advancedQuerySearch(Products), getAllProducts);
 router.get('/:productId', getProduct);
 router.post('/admin', protect(Users), authorize('admin'), createProducts);
 router.put(
-  '/:productId/admin',
+  '/update/:productId/admin',
   protect(Users),
   authorize('admin'),
   updateProduct
 );
 router.delete(
-  '/:productId/admin',
+  '/delete/:productId/admin',
   protect(Users),
   authorize('admin'),
   deleteProduct

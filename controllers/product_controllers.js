@@ -4,7 +4,7 @@ const asyncHandler = require('../middleware/async_middleware');
 const Reviews = require('../models/Reviews');
 
 // @desc Get all products
-// @route GET /api/v1/products
+// @route GET /api/v1/products/allproducts
 // access Public
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch); // <== middleware/advancedQuerySearch.js
@@ -46,7 +46,7 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Update product
-// @route PUT /api/v1/products/:productId/admin
+// @route PUT /api/v1/products/update/:productId/admin
 // access Private/Admin
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   let product = await Products.update(req.body, {
@@ -75,7 +75,7 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Delete product
-// @route DELETE /api/v1/products/:productId/admin
+// @route DELETE /api/v1/products/delete/:productId/admin
 // access  Private/Admin
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
   const product = await Products.destroy({

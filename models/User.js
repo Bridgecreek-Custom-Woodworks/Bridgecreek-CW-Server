@@ -8,6 +8,7 @@ const Reviews = require('../models/Reviews');
 const Carts = require('../models/Cart');
 const CartItems = require('../models/CartItem');
 const CartOrderAccess = require('../models/CartOrderAccess');
+const ShippingAddress = require('../models/ShippingAddress');
 const crypto = require('crypto');
 
 const User = sequelize.define(
@@ -205,14 +206,11 @@ CartItems.belongsTo(Products, { foreignKey: 'productId' });
 Carts.hasMany(CartItems, { foreignKey: 'cartId' });
 CartItems.belongsTo(Carts, { foreignKey: 'cartId' });
 
-CartOrderAccess.hasMany(User, {
-  foreignKey: 'cartOrderAccessId',
-  // onDelete: 'CASCADE',
-});
-User.belongsTo(CartOrderAccess, {
-  foreignKey: 'cartOrderAccessId',
-  // onDelete: 'CASCADE',
-});
+CartOrderAccess.hasMany(User, { foreignKey: 'cartOrderAccessId' });
+User.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
+
+User.hasMany(ShippingAddress, { foreignKey: 'userId', onDelete: 'CASCADE' });
+ShippingAddress.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
 const saltAndHashPassword = async (user) => {
   if (user.changed('password')) {

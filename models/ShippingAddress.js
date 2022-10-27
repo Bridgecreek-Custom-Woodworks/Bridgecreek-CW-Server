@@ -50,6 +50,7 @@ const ShippingAddress = sequelize.define(
   {
     sequelize,
     modelName: 'ShippingAddress',
+    tableName: 'ShippingAddress',
   }
 );
 

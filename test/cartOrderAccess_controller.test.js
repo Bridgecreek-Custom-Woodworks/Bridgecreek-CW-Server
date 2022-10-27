@@ -3,6 +3,7 @@ const expect = chai.expect;
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
+
 const CartOrderAccess = require('../models/CartOrderAccess');
 const {
   user,
@@ -127,5 +128,17 @@ describe('CART_ORDER_ACCESS WORKFLOW TEST ===>', function () {
 
         done();
       });
+  });
+
+  it('Check cart order access method', async () => {
+    const testSaltAndHashMethod = await CartOrderAccess.findOne({
+      where: {
+        cartOrderAccessId: '20d07cfc-fcd7-43af-84ae-998ccef52cd6',
+      },
+    });
+    const password = await testSaltAndHashMethod.saltAndHashPassword();
+
+    expect(testSaltAndHashMethod.dataValues).to.be.an('object');
+    expect(password.length).to.be.equal(60);
   });
 });

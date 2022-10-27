@@ -517,3 +517,27 @@ exports.createdCartOrderAccessKeys = [
   'updatedAt',
   'createdBy',
 ];
+
+// SHIPPING ADDRESS INFO *************************************************************
+
+exports.createdShippingAddress = {
+  shippingAddressId: '8463aecf-4268-448f-8cdd-81690bcf77d4',
+  userId: 'e857a4a6-b506-4e20-b214-1ce57773bc46',
+  street: '666 Hell Pl',
+  city: 'Charlotte',
+  state: 'NC',
+  zipCode: '28977',
+  createdAt: '2022-10-26T23:29:26.610Z',
+  updatedAt: '2022-10-26T23:29:26.610Z',
+};
+
+exports.shippingAddressKeys = [
+  'shippingAddressId',
+  'userId',
+  'street',
+  'city',
+  'state',
+  'zipCode',
+  'createdAt',
+  'updatedAt',
+];

@@ -3,6 +3,8 @@ const sequelize = require('../config/db');
 const Guests = require('../models/Guests');
 const Carts = require('../models/Cart');
 const Orders = require('../models/Order');
+const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcryptjs');
 
 const CartOrderAccess = sequelize.define(
   'CartOrderAccess',

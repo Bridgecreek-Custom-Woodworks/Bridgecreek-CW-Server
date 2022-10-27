@@ -9,6 +9,7 @@ const Orders = require('../models/Order');
 const OrderItems = require('../models/OrderItems');
 const CartOrderAccess = require('../models/CartOrderAccess');
 const Guests = require('../models/Guests');
+const ShippingAddress = require('../models/ShippingAddress');
 
 const advancedQuerySearch =
   (Model, searchUserInfo) => async (req, res, next) => {
@@ -122,6 +123,8 @@ const advancedQuerySearch =
           query['include'].push({ model: CartOrderAccess });
         } else if (includeArry[i] === 'guests') {
           query['include'].push({ model: Guests });
+        } else if (includeArry[i] === 'shippingaddress') {
+          query['include'].push({ model: ShippingAddress });
         }
       }
     }

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
 const Reviews = require('./Reviews');
-
+const ProductCare = require('../models/ProductCare');
 const Product = sequelize.define(
   'Products',
   {
@@ -93,7 +93,12 @@ Product.hasMany(Reviews, {
   onDelete: 'CASCADE',
   hooks: true,
 });
-
 Reviews.belongsTo(Product, { foreignKey: 'productId', onDelete: 'CASCADE' });
+
+Product.hasOne(ProductCare, { foreignKey: 'productId', onDelete: 'CASCADE' });
+ProductCare.belongsTo(Product, {
+  foreignKey: 'productId',
+  onDelete: 'CASCADE',
+});
 
 module.exports = Product;

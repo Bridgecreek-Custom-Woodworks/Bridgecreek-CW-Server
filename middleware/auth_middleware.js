@@ -1,3 +1,4 @@
+const Admins = require('../models/Admin');
 const Users = require('../models/User');
 const Guests = require('../models/Guests');
 const Cart = require('../models/Cart');
@@ -33,6 +34,7 @@ exports.protect = (Model) =>
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       let id = decoded.userId ? decoded.userId : decoded.guestId;
+
       // Adding user to the req object for all protected routes
       if (Model === Users) {
         req.user = await Users.findOne({
@@ -56,6 +58,10 @@ exports.protect = (Model) =>
           req.user.dataValues.Guests.length === 1
             ? req.user.dataValues.Guests[0].dataValues.role
             : req.user.dataValues.Users[0].dataValues.role;
+      } else if (Model === Admins) {
+        req.user = await Admins.findOne({
+          where: { adminId: decoded.adminId },
+        });
       }
 
       next();

@@ -11,6 +11,7 @@ const { protect, authorize } = require('../middleware/auth_middleware');
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
+const Admin = require('../models/Admin');
 
 const router = express.Router();
 

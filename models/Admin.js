@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const Admins = sequelize.define('Admins', {
   adminId: {
@@ -80,7 +82,11 @@ const Admins = sequelize.define('Admins', {
       },
     },
   },
-
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: false,
+  },
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE,
@@ -90,5 +96,25 @@ const Admins = sequelize.define('Admins', {
     type: Sequelize.DATE,
   },
 });
+
+const saltAndHashPassword = async (admin) => {
+  if (admin.changed('password')) {
+    const salt = await bcrypt.genSalt(10);
+    admin.password = await bcrypt.hash(admin.dataValues.password, salt);
+  }
+};
+
+Admins.prototype.matchPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+Admins.prototype.getSignedToken = async function () {
+  return jwt.sign({ adminId: this.adminId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
+Admins.beforeCreate(saltAndHashPassword);
+Admins.beforeUpdate(saltAndHashPassword);
 
 module.exports = Admins;

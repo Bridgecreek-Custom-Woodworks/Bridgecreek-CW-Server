@@ -541,3 +541,14 @@ exports.shippingAddressKeys = [
   'createdAt',
   'updatedAt',
 ];
+
+// PRODUCT CARE INFO *************************************************************
+
+exports.productCareKeys = [
+  'productCareId',
+  'productId',
+  'maintenance',
+  'specialInstructions',
+  'createdAt',
+  'updatedAt',
+];

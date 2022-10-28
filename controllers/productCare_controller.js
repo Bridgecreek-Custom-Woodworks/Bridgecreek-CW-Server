@@ -39,7 +39,7 @@ exports.createProductCare = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Unable to create Product Care item', 400));
   }
 
-  res.status(200).json({ success: true, data: productCare });
+  res.status(201).json({ success: true, data: productCare });
 });
 
 // @desc Updated product care
@@ -74,6 +74,6 @@ exports.deleteProductCare = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  console.log(productCare);
+
   res.status(200).json({ success: true, data: productCare });
 });

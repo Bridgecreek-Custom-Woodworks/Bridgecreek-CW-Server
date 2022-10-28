@@ -21,6 +21,7 @@ const orderItems = require('./routes/orderItem_routes');
 const guests = require('./routes/guest_routes');
 const cartOrderAccess = require('./routes/cartOrderAccess_routes');
 const shippingAddresses = require('./routes/shippingAddress_routes');
+const productCare = require('./routes/productCare_routes');
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use('/api/v1/orderitems', orderItems);
 app.use('/api/v1/guests', guests);
 app.use('/api/v1/cartorderaccess', cartOrderAccess);
 app.use('/api/v1/shippingaddress', shippingAddresses);
+app.use('/api/v1/productcare', productCare);
 
 // Errror handling
 app.use(errorHandler);

@@ -13,13 +13,13 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 const router = express.Router();
 
 const CartOrderAccess = require('../models/CartOrderAccess');
-const Users = require('../models/User');
 const OrderItems = require('../models/OrderItems');
+const Admin = require('../models/Admin');
 
 // Route = '/api/v1/orderitems'
 router.get(
   '/admin/allorderitems',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(OrderItems),
   getAllOrderItems

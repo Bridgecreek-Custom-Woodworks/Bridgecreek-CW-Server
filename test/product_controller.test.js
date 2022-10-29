@@ -17,6 +17,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
     count = await Products.count();
   });
 
+  let adminToken;
   let token;
   let count;
 
@@ -31,6 +32,25 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
       .end(function (err, res) {
         token = res.body.token;
         expect(res.status).to.be.equal(200);
+
+        done();
+      });
+  });
+
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
 
         done();
       });
@@ -67,7 +87,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .put(`/api/v1/products/update/2c7e9ccd-a521-4505-b03f-1ff24614fad0/admin`) // <== Bad product id
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send({ productName: '' })
       .end((err, res) => {
         expect(res.status).to.be.equal(500);
@@ -96,7 +116,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send(newProduct)
       .end((err, res) => {
         updateDeleteToken = res.body.token;
@@ -125,7 +145,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .put(`/api/v1/products/update/${newProduct.productId}/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send({ productName: 'Updated Product', price: 20.2 })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
@@ -142,7 +162,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .delete(`/api/v1/products/delete/${newProduct.productId}/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const deletedCount = count - res.body.data;
 

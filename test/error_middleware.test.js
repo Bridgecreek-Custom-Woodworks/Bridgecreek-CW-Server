@@ -11,6 +11,7 @@ const {
 } = require('./utils');
 
 describe('ERROR MIDDLEWARE WORKFLOW TEST ==>', function () {
+  let adminToken;
   let token;
 
   it('Set Token', (done) => {
@@ -29,11 +30,30 @@ describe('ERROR MIDDLEWARE WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Check for bad primary key format error', (done) => {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send(badIdProduct)
       .end((err, res) => {
         expect(res.status).to.be.equal(404);
@@ -49,7 +69,7 @@ describe('ERROR MIDDLEWARE WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send(product)
       .end((err, res) => {
         expect(res.status).to.be.equal(400);
@@ -65,7 +85,7 @@ describe('ERROR MIDDLEWARE WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send(badValidationProduct)
       .end((err, res) => {
         expect(res.status).to.be.equal(400);

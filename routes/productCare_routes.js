@@ -11,7 +11,7 @@ const { protect, authorize } = require('../middleware/auth_middleware');
 
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
-const Users = require('../models/User');
+const Admin = require('../models/Admin');
 const ProductCare = require('../models/ProductCare');
 
 const router = express.Router();
@@ -20,23 +20,25 @@ const router = express.Router();
 
 router.get(
   '/allproductcare/admin',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(ProductCare),
   getAllProductCare
 );
 
 router.get('/:productCareId', getProductCare);
-router.post('/admin', createProductCare);
+router.post('/admin', protect(Admin), authorize('admin'), createProductCare);
+
 router.put(
   '/update/:productCareId/admin',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   updateProductCare
 );
+
 router.delete(
   '/delete/:productCareId/admin',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   deleteProductCare
 );

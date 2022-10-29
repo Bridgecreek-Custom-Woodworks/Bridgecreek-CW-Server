@@ -15,6 +15,7 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
     });
   });
 
+  let adminToken;
   let token;
   let unauthorizedUserToken;
 
@@ -29,6 +30,25 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
       .end(function (err, res) {
         token = res.body.token;
         expect(res.status).to.be.equal(200);
+
+        done();
+      });
+  });
+
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
 
         done();
       });
@@ -54,7 +74,7 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
-      .set('Cookie', `token=` + JSON.stringify(token))
+      .set('Cookie', `token=` + JSON.stringify(adminToken))
       .send(newProduct)
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
@@ -99,7 +119,7 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
       .set({ Authorization: `Bearer ${unauthorizedUserToken}` })
       .send(newProduct)
       .end((err, res) => {
-        expect(res.status).to.be.equal(403);
+        expect(res.status).to.be.equal(401);
         expect(res).to.have.a.property('error');
 
         done();

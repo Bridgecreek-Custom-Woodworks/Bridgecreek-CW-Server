@@ -15,12 +15,12 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const CartItems = require('../models/CartItem');
 const CartOrderAccess = require('../models/CartOrderAccess');
-const Users = require('../models/User');
+const Admin = require('../models/Admin');
 
 // Route = /api/v1/cartitems
 router.get(
   '/admin/allcartitems',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(CartItems),
   getAllCartItems

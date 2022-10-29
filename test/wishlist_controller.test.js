@@ -15,6 +15,7 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
     });
   });
 
+  let adminToken;
   let token;
   let count;
 
@@ -33,11 +34,30 @@ describe('WISHLIST WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Should log in admin', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Should get all wishlist', (done) => {
     chai
       .request(server)
       .get('/api/v1/wishlist/admin/allwishlist')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');

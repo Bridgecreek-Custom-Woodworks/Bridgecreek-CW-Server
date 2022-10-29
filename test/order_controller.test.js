@@ -10,6 +10,8 @@ describe('ORDER WORKFLOW TEST ==>', function () {
   this.afterEach(async () => {
     count = await Orders.count();
   });
+
+  let adminToken;
   let token;
   let createOrderToken;
   let count;
@@ -23,6 +25,25 @@ describe('ORDER WORKFLOW TEST ==>', function () {
       .end((err, res) => {
         token = res.body.token;
         expect(res.status).to.be.equal(200);
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
         expect(err).to.be.null;
 
         done();
@@ -47,7 +68,7 @@ describe('ORDER WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/orders/admin/allorders')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.a('array');
@@ -362,7 +383,7 @@ describe('ORDER WORKFLOW TEST ==>', function () {
                             chai
                               .request(server)
                               .delete(`/api/v1/carts/admin/delete/${cartId}`)
-                              .set({ Authorization: `Bearer ${token}` })
+                              .set({ Authorization: `Bearer ${adminToken}` })
                               .end((err, res) => {
                                 expect(res.status).to.be.equal(200);
                                 expect(err).to.be.null;

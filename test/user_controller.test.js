@@ -12,12 +12,13 @@ describe('USER WORKFLOW TEST ===>', function () {
     count = await User.count();
   });
 
+  let adminToken;
   let token;
   let updateDeleteToken;
   let count;
   let activeUserToken;
 
-  it('Should log in user', (done) => {
+  it('Set User Token', (done) => {
     chai
       .request(server)
       .post('/api/v1/auth/login')
@@ -30,7 +31,25 @@ describe('USER WORKFLOW TEST ===>', function () {
 
         expect(res.status).to.be.equal(200);
         expect(res.body).to.be.a('object');
-        expect(err).to.be.equal(null);
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
         expect(err).to.be.null;
 
         done();
@@ -59,7 +78,7 @@ describe('USER WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .get('/api/v1/users/admin/allusers')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         count = res.body.data.length;
 

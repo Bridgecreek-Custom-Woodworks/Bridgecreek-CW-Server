@@ -16,6 +16,7 @@ describe('CART_ORDER_ACCESS WORKFLOW TEST ===>', function () {
     count = await CartOrderAccess.count();
   });
 
+  let adminToken;
   let token;
   let count;
   let createdCartOrderAccessId;
@@ -41,11 +42,30 @@ describe('CART_ORDER_ACCESS WORKFLOW TEST ===>', function () {
       });
   });
 
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Should get all cart order access', (done) => {
     chai
       .request(server)
       .get('/api/v1/cartorderaccess/admin/allcartOrderAccess')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -77,7 +97,7 @@ describe('CART_ORDER_ACCESS WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .post('/api/v1/cartorderaccess')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send() // Nothing needs to be sent in the body
       .end((err, res) => {
         createdCartOrderAccessId = res.body.data.cartOrderAccessId;

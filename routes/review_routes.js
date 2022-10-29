@@ -14,13 +14,14 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
 const Reviews = require('../models/Reviews');
+const Admin = require('../models/Admin');
 
 const router = express.Router();
 
 // Route = /api/v1/reviews
 router.get(
   '/admin/allreviews',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(Reviews),
   getAllReviews

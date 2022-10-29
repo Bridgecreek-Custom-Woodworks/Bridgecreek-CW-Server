@@ -169,6 +169,7 @@ describe('USER WORKFLOW TEST ===>', function () {
         expect(res.body.data.firstName).to.be.equal('Sam-Updated');
         expect(res.body.data.city).to.be.equal('Charlotte-Updated');
         expect(err).to.be.null;
+
         done();
       });
   });

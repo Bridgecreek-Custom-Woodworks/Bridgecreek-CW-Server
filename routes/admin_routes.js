@@ -1,11 +1,12 @@
 const express = require('express');
 const {
   getAllAdminUsers,
-  getAdminUser,
+  getMe,
   createAdminUser,
   login,
   logout,
   updateAdminUser,
+  updateAdminPassword,
   deleteAdminUser,
   getCartById,
   getGuestById,
@@ -23,14 +24,14 @@ const Admin = require('../models/Admin');
 // Route  = /api/v1/admin
 
 router.get(
-  '/',
+  '/alladmins',
   protect(Admin),
   authorize('admin'),
   advancedQuerySearch(Admin),
   getAllAdminUsers
 );
 
-router.get('/:adminId', protect(Admin), authorize('admin'), getAdminUser);
+router.get('/getme', protect(Admin), authorize('admin'), getMe);
 
 router.get('/cart/:cartId', protect(Admin), authorize('admin'), getCartById);
 router.get('/guest/:guestId', protect(Admin), authorize('admin'), getGuestById);
@@ -44,6 +45,13 @@ router.put(
   protect(Admin),
   authorize('admin'),
   updateAdminUser
+);
+
+router.put(
+  '/updatepassword',
+  protect(Admin),
+  authorize('admin'),
+  updateAdminPassword
 );
 
 router.delete(

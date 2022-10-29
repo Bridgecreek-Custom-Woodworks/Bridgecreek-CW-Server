@@ -12,7 +12,7 @@ const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
 
 // @desc Get all admin users
-// @route GET /api/v1/admin
+// @route GET /api/v1/admin/alladmins
 // access Private/Admin
 exports.getAllAdminUsers = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedQuerySearch);
@@ -21,7 +21,7 @@ exports.getAllAdminUsers = asyncHandler(async (req, res, next) => {
 // @desc Get single admin user
 // @route GET /api/v1/admin/:adminId
 // access Private/Admin
-exports.getAdminUser = asyncHandler(async (req, res, next) => {
+exports.getMe = asyncHandler(async (req, res, next) => {
   const admin = await Admins.findOne({
     where: { adminId: req.user.adminId },
   });
@@ -61,7 +61,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const admin = await Admins.findOne({
+  const admin = await Admins.scope('withPassword').findOne({
     where: { email: email },
   });
 
@@ -93,7 +93,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    msg: `User with the id of ${req.user.userId} was logged out`,
+    msg: `User with the id of ${req.user.adminId} was logged out`,
   });
 });
 
@@ -112,6 +112,33 @@ exports.updateAdminUser = asyncHandler(async (req, res, next) => {
     );
   }
   res.status(200).json({ success: true, data: admin });
+});
+
+// @desc Update password
+// @route PUT /api/v1/admin/updatepassword
+// access Private/Admin
+exports.updateAdminPassword = asyncHandler(async (req, res, next) => {
+  const user = await Admins.scope('withPassword').findOne({
+    where: { adminId: req.user.adminId },
+  });
+
+  if (req.body.newPassword !== req.body.newPassword2) {
+    return next(new ErrorResponse('Passwords must match', 400));
+  }
+
+  if (!user) {
+    return next(new ErrorResponse('Please log in to update password', 400));
+  }
+
+  // Check current password
+  if (!(await user.matchPassword(req.body.currentPassword))) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  }
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
 });
 
 // @desc Delete an admin user

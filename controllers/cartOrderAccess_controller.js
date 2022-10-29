@@ -24,8 +24,7 @@ exports.getMyCartOrderAccess = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/cartorderaccess
 // access Private/Admin
 exports.createCartOrderAccess = asyncHandler(async (req, res, next) => {
-  const { firstName, lastName, userId } =
-    req.user.dataValues.Users[0].dataValues;
+  const { firstName, lastName, adminId } = req.user.dataValues;
 
   const guest = await Guests.build();
   const { guestId } = guest.dataValues;
@@ -47,7 +46,7 @@ exports.createCartOrderAccess = asyncHandler(async (req, res, next) => {
   guest.password = password;
   guest.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;
   guest.activeStatus = 'active';
-  guest.createdBy = `${firstName} ${lastName} Id: ${userId}`;
+  guest.createdBy = `${firstName} ${lastName} Id: ${adminId}`;
 
   await cartOrderAccess.save();
 

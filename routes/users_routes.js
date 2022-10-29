@@ -18,7 +18,7 @@ const router = express.Router();
 // Route = /api/v1/users
 router.get(
   '/admin/allusers',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(Users),
   getAllUsers

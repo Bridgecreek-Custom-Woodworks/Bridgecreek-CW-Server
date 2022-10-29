@@ -3,6 +3,7 @@ const sequelize = require('../config/db');
 const Guests = require('../models/Guests');
 const Carts = require('../models/Cart');
 const Orders = require('../models/Order');
+const Admins = require('../models/Admin');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
 
@@ -53,6 +54,9 @@ Orders.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
 
 CartOrderAccess.hasMany(Carts, { foreignKey: 'cartOrderAccessId' });
 Carts.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
+
+CartOrderAccess.hasMany(Admins, { foreignKey: 'cartOrderAccessId' });
+Admins.belongsTo(CartOrderAccess, { foreignKey: 'cartOrderAccessId' });
 
 CartOrderAccess.prototype.saltAndHashPassword = async function () {
   let password = uuidv4();

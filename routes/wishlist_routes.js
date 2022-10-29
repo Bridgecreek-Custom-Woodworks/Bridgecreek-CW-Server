@@ -14,11 +14,12 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
 const Wishlist = require('../models/Wishlist');
+const Admin = require('../models/Admin');
 
 // Route = /api/v1/wishlist
 router.get(
   '/admin/allwishlist',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(Wishlist),
   getAllWishlist

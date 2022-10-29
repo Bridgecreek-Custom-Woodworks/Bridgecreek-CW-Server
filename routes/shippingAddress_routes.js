@@ -15,12 +15,13 @@ const advanceQuerySearch = require('../middleware/advancedQuerySearch');
 
 const Users = require('../models/User');
 const ShippingAddress = require('../models/ShippingAddress');
+const Admin = require('../models/Admin');
 
 // Route = 'api/v1/shippingaddress'
 
 router.get(
   '/admin/allshippingaddresses',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advanceQuerySearch(ShippingAddress),
   getAllShippingAddresses

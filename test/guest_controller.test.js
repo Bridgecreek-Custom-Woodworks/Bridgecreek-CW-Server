@@ -11,12 +11,13 @@ describe('GUEST WORKFLOW TEST ===>', function () {
     count = await Guests.count();
   });
 
+  let adminToken;
   let token;
   let count;
   let guestToken;
   let guestId;
 
-  it('Should log in user', (done) => {
+  it('Set User Token', (done) => {
     chai
       .request(server)
       .post('/api/v1/auth/login')
@@ -33,11 +34,30 @@ describe('GUEST WORKFLOW TEST ===>', function () {
       });
   });
 
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Should get all guest', (done) => {
     chai
       .request(server)
       .get('/api/v1/guests/admin/allguests')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.count).to.be.equal(5);

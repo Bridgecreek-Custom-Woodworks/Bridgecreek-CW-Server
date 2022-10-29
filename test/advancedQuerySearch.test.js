@@ -11,6 +11,7 @@ const {
 
 describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
   let token;
+  let adminToken;
 
   it('Set Token', (done) => {
     chai
@@ -28,11 +29,30 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Should log in admin', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Check Pagination', (done) => {
     chai
       .request(server)
       .get('/api/v1/users/admin/allusers?page=2&limit=2')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const { pagination } = res.body;
 
@@ -53,7 +73,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       .get(
         '/api/v1/users/admin/allusers?attributes[]=firstName,lastName,cellPhone'
       )
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const paginationObj = res.body.pagination;
         const paginationSize = Object.keys(paginationObj).length;
@@ -73,7 +93,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/users/admin/allusers?order[]=firstName,desc')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const descOrder = ['S', 'O', 'M', 'J', 'D'];
 
@@ -93,7 +113,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/users/admin/allusers?include=true')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const { data } = res.body;
 
@@ -113,7 +133,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/users/admin/allusers?firstName=Mike')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -237,7 +257,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/reviews/admin/allreviews?ratinggte=5')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -255,7 +275,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/reviews/admin/allreviews?ratinglte=4')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -273,7 +293,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/carts/admin/allcarts?totalgte=280')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -290,7 +310,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .get('/api/v1/carts/admin/allcarts?totallte=300')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.data).to.be.an('array');
@@ -309,7 +329,7 @@ describe('ADVANCED SEARCH QUERY WORKFLOW TEST ==>', function () {
       .get(
         '/api/v1/users/admin/allusers?include=model,products,reviews,wishlist,cartorderaccess'
       )
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const { data } = res.body;
 

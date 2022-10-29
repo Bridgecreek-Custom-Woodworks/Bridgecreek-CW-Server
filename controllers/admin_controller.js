@@ -1,8 +1,15 @@
 const Admins = require('../models/Admin');
+const Cart = require('../models/Cart');
+const Guest = require('../models/Guests');
+const Products = require('../models/Product');
+const Reviews = require('../models/Reviews');
+const ShippingAddress = require('../models/ShippingAddress');
+const Orders = require('../models/Order');
+const User = require('../models/User');
+const CartOrderAccess = require('../models/CartOrderAccess');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
-const { verifyPassword } = require('../utils/functions');
 
 // @desc Get all admin users
 // @route GET /api/v1/admin
@@ -12,11 +19,11 @@ exports.getAllAdminUsers = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Get single admin user
-// @route GET /api/v1/admin/:userId
+// @route GET /api/v1/admin/:adminId
 // access Private/Admin
 exports.getAdminUser = asyncHandler(async (req, res, next) => {
   const admin = await Admins.findOne({
-    where: { adminId: req.user.userId },
+    where: { adminId: req.user.adminId },
   });
 
   if (!admin) {
@@ -34,6 +41,8 @@ exports.createAdminUser = asyncHandler(async (req, res, next) => {
   if (!admin) {
     return next(new ErrorResponse('Unable to create Admin user', 400));
   }
+
+  await admin.createCartOrderAccess(CartOrderAccess);
 
   await admin.save();
 
@@ -53,7 +62,6 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   const admin = await Admins.findOne({
-    // attributes: { exclude: ['password'] },
     where: { email: email },
   });
 
@@ -74,16 +82,113 @@ exports.login = asyncHandler(async (req, res, next) => {
   sendTokenResponse(admin, 200, res, msg);
 });
 
+// @desc Logout User / Clear cookie
+// @route POST /api/v1/admin/logout
+// access Private/Admin
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 + 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    msg: `User with the id of ${req.user.userId} was logged out`,
+  });
+});
+
 // @desc Update an admin user
-// @route PUT /api/v1/admin/update/:userId
+// @route PUT /api/v1/admin/update/:adminId
 // access Private/Admin
 exports.updateAdminUser = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ msg: 'You updated an admin user' });
+  const admin = await Admins.update(req.body, {
+    where: { adminId: req.params.adminId },
+    returning: true,
+  });
+
+  if (!admin) {
+    return next(
+      new ErrorResponse(`No admin found with the id ${req.params.adminId}`, 404)
+    );
+  }
+  res.status(200).json({ success: true, data: admin });
 });
 
 // @desc Delete an admin user
-// @route DELETE /api/v1/admin/delete/:userId
+// @route DELETE /api/v1/admin/delete/:adminId
 // access Private/Admin
 exports.deleteAdminUser = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ msg: 'You deleted an admin user' });
+  const admin = await Admins.destroy({
+    where: { adminId: req.params.adminId },
+  });
+
+  if (!admin) {
+    return next(
+      new ErrorResponse(
+        `Admin with the id ${req.params.adminId} has been removed`,
+        404
+      )
+    );
+  }
+  res.status(200).json({ success: true, data: admin });
+});
+
+// @desc Get cart by id
+// @route GET /api/v1/admin/cart/:cartId
+// access Private/Admin
+exports.getCartById = asyncHandler(async (req, res, next) => {
+  const cart = await Cart.findOne({
+    where: { cartId: req.params.cartId },
+  });
+
+  if (!cart) {
+    return next(
+      new ErrorResponse(`Cart with the id ${req.params.cartId} was not found`)
+    );
+  }
+
+  res.status(200).json({ success: true, data: cart });
+});
+
+// @desc Get guest by id
+// @route GET /api/v1/admin/guest/:guestId
+// access Private/Admin
+exports.getGuestById = asyncHandler(async (req, res, next) => {
+  const guest = await Guest.findOne({
+    where: { guestId: req.params.guestId },
+  });
+
+  if (!guest) {
+    return next(
+      new ErrorResponse(
+        `Guest with the id ${req.params.guestId} was not found`,
+        404
+      )
+    );
+  }
+  res.status(200).json({ success: true, data: guest });
+});
+
+// @desc Get user by id
+// @route GET /api/v1/admin/user/:userId
+// access Private/Admin
+exports.getUserById = asyncHandler(async (req, res, next) => {
+  const user = await User.findOne({
+    require: true,
+    where: { userId: req.params.userId },
+    include: [
+      { model: ShippingAddress },
+      { model: Products },
+      { model: Reviews, include: { model: Products } },
+      { model: CartOrderAccess, include: [{ model: Orders }, { model: Cart }] },
+    ],
+  });
+
+  if (!user) {
+    return next(
+      new ErrorResponse(`User with the id ${req.params.userId}`, 404)
+    );
+  }
+
+  res.status(200).json({ success: true, data: user });
 });

@@ -13,14 +13,14 @@ const router = express.Router();
 const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const CartOrderAccess = require('../models/CartOrderAccess');
-const Users = require('../models/User');
+const Admin = require('../models/Admin');
 const Guests = require('../models/Guests');
 
 // Route = '/api/v1/guests'
 
 router.get(
   '/admin/allguests',
-  protect(Users),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(Guests),
   getAllGuest

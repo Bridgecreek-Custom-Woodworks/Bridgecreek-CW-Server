@@ -15,12 +15,14 @@ describe('ORDER_ITEM WORKFOLW TEST ==>', function () {
   this.afterEach(async () => {
     count = await OrderItems.count();
   });
+
+  let adminToken;
   let token;
   let count;
   let orderItemId;
   let newOrderItemId;
 
-  it('Set Token', (done) => {
+  it('Set User Token', (done) => {
     chai
       .request(server)
       .post('/api/v1/auth/login')
@@ -33,11 +35,30 @@ describe('ORDER_ITEM WORKFOLW TEST ==>', function () {
       });
   });
 
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Get all order items', (done) => {
     chai
       .request(server)
       .get('/api/v1/orderitems/admin/allorderitems')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         orderItemId = res.body.data[0].orderItemId;
         expect(res.status).to.be.equal(200);

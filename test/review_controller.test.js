@@ -30,8 +30,9 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
     productAvg = Number(productAvg.dataValues.avgRating);
   });
 
-  let productAvg;
+  let adminToken;
   let token;
+  let productAvg;
   let count;
 
   it('Set Token', (done) => {
@@ -51,11 +52,30 @@ describe('REVIEW WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Should get all reviews', (done) => {
     chai
       .request(server)
       .get('/api/v1/reviews/admin/allreviews')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         const { count, data } = res.body;
 

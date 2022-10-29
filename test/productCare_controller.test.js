@@ -11,6 +11,7 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
     count = await ProductCare.count();
   });
 
+  let adminToken;
   let token;
   let count;
   let productCareId;
@@ -29,11 +30,30 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
       });
   });
 
+  it('Set Admin Token', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Should get all product care items', (done) => {
     chai
       .request(server)
       .get('/api/v1/productcare/allproductcare/admin')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
@@ -68,7 +88,7 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .post('/api/v1/productcare/admin')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send({
         productId: '700b2eb1-3de0-4d9d-a0b7-a9d48c67f1ac',
         maintenance: 'Clean you board with water',
@@ -91,7 +111,7 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .put(`/api/v1/productcare/update/${productCareId}/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .send({ specialInstructions: `Don't put this in the dishwasher` })
       .end((err, res) => {
         const { specialInstructions } = res.body.data[1][0];
@@ -112,7 +132,7 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
     chai
       .request(server)
       .delete(`/api/v1/productcare/delete/${productCareId}/admin`)
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         let deletedCount = count - 1;
 

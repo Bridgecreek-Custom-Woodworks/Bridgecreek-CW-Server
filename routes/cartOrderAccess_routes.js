@@ -14,11 +14,12 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 const router = express.Router();
 
 const CartOrderAccess = require('../models/CartOrderAccess');
+const Admin = require('../models/Admin');
 
 // Route = '/api/v1/cartorderaccess'
 router.get(
   '/admin/allcartorderaccess',
-  protect(CartOrderAccess),
+  protect(Admin),
   authorize('admin'),
   advancedQuerySearch(CartOrderAccess),
   getAllCartOrderAccess
@@ -26,12 +27,7 @@ router.get(
 
 router.get('/getme', protect(CartOrderAccess), getMyCartOrderAccess);
 
-router.post(
-  '/',
-  protect(CartOrderAccess),
-  authorize('admin'),
-  createCartOrderAccess
-);
+router.post('/', protect(Admin), authorize('admin'), createCartOrderAccess);
 
 router.put(
   '/update/:cartOrderAccessId',

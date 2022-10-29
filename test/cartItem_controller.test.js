@@ -10,6 +10,8 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
   this.afterEach(async () => {
     count = await CartItem.count();
   });
+
+  let adminToken;
   let token;
   let count;
   let cartItemId;
@@ -49,11 +51,30 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
       });
   });
 
+  it('Should log in admin', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/admin/login')
+      .send({
+        email: 'ottosjonesjr@gmail.com',
+        password: 'admin1234',
+      })
+      .end(function (err, res) {
+        adminToken = res.body.token;
+
+        expect(res.status).to.be.equal(200);
+        expect(res.body).to.be.a('object');
+        expect(err).to.be.null;
+
+        done();
+      });
+  });
+
   it('Should get all cartItems', (done) => {
     chai
       .request(server)
       .get('/api/v1/cartitems/admin/allcartitems')
-      .set({ Authorization: `Bearer ${token}` })
+      .set({ Authorization: `Bearer ${adminToken}` })
       .end((err, res) => {
         cartItemId = res.body.data[0].cartItemId;
 
@@ -142,7 +163,7 @@ describe('CART_ITEM WORKFLOW TEST ==>', function () {
         chai
           .request(server)
           .delete(`/api/v1/carts/admin/delete/${newCartId}`)
-          .set({ Authorization: `Bearer ${token}` })
+          .set({ Authorization: `Bearer ${adminToken}` })
           .end((err, res) => {
             expect(res.status).to.be.equal(200);
             expect(res.body.success).to.be.true;

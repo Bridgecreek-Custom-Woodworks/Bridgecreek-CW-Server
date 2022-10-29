@@ -552,3 +552,28 @@ exports.productCareKeys = [
   'createdAt',
   'updatedAt',
 ];
+
+// ADMIN INFO *************************************************************
+
+exports.newAdmin = {
+  firstName: 'Brad',
+  lastName: 'Jacobs',
+  role: 'admin',
+  email: 'bradjacobs@gmail.com',
+  cellPhone: '9878793335',
+  password: 'admin1234',
+};
+
+exports.adminKeys = [
+  'adminId',
+  'firstName',
+  'lastName',
+  'role',
+  'email',
+  'cellPhone',
+  'password',
+  'cartOrderAccessId',
+  'updatedAt',
+  'createdAt',
+  'homePhone',
+];

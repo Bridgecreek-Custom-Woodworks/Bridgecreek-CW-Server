@@ -11,6 +11,15 @@ const Admins = sequelize.define('Admins', {
     allowNull: false,
     unique: true,
   },
+  cartOrderAccessId: {
+    type: Sequelize.UUID,
+    allowNull: false,
+    unique: true,
+    references: {
+      model: 'CartOrderAccess',
+      key: 'cartOrderAccessId',
+    },
+  },
   firstName: {
     type: Sequelize.STRING,
     unique: false,
@@ -112,6 +121,17 @@ Admins.prototype.getSignedToken = async function () {
   return jwt.sign({ adminId: this.adminId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
+};
+
+Admins.prototype.createCartOrderAccess = async function (cartOrderAccessModel) {
+  let customer = {
+    userName: `${this.firstName} ${this.lastName}`,
+    customerId: this.adminId,
+  };
+
+  const cartOrderAccess = await cartOrderAccessModel.create(customer);
+
+  this.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;
 };
 
 Admins.beforeCreate(saltAndHashPassword);

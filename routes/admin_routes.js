@@ -35,9 +35,9 @@ router.get('/:adminId', protect(Admin), authorize('admin'), getAdminUser);
 router.get('/cart/:cartId', protect(Admin), authorize('admin'), getCartById);
 router.get('/guest/:guestId', protect(Admin), authorize('admin'), getGuestById);
 router.get('/user/:userId', protect(Admin), authorize('admin'), getUserById);
-// router.get('/:adminId', protect(Admin), authorize('admin'), );
+router.post('/logout', protect(Admin), authorize('admin'), logout);
 router.post('/login', login);
-router.post('/', createAdminUser);
+router.post('/', protect(Admin), authorize('admin'), createAdminUser);
 
 router.put(
   '/update/:adminId',

@@ -6,10 +6,10 @@ const Reviews = require('../models/Reviews');
 const ShippingAddress = require('../models/ShippingAddress');
 const Orders = require('../models/Order');
 const User = require('../models/User');
+const CartOrderAccess = require('../models/CartOrderAccess');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const { sendTokenResponse } = require('../utils/tokenResponse');
-const CartOrderAccess = require('../models/CartOrderAccess');
 
 // @desc Get all admin users
 // @route GET /api/v1/admin
@@ -42,6 +42,8 @@ exports.createAdminUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Unable to create Admin user', 400));
   }
 
+  await admin.createCartOrderAccess(CartOrderAccess);
+
   await admin.save();
 
   res.status(201).json({ success: true, data: admin });
@@ -60,7 +62,6 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   const admin = await Admins.findOne({
-    // attributes: { exclude: ['password'] },
     where: { email: email },
   });
 
@@ -79,6 +80,21 @@ exports.login = asyncHandler(async (req, res, next) => {
   let msg = 'You are now logged in!';
 
   sendTokenResponse(admin, 200, res, msg);
+});
+
+// @desc Logout User / Clear cookie
+// @route POST /api/v1/admin/logout
+// access Private/Admin
+exports.logout = asyncHandler(async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 + 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    msg: `User with the id of ${req.user.userId} was logged out`,
+  });
 });
 
 // @desc Update an admin user
@@ -175,11 +191,4 @@ exports.getUserById = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({ success: true, data: user });
-});
-
-// @desc Get all admin users
-// @route GET /api/v1/admin
-// access Private/Admin
-exports.logout = asyncHandler(async (req, res, next) => {
-  res.status(200).json({ success: true, data: 'You logged out' });
 });

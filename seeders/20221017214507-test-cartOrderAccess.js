@@ -76,6 +76,20 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          cartOrderAccessId: 'f989830e-3fdd-4467-8ccb-0e93bcb5df03',
+          customerId: 'a0566232-3f3a-4773-8fb2-532eeacf4e5b',
+          userName: 'Otto Jones Sr',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          cartOrderAccessId: '15fdbb54-7095-4b72-962f-d9e03d1cfff1',
+          customerId: 'ecc8850b-b490-49c4-8593-828878eaf285',
+          userName: 'Otto Jones Jr',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

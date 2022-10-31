@@ -221,3 +221,9 @@ const fetchData = async () => {
 
 //   console.log('Card Response', cardResponse);
 // };
+
+let cuttingBoardStripeId = 'price_1Lz3x4EUecojPOrFK3SAJTZf';
+let coastersSetStripeId = 'price_1Lz40CEUecojPOrFOklAQz0e';
+let cheeseBoardStripeId = 'price_1Lz411EUecojPOrFdOhuTxyq';
+let carvingBoardStripeId = 'price_1Lz41vEUecojPOrF6NwtwJKY';
+let boardHolderStripeId = 'price_1Lz430EUecojPOrFAuFp0c6f';

@@ -317,8 +317,6 @@ User.prototype.createCartOrderAccess = async function (req) {
   const cartOrderAccess = await CartOrderAccess.create(customer);
 
   this.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;
-
-  console.log(typeof CartOrderAccess);
 };
 
 User.beforeCreate(saltAndHashPassword);

@@ -133,6 +133,7 @@ exports.product = {
 
 exports.newProduct = {
   productId: '6db8cfdd-ddaf-4165-be30-6eb55107a0b8',
+  stripeProductId: 'price_1Lz430EUecojPOrFAuFp0gj4',
   productName: 'New Product',
   price: 119,
   discount: 0.1,
@@ -146,6 +147,7 @@ exports.newProduct = {
 
 exports.productKeys = [
   'productId',
+  'stripeProductId',
   'productName',
   'price',
   'discount',
@@ -161,6 +163,7 @@ exports.productKeys = [
 
 exports.singleProductKeys = [
   'productId',
+  'stripeProductId',
   'productName',
   'price',
   'discount',
@@ -284,6 +287,7 @@ exports.reviewedProduct = {
 
 exports.badIdProduct = {
   productId: '1ee44e7e-6a3a-4a6d-9626-32d4447ef25fTEST', // <== Bad Id for test
+  stripeProductId: 'price_1Lz430EUecojPOrFAuFp0pr4',
   productName: 'Cutting Board',
   price: 45,
   weight: 12,
@@ -296,6 +300,7 @@ exports.badIdProduct = {
 
 exports.badValidationProduct = {
   productId: '6db8cfdd-ddaf-4165-be30-6eb55107a0b8',
+  stripeProductId: 'price_1Lz430EUecojPOrFAuFp0ge0',
   productName: 'New Product',
   price: 119,
   weight: 24,

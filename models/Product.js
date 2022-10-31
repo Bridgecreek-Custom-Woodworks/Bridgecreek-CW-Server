@@ -12,7 +12,11 @@ const Product = sequelize.define(
       allowNull: false,
       unique: true,
     },
-
+    stripeProductId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
     productName: {
       type: Sequelize.STRING,
       allowNull: false,

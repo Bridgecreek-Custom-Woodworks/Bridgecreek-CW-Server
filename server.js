@@ -4,6 +4,8 @@ const colors = require('colors');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
+const cors = require('cors');
+const stripe = require('stripe')(process.env.STRIP_SECRET_TEST_KEY);
 
 // Load env vars
 const PORT = process.env.PORT || 5000;

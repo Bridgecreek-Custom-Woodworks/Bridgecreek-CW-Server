@@ -13,7 +13,6 @@ const advancedQuerySearch = require('../middleware/advancedQuerySearch');
 
 const CartOrderAccess = require('../models/CartOrderAccess');
 const Carts = require('../models/Cart');
-const Users = require('../models/User');
 const Admin = require('../models/Admin');
 
 // Route = /api/v1/carts

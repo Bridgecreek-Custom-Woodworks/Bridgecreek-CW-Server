@@ -1,7 +1,10 @@
 const Products = require('../models/Product');
+const Reviews = require('../models/Reviews');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
-const Reviews = require('../models/Reviews');
+const dotenv = require('dotenv');
+dotenv.config({ path: './config/config.env' });
+const stripe = require('stripe')(process.env.STRIP_SECRET_TEST_KEY);
 
 // @desc Get all products
 // @route GET /api/v1/products/allproducts
@@ -40,9 +43,36 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/products/admin
 // access  Private/Admin
 exports.createProducts = asyncHandler(async (req, res, next) => {
-  const product = await Products.create(req.body);
+  const dbProduct = await Products.build(req.body);
 
-  res.status(201).json({ success: true, data: product });
+  let unitPrice = String(dbProduct.price).split('.').join('');
+
+  // console.log(unitPrice);
+
+  const stripeProduct = await stripe.products.create({
+    id: dbProduct.productId,
+    name: dbProduct.productName,
+    active: true,
+    images: [dbProduct.url],
+    description: dbProduct.description,
+    url: dbProduct.url,
+    default_price_data: {
+      currency: 'usd',
+      unit_amount: Number(unitPrice),
+      tax_behavior: 'exclusive',
+    },
+  });
+
+  dbProduct.stripeProductId = stripeProduct.default_price;
+
+  await dbProduct.save();
+  await dbProduct.validate();
+
+  if (!dbProduct) {
+    return next(new ErrorResponse('Unable to create product', 400));
+  }
+
+  res.status(201).json({ success: true, data: dbProduct });
 });
 
 // @desc Update product

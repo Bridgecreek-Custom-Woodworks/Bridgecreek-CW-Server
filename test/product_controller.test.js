@@ -169,7 +169,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
         expect(res.body.msg).to.include(newProduct.productId);
-        expect(deletedCount).to.be.equal(5);
+        expect(deletedCount).to.be.equal(6);
         expect(err).to.be.null;
 
         done();

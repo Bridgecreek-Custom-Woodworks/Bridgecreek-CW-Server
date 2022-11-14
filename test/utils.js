@@ -133,13 +133,24 @@ exports.product = {
 
 exports.newProduct = {
   productId: '6db8cfdd-ddaf-4165-be30-6eb55107a0b8',
-  stripeProductId: 'price_1Lz430EUecojPOrFAuFp0gj4',
   productName: 'New Product',
-  price: 119,
+  price: '119.00',
   discount: 0.1,
   weight: 24,
   dementions: '1.5ft X 2ft',
   description: 'Some new product description',
+  url: 'foo@bar.com',
+  createdAt: '2022-09-01T21:43:17.243Z',
+  updatedAt: '2022-09-01T21:43:17.243Z',
+};
+exports.newAuthProduct = {
+  productId: '5a4e4574-9455-4b02-ac26-6467f5e5d333',
+  productName: 'New Auth Product',
+  price: '119.00',
+  discount: 0.1,
+  weight: 24,
+  dementions: '1.5ft X 2ft',
+  description: 'Some new auth product description',
   url: 'foo@bar.com',
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
@@ -287,9 +298,9 @@ exports.reviewedProduct = {
 
 exports.badIdProduct = {
   productId: '1ee44e7e-6a3a-4a6d-9626-32d4447ef25fTEST', // <== Bad Id for test
-  stripeProductId: 'price_1Lz430EUecojPOrFAuFp0pr4',
-  productName: 'Cutting Board',
-  price: 45,
+  // stripeProductId: 'price_1Lz430EUecojPOrFAuFp0pr4',
+  productName: 'Cutting Board2',
+  price: '45.00',
   weight: 12,
   dementions: '1.5ft X 2ft',
   description: 'Wooded cutting board',
@@ -299,10 +310,10 @@ exports.badIdProduct = {
 };
 
 exports.badValidationProduct = {
-  productId: '6db8cfdd-ddaf-4165-be30-6eb55107a0b8',
-  stripeProductId: 'price_1Lz430EUecojPOrFAuFp0ge0',
-  productName: 'New Product',
-  price: 119,
+  productId: '383bfc56-b491-4d2e-aa39-74250b1bfe39',
+  // stripeProductId: 'price_1Lz430EUecojPOrFAuFp0ge0',
+  productName: 'New Bad Product',
+  price: '119.00',
   weight: 24,
   dementions: '1.5ft X 2ft',
   description: 'Some new product description',

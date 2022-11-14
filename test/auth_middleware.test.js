@@ -4,7 +4,13 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const Products = require('../models/Product');
-const { user, newProduct, badToken, unauthorizedUser } = require('./utils');
+const {
+  user,
+  newAuthProduct,
+  newProduct,
+  badToken,
+  unauthorizedUser,
+} = require('./utils');
 
 describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
   after(async () => {
@@ -75,7 +81,7 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
       .request(server)
       .post(`/api/v1/products/admin`)
       .set('Cookie', `token=` + JSON.stringify(adminToken))
-      .send(newProduct)
+      .send(newAuthProduct)
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;
@@ -88,7 +94,7 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
-      .send(newProduct)
+      .send(newAuthProduct)
       .end((err, res) => {
         expect(res.status).to.be.equal(401);
         expect(res.body.success).to.be.false;

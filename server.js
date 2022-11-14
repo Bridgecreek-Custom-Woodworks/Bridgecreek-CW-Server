@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
 const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIP_SECRET_TEST_KEY);
+const bodyParser = require('body-parser');
 
 // Load env vars
 const PORT = process.env.PORT || 5000;
@@ -24,8 +24,20 @@ const guests = require('./routes/guest_routes');
 const cartOrderAccess = require('./routes/cartOrderAccess_routes');
 const shippingAddresses = require('./routes/shippingAddress_routes');
 const productCare = require('./routes/productCare_routes');
+const stripePayments = require('./routes/stripePayments_routes');
 
 const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.static('public'));
+
+// Raw data for Stripe
+app.use(
+  '/api/v1/stripe/webhook',
+  bodyParser.raw({ type: '*/*' }),
+  stripePayments
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +60,7 @@ app.use('/api/v1/guests', guests);
 app.use('/api/v1/cartorderaccess', cartOrderAccess);
 app.use('/api/v1/shippingaddress', shippingAddresses);
 app.use('/api/v1/productcare', productCare);
+app.use('/api/v1/stripe', stripePayments);
 
 // Errror handling
 app.use(errorHandler);

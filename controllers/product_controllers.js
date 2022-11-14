@@ -47,8 +47,6 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 
   let unitPrice = String(dbProduct.price).split('.').join('');
 
-  // console.log(unitPrice);
-
   const stripeProduct = await stripe.products.create({
     id: dbProduct.productId,
     name: dbProduct.productName,
@@ -67,10 +65,6 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 
   await dbProduct.save();
   await dbProduct.validate();
-
-  if (!dbProduct) {
-    return next(new ErrorResponse('Unable to create product', 400));
-  }
 
   res.status(201).json({ success: true, data: dbProduct });
 });

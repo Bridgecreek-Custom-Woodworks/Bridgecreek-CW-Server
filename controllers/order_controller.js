@@ -84,6 +84,9 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   //  Setting the Cart total to the body of the req subTotal for the order
   req.body.subTotal = usersCart.dataValues.total;
 
+  // Setting the cart id in a var for the response below
+  const usersCartId = usersCart.dataValues.cartId;
+
   // Verifying that the customer's account is active
   if (activeStatus === 'pending' || activeStatus === 'not active') {
     return next(new ErrorResponse('Please active your account first', 400));
@@ -115,7 +118,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 
   order.createOrderItems(req);
 
-  res.status(201).json({ success: true, data: order });
+  res.status(201).json({ success: true, data: order, usersCartId });
 });
 
 // @desc Update order

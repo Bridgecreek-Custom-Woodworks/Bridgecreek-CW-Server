@@ -8,9 +8,8 @@ const stripe = require('stripe')(process.env.STRIP_SECRET_TEST_KEY);
 // @route POST /api/v1/stripe/checkout
 // access Private
 exports.createPayment = asyncHandler(async (req, res, next) => {
-  console.log('Body', req.body);
-
   const orderId = req.body.orderId;
+  const cartId = req.body.cartId;
   const items = req.body.items;
   let lineItems = [];
 
@@ -80,7 +79,7 @@ exports.createPayment = asyncHandler(async (req, res, next) => {
     //     coupon: 'RAvZz0yr',
     //   },
     // ],
-    success_url: `http://localhost:3000/success/${orderId}`,
+    success_url: `http://localhost:3000/success/${orderId}/${cartId}`,
     cancel_url: 'http://localhost:3000/cancel',
     automatic_tax: {
       enabled: true,

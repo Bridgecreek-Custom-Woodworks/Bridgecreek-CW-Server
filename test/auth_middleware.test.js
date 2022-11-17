@@ -4,6 +4,8 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const server = require('../server');
 const Products = require('../models/Product');
+const fs = require('fs');
+
 const {
   user,
   newAuthProduct,
@@ -80,6 +82,7 @@ describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
+      .type('form')
       .set('Cookie', `token=` + JSON.stringify(adminToken))
       .send(newAuthProduct)
       .end((err, res) => {

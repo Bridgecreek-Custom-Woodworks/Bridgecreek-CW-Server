@@ -5,6 +5,7 @@ const asyncHandler = require('../middleware/async_middleware');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 const stripe = require('stripe')(process.env.STRIP_SECRET_TEST_KEY);
+const cloudinary = require('../utils/cloudinary.js');
 
 // @desc Get all products
 // @route GET /api/v1/products/allproducts
@@ -47,20 +48,43 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 
   let unitPrice = String(dbProduct.price).split('.').join('');
 
-  const stripeProduct = await stripe.products.create({
-    id: dbProduct.productId,
-    name: dbProduct.productName,
-    active: true,
-    images: [dbProduct.url],
-    description: dbProduct.description,
-    url: dbProduct.url,
-    default_price_data: {
-      currency: 'usd',
-      unit_amount: Number(unitPrice),
-      tax_behavior: 'exclusive',
-    },
-  });
+  // *** Need to add product care model here as well ***
 
+  if (!dbProduct) {
+    return next(new ErrorResponse('Unable to create product in database', 400));
+  }
+  try {
+    var cloudinaryRes = await cloudinary.uploader.upload(req.body.image, {
+      folder: 'online-shop',
+      public_id: null,
+      overwrite: true,
+      width: 300,
+      height: 300,
+    });
+
+    var stripeProduct = await stripe.products.create({
+      id: dbProduct.productId,
+      name: dbProduct.productName,
+      active: true,
+      images: [cloudinaryRes.secure_url],
+      description: dbProduct.description,
+      url: dbProduct.url,
+      default_price_data: {
+        currency: 'usd',
+        unit_amount: Number(unitPrice),
+        tax_behavior: 'exclusive',
+      },
+    });
+  } catch (error) {
+    return next(
+      new ErrorResponse(
+        `Unable to create product in Stripe or Cloudinary: ${error}`,
+        400
+      )
+    );
+  }
+
+  // dbProduct.url = cloudinaryRes.secure_url;
   dbProduct.stripeProductId = stripeProduct.default_price;
 
   await dbProduct.save();

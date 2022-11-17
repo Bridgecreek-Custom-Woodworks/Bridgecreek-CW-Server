@@ -149,6 +149,7 @@ exports.newProduct = {
   image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
+  maintenance: 'Take care of this new product',
 };
 exports.newAuthProduct = {
   productId: '5a4e4574-9455-4b02-ac26-6467f5e5d333',
@@ -162,6 +163,7 @@ exports.newAuthProduct = {
   image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
+  maintenance: 'Take care of this new auth product',
 };
 
 exports.productKeys = [
@@ -306,7 +308,7 @@ exports.reviewedProduct = {
 
 exports.badIdProduct = {
   productId: '1ee44e7e-6a3a-4a6d-9626-32d4447ef25fTEST', // <== Bad Id for test
-  productName: 'Cutting Board2',
+  productName: 'New Bad Id Product',
   price: '45.00',
   weight: 12,
   dementions: '1.5ft X 2ft',
@@ -315,6 +317,7 @@ exports.badIdProduct = {
   image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
+  maintenance: 'Take care of this new auth product',
 };
 
 exports.badValidationProduct = {

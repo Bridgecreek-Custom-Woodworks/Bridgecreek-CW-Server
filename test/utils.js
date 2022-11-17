@@ -17,6 +17,7 @@ uuid4 = uuid4[1];
 const bcrypt = require('bcryptjs');
 const salt = bcrypt.genSaltSync(10);
 const password = bcrypt.hashSync(uuid4, salt);
+const fs = require('fs');
 
 const deleteData = async () => {
   await sequelize.sync({ force: true });
@@ -34,6 +35,11 @@ if (process.argv[2] === '-dev') {
   deleteData();
   console.log(`Your test data was destroyed`.blue.inverse);
 }
+let image = Buffer.from(
+  fs.readFileSync('./test/test_images/Chopping-board.jpeg')
+).toString('base64');
+
+image = 'data:image/jpeg;base64,' + image;
 
 // USERS INFO ***************************************
 exports.user = {
@@ -140,6 +146,7 @@ exports.newProduct = {
   dementions: '1.5ft X 2ft',
   description: 'Some new product description',
   url: 'foo@bar.com',
+  image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
 };
@@ -152,6 +159,7 @@ exports.newAuthProduct = {
   dementions: '1.5ft X 2ft',
   description: 'Some new auth product description',
   url: 'foo@bar.com',
+  image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
 };
@@ -298,26 +306,26 @@ exports.reviewedProduct = {
 
 exports.badIdProduct = {
   productId: '1ee44e7e-6a3a-4a6d-9626-32d4447ef25fTEST', // <== Bad Id for test
-  // stripeProductId: 'price_1Lz430EUecojPOrFAuFp0pr4',
   productName: 'Cutting Board2',
   price: '45.00',
   weight: 12,
   dementions: '1.5ft X 2ft',
   description: 'Wooded cutting board',
   url: 'foo@bar.com',
+  image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
 };
 
 exports.badValidationProduct = {
   productId: '383bfc56-b491-4d2e-aa39-74250b1bfe39',
-  // stripeProductId: 'price_1Lz430EUecojPOrFAuFp0ge0',
   productName: 'New Bad Product',
   price: '119.00',
   weight: 24,
   dementions: '1.5ft X 2ft',
   description: 'Some new product description',
   url: 'foo@bar', // <== Bad url format
+  image, // <=== See top of file for image ref
   createdAt: '2022-09-01T21:43:17.243Z',
   updatedAt: '2022-09-01T21:43:17.243Z',
 };

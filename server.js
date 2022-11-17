@@ -41,7 +41,7 @@ app.use(
 );
 
 app.use(express.json({ limit: '75mb' }));
-app.use(forms.array());
+app.use(forms.array('image', 5));
 app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser

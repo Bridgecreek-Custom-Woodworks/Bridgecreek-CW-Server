@@ -13,9 +13,8 @@ const {
   badToken,
   unauthorizedUser,
 } = require('./utils');
-const { set } = require('../server');
 
-describe.only('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
+describe('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
   after(async () => {
     await Products.destroy({
       where: {
@@ -23,10 +22,6 @@ describe.only('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
       },
     });
   });
-
-  let imageBuffer = fs.readFileSync(
-    'test/test_images/Chopping-board-thickness-1-e1644318713641.jpeg'
-  );
 
   let adminToken;
   let token;
@@ -87,47 +82,16 @@ describe.only('AUTH MIDDLEWARE WORKFLOW TEST ==>', function () {
     chai
       .request(server)
       .post(`/api/v1/products/admin`)
+      .type('form')
       .set('Cookie', `token=` + JSON.stringify(adminToken))
-      .set('Content-Type', 'multipart/form-data')
-      .field('productId', '5a4e4574-9455-4b02-ac26-6467f5e5d333')
-      .field('productName', 'New Auth Product')
-      .field('price', '119.00')
-      .field('discount', 0.1)
-      .field('weight', 24)
-      .field('dementions', '1.5ft X 2ft')
-      .field('description', 'Some new auth product description')
-      .field('url', 'foo@bar.com')
-      .field('createdAt', '2022-09-01T21:43:17.243Z')
-      .field('updatedAt', '2022-09-01T21:43:17.243Z')
-      .attach(
-        'image',
-        fs.readFileSync(
-          'test/test_images/Chopping-board-thickness-1-e1644318713641.jpeg'
-        )
-      )
+      .send(newAuthProduct)
       .end((err, res) => {
-        // console.log(err);
-        // console.log(res.body);
         expect(res.status).to.be.equal(201);
         expect(res.body.success).to.be.true;
 
         done();
       });
   });
-
-  // it('Verify if Bearer token isnt present, the token is set to req.cookie.token', (done) => {
-  //   chai
-  //     .request(server)
-  //     .post(`/api/v1/products/admin`)
-  //     .set('Cookie', `token=` + JSON.stringify(adminToken))
-  //     .send(newAuthProduct)
-  //     .end((err, res) => {
-  //       expect(res.status).to.be.equal(201);
-  //       expect(res.body.success).to.be.true;
-
-  //       done();
-  //     });
-  // });
 
   it('Check if there is no token', (done) => {
     chai

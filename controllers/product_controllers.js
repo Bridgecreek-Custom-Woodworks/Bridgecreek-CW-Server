@@ -50,7 +50,6 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 
   // *** Need to add product care model here as well ***
 
-  console.log(req.body);
   if (!dbProduct) {
     return next(new ErrorResponse('Unable to create product in database', 400));
   }
@@ -77,9 +76,11 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
     return next(
-      new ErrorResponse('Unable to create product in Stripe or Cloudinary', 400)
+      new ErrorResponse(
+        `Unable to create product in Stripe or Cloudinary: ${error}`,
+        400
+      )
     );
   }
 

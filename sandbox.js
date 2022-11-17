@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
-
+const fs = require('fs');
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 
@@ -9,7 +9,7 @@ let uuid1 = uuidv4();
 let uuid2 = uuidv4();
 let uuid3 = uuidv4();
 
-console.log(uuid1, uuid2, uuid3);
+// console.log(uuid1, uuid2, uuid3);
 
 // How generate next day
 const date = new Date();
@@ -227,3 +227,9 @@ let coastersSetStripeId = 'price_1Lz40CEUecojPOrFOklAQz0e';
 let cheeseBoardStripeId = 'price_1Lz411EUecojPOrFdOhuTxyq';
 let carvingBoardStripeId = 'price_1Lz41vEUecojPOrF6NwtwJKY';
 let boardHolderStripeId = 'price_1Lz430EUecojPOrFAuFp0c6f';
+
+let image = Buffer.from(
+  fs.readFileSync('./test/test_images/Chopping-board.jpeg')
+).toString('base64');
+
+// console.log(' data:image/jpeg;base64,' + image);

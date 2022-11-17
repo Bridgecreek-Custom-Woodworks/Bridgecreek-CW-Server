@@ -100,7 +100,7 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
         expect(res.status).to.be.equal(201);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data).to.have.all.keys(productCareKeys);
-        expect(addedCount).to.be.equal(5);
+        expect(addedCount).to.be.equal(6);
         expect(err).to.be.null;
 
         done();
@@ -138,7 +138,7 @@ describe('PRODUCT CARE WORKFLOW TEST ===>', function () {
 
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
-        expect(deletedCount).to.be.equal(4);
+        expect(deletedCount).to.be.equal(5);
         expect(err).to.be.null;
 
         done();

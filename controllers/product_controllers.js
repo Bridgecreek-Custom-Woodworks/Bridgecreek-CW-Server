@@ -1,5 +1,6 @@
 const Products = require('../models/Product');
 const Reviews = require('../models/Reviews');
+const ProductCare = require('../models/ProductCare');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async_middleware');
 const dotenv = require('dotenv');
@@ -46,13 +47,18 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
 exports.createProducts = asyncHandler(async (req, res, next) => {
   const dbProduct = await Products.build(req.body);
 
-  let unitPrice = String(dbProduct.price).split('.').join('');
-
-  // *** Need to add product care model here as well ***
-
   if (!dbProduct) {
     return next(new ErrorResponse('Unable to create product in database', 400));
   }
+
+  let unitPrice = String(dbProduct.price).split('.').join('');
+
+  // *** Need to add product care model here as well ***
+  const productCare = await ProductCare.build({
+    productId: dbProduct.productId,
+    maintenance: req.body.maintenance,
+  });
+
   try {
     var cloudinaryRes = await cloudinary.uploader.upload(req.body.image, {
       folder: 'online-shop',
@@ -89,6 +95,8 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 
   await dbProduct.save();
   await dbProduct.validate();
+  await productCare.save();
+  await productCare.validate();
 
   res.status(201).json({ success: true, data: dbProduct });
 });

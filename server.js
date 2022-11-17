@@ -6,7 +6,8 @@ const errorHandler = require('./middleware/error_middleware');
 dotenv.config({ path: './config/config.env' });
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
+const multer = require('multer');
+const forms = multer();
 // Load env vars
 const PORT = process.env.PORT || 5000;
 
@@ -39,7 +40,8 @@ app.use(
   stripePayments
 );
 
-app.use(express.json());
+app.use(express.json({ limit: '75mb' }));
+app.use(forms.array());
 app.use(express.urlencoded({ extended: true }));
 
 // Cookie parser

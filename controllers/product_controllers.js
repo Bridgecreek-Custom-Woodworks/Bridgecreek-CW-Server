@@ -53,7 +53,6 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
 
   let unitPrice = String(dbProduct.price).split('.').join('');
 
-  // *** Need to add product care model here as well ***
   const productCare = await ProductCare.build({
     productId: dbProduct.productId,
     maintenance: req.body.maintenance,
@@ -90,7 +89,7 @@ exports.createProducts = asyncHandler(async (req, res, next) => {
     );
   }
 
-  // dbProduct.url = cloudinaryRes.secure_url;
+  dbProduct.url = cloudinaryRes.secure_url;
   dbProduct.stripeProductId = stripeProduct.default_price;
 
   await dbProduct.save();

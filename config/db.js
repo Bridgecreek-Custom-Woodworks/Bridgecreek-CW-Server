@@ -3,17 +3,33 @@ const config = require('config');
 const configuration = config.get('database');
 
 // SEQUELIZE CONNECTION
-const sequelize = new Sequelize(
-  configuration.db,
-  configuration.username,
-  configuration.password,
-  {
-    dialect: configuration.dialect,
-    host: configuration.host,
-    port: configuration.port,
-    logging: configuration.logging,
-  }
-);
+let sequelize;
+if (
+  configuration.db === 'bridgecreek_dev' ||
+  configuration.db === 'bridgecreek_test'
+) {
+  sequelize = new Sequelize(
+    configuration.db,
+    configuration.username,
+    configuration.password,
+    {
+      dialect: configuration.dialect,
+      host: configuration.host,
+    }
+  );
+} else if (configuration.db === 'defaultdb') {
+  // sequelize = new Sequelize(configuration.connectionString);
+  sequelize = new Sequelize(
+    configuration.db,
+    configuration.username,
+    configuration.password,
+    {
+      dialect: configuration.dialect,
+      host: configuration.host,
+      port: configuration.port,
+    }
+  );
+}
 
 if (configuration.db === 'bridgecreek_dev') {
   console.log(configuration.db.brightWhite.underline.bold);

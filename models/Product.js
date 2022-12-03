@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Reviews = require('./Reviews');
 const ProductCare = require('../models/ProductCare');
@@ -6,31 +6,31 @@ const Product = sequelize.define(
   'Products',
   {
     productId: {
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
       unique: true,
     },
     stripeProductId: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: true,
       unique: true,
     },
     productName: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
     price: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.0,
       allowNull: false,
       unique: false,
     },
 
     discount: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.1,
       allowNull: true,
       unique: false,
@@ -42,23 +42,23 @@ const Product = sequelize.define(
       },
     },
     weight: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.0,
       allowNull: false,
       unique: false,
     },
     dementions: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: false,
     },
     description: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
     url: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       defaultValue: 'foo@bar.com',
       allowNull: true,
       unique: false,
@@ -67,23 +67,23 @@ const Product = sequelize.define(
       },
     },
     avgRating: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.0,
       allowNull: true,
       unique: false,
     },
     displayStatus: {
-      type: Sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       defaultValue: true,
       allowNull: false,
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
   },
   {
@@ -91,6 +91,8 @@ const Product = sequelize.define(
     modelName: 'Products',
   }
 );
+
+// console.log(typeof Product);
 
 Product.hasMany(Reviews, {
   foreignKey: 'productId',

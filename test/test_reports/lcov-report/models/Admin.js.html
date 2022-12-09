@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>12/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>12/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -352,31 +352,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -511,32 +511,32 @@ const Admins = sequelize.define(
   }
 );
 &nbsp;
-const saltAndHashPassword = async (admin) =&gt; {
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (admin.changed('password')) {
-    const salt = await bcrypt.genSalt(10);
-    admin.password = await bcrypt.hash(admin.dataValues.password, salt);
+const saltAndHashPassword = <span class="fstat-no" title="function not covered" >as</span>ync (admin) =&gt; {
+<span class="cstat-no" title="statement not covered" >  if (admin.changed('password')) {</span>
+    const salt = <span class="cstat-no" title="statement not covered" >await bcrypt.genSalt(10);</span>
+<span class="cstat-no" title="statement not covered" >    admin.password = await bcrypt.hash(admin.dataValues.password, salt);</span>
   }
 };
 &nbsp;
-Admins.prototype.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+Admins.prototype.matchPassword = <span class="fstat-no" title="function not covered" >as</span>ync function (password) {
+<span class="cstat-no" title="statement not covered" >  return await bcrypt.compare(password, this.password);</span>
 };
 &nbsp;
-Admins.prototype.getSignedToken = async function () {
-  return jwt.sign({ adminId: this.adminId }, process.env.JWT_SECRET, {
+Admins.prototype.getSignedToken = <span class="fstat-no" title="function not covered" >as</span>ync function () {
+<span class="cstat-no" title="statement not covered" >  return jwt.sign({ adminId: this.adminId }, process.env.JWT_SECRET, {</span>
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
 &nbsp;
-Admins.prototype.createCartOrderAccess = async function (cartOrderAccessModel) {
-  let customer = {
+Admins.prototype.createCartOrderAccess = <span class="fstat-no" title="function not covered" >as</span>ync function (cartOrderAccessModel) {
+  let customer = <span class="cstat-no" title="statement not covered" >{</span>
     userName: `${this.firstName} ${this.lastName}`,
     customerId: this.adminId,
   };
 &nbsp;
-  const cartOrderAccess = await cartOrderAccessModel.create(customer);
+  const cartOrderAccess = <span class="cstat-no" title="statement not covered" >await cartOrderAccessModel.create(customer);</span>
 &nbsp;
-  this.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;
+<span class="cstat-no" title="statement not covered" >  this.cartOrderAccessId = cartOrderAccess.cartOrderAccessId;</span>
 };
 &nbsp;
 Admins.beforeCreate(saltAndHashPassword);
@@ -550,7 +550,7 @@ module.exports = Admins;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-09T14:21:24.748Z
+                at 2022-12-09T17:04:18.382Z
             </div>
         <script src="../prettify.js"></script>
         <script>

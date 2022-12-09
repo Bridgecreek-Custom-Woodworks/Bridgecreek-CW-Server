@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">60.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>17/28</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">62.96% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/27</span>
+                <span class='fraction'>17/27</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -563,38 +563,22 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -602,8 +586,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -836,23 +836,23 @@ Products.belongsToMany(Order, {
 Order.hasMany(OrderItems, { foreignKey: 'orderId' });
 OrderItems.belongsTo(Order, { foreignKey: 'orderId' });
 &nbsp;
-const getOrderTotal = async (order, req, res) =&gt; {
-  const { tax, subTotal, shipping, orderDiscount } = order.dataValues;
+const getOrderTotal = <span class="fstat-no" title="function not covered" >as</span>ync (order, req, res) =&gt; {
+  const { tax, subTotal, shipping, orderDiscount } = <span class="cstat-no" title="statement not covered" >order.dataValues;</span>
 &nbsp;
-  const taxAmount = Number(tax) * Number(subTotal);
+  const taxAmount = <span class="cstat-no" title="statement not covered" >Number(tax) * Number(subTotal);</span>
 &nbsp;
   const total =
-    Number(taxAmount) +
+<span class="cstat-no" title="statement not covered" >    Number(taxAmount) +</span>
     Number(shipping) +
     Number(subTotal) -
     Number(orderDiscount);
 &nbsp;
-  order.dataValues.taxTotal = Number(taxAmount).toFixed(2);
-  order.dataValues.total = Number(total).toFixed(2);
+<span class="cstat-no" title="statement not covered" >  order.dataValues.taxTotal = Number(taxAmount).toFixed(2);</span>
+<span class="cstat-no" title="statement not covered" >  order.dataValues.total = Number(total).toFixed(2);</span>
 };
 &nbsp;
-Order.prototype.createOrderItems = async function (req) {
-  const cart = await Carts.findOne({
+Order.prototype.createOrderItems = <span class="fstat-no" title="function not covered" >as</span>ync function (req) {
+  const cart = <span class="cstat-no" title="statement not covered" >await Carts.findOne({</span>
     where: {
       cartOrderAccessId: req.user.dataValues.cartOrderAccessId,
       cartStatus: { [Op.or]: ['checkout', 'new'] },
@@ -860,15 +860,15 @@ Order.prototype.createOrderItems = async function (req) {
     include: [{ model: CartItems }, { model: Products }],
   });
 &nbsp;
-  for (let i = 0; i &lt; cart.dataValues.Products.length; i++) {
+<span class="cstat-no" title="statement not covered" >  for (let i = <span class="cstat-no" title="statement not covered" >0;</span> i &lt; cart.dataValues.Products.length; i++) {</span>
     const {
       productId,
       price,
       discount,
       CartItems: cartItems,
-    } = cart.dataValues.Products[i].dataValues;
+    } = <span class="cstat-no" title="statement not covered" >cart.dataValues.Products[i].dataValues;</span>
 &nbsp;
-    const orderItemFields = {
+    const orderItemFields = <span class="cstat-no" title="statement not covered" >{</span>
       productId: productId,
       orderId: await this.orderId,
       price: price,
@@ -877,7 +877,7 @@ Order.prototype.createOrderItems = async function (req) {
       total: cartItems.dataValues.total,
     };
 &nbsp;
-    await OrderItems.create(orderItemFields);
+<span class="cstat-no" title="statement not covered" >    await OrderItems.create(orderItemFields);</span>
   }
 };
 &nbsp;
@@ -892,7 +892,7 @@ module.exports = Order;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-09T14:21:24.748Z
+                at 2022-12-09T17:04:18.382Z
             </div>
         <script src="../prettify.js"></script>
         <script>

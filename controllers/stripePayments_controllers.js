@@ -86,6 +86,10 @@ exports.createPayment = asyncHandler(async (req, res, next) => {
     },
   });
 
+  if (!session) {
+    return next(new ErrorResponse('Stripe session was rejected', 400));
+  }
+
   res.send(
     JSON.stringify({
       url: session.url,

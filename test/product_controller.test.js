@@ -134,7 +134,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(data.weight).to.be.equal(newProductWeight);
         expect(data.description).to.be.equal(newProduct.description);
         expect(data.dementions).to.be.equal(newProduct.dementions);
-        expect(data.url).to.be.equal(newProduct.url);
+        expect(data.url).to.include('res.cloudinary.com');
         expect(err).to.be.null;
 
         done();
@@ -169,7 +169,7 @@ describe('PRODUCT WORKFLOW TEST ===>', function () {
         expect(res.status).to.be.equal(200);
         expect(res.body.success).to.be.true;
         expect(res.body.msg).to.include(newProduct.productId);
-        expect(deletedCount).to.be.equal(6); // Should expect 6 if run with all suits : 5
+        expect(deletedCount).to.be.equal(7); // Should expect 7 if run with all suits : 6
         expect(err).to.be.null;
 
         done();

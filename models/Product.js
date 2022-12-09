@@ -55,7 +55,7 @@ const Product = sequelize.define(
     description: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     url: {
       type: DataTypes.STRING,

@@ -167,7 +167,13 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -257,21 +263,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const Sequelize = require('sequelize');
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Reviews = require('./Reviews');
 const ProductCare = require('../models/ProductCare');
@@ -279,27 +291,31 @@ const Product = sequelize.define(
   'Products',
   {
     productId: {
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
       unique: true,
     },
-&nbsp;
+    stripeProductId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
     productName: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
     price: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.0,
       allowNull: false,
       unique: false,
     },
 &nbsp;
     discount: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.1,
       allowNull: true,
       unique: false,
@@ -311,23 +327,23 @@ const Product = sequelize.define(
       },
     },
     weight: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.0,
       allowNull: false,
       unique: false,
     },
     dementions: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: false,
     },
     description: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     url: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       defaultValue: 'foo@bar.com',
       allowNull: true,
       unique: false,
@@ -336,23 +352,23 @@ const Product = sequelize.define(
       },
     },
     avgRating: {
-      type: Sequelize.DECIMAL,
+      type: DataTypes.DECIMAL,
       defaultValue: 0.0,
       allowNull: true,
       unique: false,
     },
     displayStatus: {
-      type: Sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       defaultValue: true,
       allowNull: false,
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
   },
   {
@@ -360,6 +376,8 @@ const Product = sequelize.define(
     modelName: 'Products',
   }
 );
+&nbsp;
+// console.log(typeof Product);
 &nbsp;
 Product.hasMany(Reviews, {
   foreignKey: 'productId',
@@ -382,7 +400,7 @@ module.exports = Product;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-10-29T20:35:17.717Z
+                at 2022-12-09T14:21:24.748Z
             </div>
         <script src="../prettify.js"></script>
         <script>

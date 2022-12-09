@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
 const Products = require('../models/Product');
 
+// console.log('===>', sequelize);
+
 const Reviews = sequelize.define(
   'Reviews',
   {

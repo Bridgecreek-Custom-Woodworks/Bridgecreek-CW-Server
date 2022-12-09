@@ -94,8 +94,6 @@ exports.createPayment = asyncHandler(async (req, res, next) => {
 });
 
 exports.updateOrderHook = asyncHandler(async (req, res, next) => {
-  console.log('Hook fired');
-
   let endpointSecret;
   const sig = req.headers['stripe-signature'];
 

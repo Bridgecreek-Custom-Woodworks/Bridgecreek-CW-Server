@@ -4,6 +4,9 @@
 
 # Youtube video https://www.youtube.com/watch?v=qp3YlqYu-ig
 
+
+# Login into server ssh -i <name of digital ocean project> <root or other username>@<ip address>
+# Make sure you are in the same dir as the ssh file is (Most likely the root)
 ########################
 # Start Setup
 ########################
@@ -36,7 +39,7 @@ groups # This should show you the sudo userscd
 usermod -aG sudo <username>
 
 # Change to the new user you just created
-sudo su <username>
+sudo su <username> # Username = totallyottojr
 
 #2.1 append sudo group
 # usermod -aG sudo "$USERNAME"
@@ -89,6 +92,10 @@ apt-get install -y nodejs
 sudo apt install mysql-server
 sudo mysql_secure_installation
 
+# To view Postgres pg_hba (From the postgres=#)
+postgres=# select * from pg_hba_file_rules;
+
+
 #5.1 edit mysql conf file
 echo "edit mysql conf file to change (change port to ramdom e.g. 5063+ )"
 sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -100,29 +107,47 @@ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 
 sudo systemctl restart mysql
 
-#5.2 create a mysql user & database .
-
-sudo mysql -u root <<MYSQL_SCRIPT
-CREATE USER '$USER'@'%' identified WITH mysql_native_password by '$PASS';
-GRANT ALL PRIVILEGES ON *.* TO '$USER'@'%';
-flush privileges;
-create database $DB;
-MYSQL_SCRIPT
-echo "MySQL user&Db created."
-
-#create a folder where all mysql backup will store.
-mkdir $HOEM_DIR/backup
-sudo chown "$USERNAME":"$USERNAME" $HOEM_DIR/backup
-#create a folder where mmenv.txt and action-runner will store.
-mkdir $HOEM_DIR/application
-sudo chown "$USERNAME":"$USERNAME" $HOEM_DIR/application
-
 
 #6. install pm2 (This will restart your server if it crashes)
 npm install pm2@latest -g # run pm2 status to check the status of the pm2 install
+pm2 startup ubuntu # This will start up the app when the server starts up or reboots.
 
 #7. install nginx
 apt install nginx # run systemctl status nginx to check the status of nginx
+# To check nginx settings run **sudo cat /etc/nginx/sites-available/default**
+ufw enable # enable firewall
+ufw allow ssh # allow ssh
+ufw allow http # allow port 80
+ufw allow https # allow port 443
+# To check status run ufw status
+
+# Configure reverse proxy for nginx
+nano /etc/nginx/sites-available/default
+
+# Remove everything in the server block and then paste
+server_name yourdomain.com www.yourdomain.com;
+location / {
+        proxy_pass http://localhost:5000;    # or which other port your app runs on
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+# Restart nginx 
+service nginx restart
+
+# Test nginx 
+nginx -t
+
+# Vist link for domain name https://www.udemy.com/course/nodejs-api-masterclass/learn/lecture/16582408#overview (BE SURE TO USE .com when setting custom dns regarless how your domain ends. example totallyboard.co should br totallyboard.com)
+
+# Add ssl with LetsEncrypt
+add-apt-repository ppa:certbot/certbot # Press [Enter]
+snap install certbot --classic
+apt-get update
+apt-get install python-certbot-nginx
+certbot --nginx -d totallyboard.co -d www.totallyboard.co
 
 #7.1 make /var/www/html public to upload using scp. (only needed when root login is disabled)
 chmod 777 /var/www/html

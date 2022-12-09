@@ -30,7 +30,6 @@ const stripePayments = require('./routes/stripePayments_routes');
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.static('public'));
 
 // Raw data for Stripe
@@ -40,6 +39,7 @@ app.use(
   stripePayments
 );
 
+app.use(cors({ origin: '*' }));
 app.use(express.json({ limit: '75mb' }));
 app.use(forms.array('image', 5));
 app.use(express.urlencoded({ extended: true }));

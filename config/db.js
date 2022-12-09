@@ -15,6 +15,7 @@ if (
     {
       dialect: configuration.dialect,
       host: configuration.host,
+      logging: false,
     }
   );
 } else if (configuration.db === 'defaultdb') {
@@ -27,6 +28,7 @@ if (
       dialect: configuration.dialect,
       host: configuration.host,
       port: configuration.port,
+      logging: false,
     }
   );
 }

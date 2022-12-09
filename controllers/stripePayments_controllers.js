@@ -120,6 +120,7 @@ exports.updateOrderHook = asyncHandler(async (req, res, next) => {
 
       // You can put this in a variable and use to find and update the correct order
       console.log(session.success_url.split('/')[4]);
+      console.log(session.success_url.split('/')[3]);
     }
   } else {
     return console.log('There was an error');

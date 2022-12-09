@@ -15,6 +15,6 @@ router = express.Router();
 router.post('/checkout', createPayment);
 
 // router.post('/', express.raw({ type: 'application/json' }), updateOrderHook);
-router.post('/', updateOrderHook);
+router.post('/webhook', updateOrderHook);
 
 module.exports = router;

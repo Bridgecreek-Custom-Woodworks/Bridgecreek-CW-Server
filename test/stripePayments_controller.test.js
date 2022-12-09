@@ -7,7 +7,6 @@ const { user } = require('./utils');
 
 describe(' STRIPE PAYMENT WORKFLOW TEST ===>', function () {
   let token;
-  let count;
 
   it('Set Token', (done) => {
     chai

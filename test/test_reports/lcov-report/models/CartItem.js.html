@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/26</span>
+                <span class='fraction'>25/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/26</span>
+                <span class='fraction'>25/26</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -309,29 +309,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -341,18 +338,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,27 +462,27 @@ const CartItems = sequelize.define(
   }
 );
 &nbsp;
-const getCartAndCartItemTotals = <span class="fstat-no" title="function not covered" >as</span>ync (cartItems, req, res) =&gt; {
-  const product = <span class="cstat-no" title="statement not covered" >await Products.findOne({</span>
+const getCartAndCartItemTotals = async (cartItems, req, res) =&gt; {
+  const product = await Products.findOne({
     attributes: ['price', 'discount'],
     where: { productId: cartItems.dataValues.productId },
   });
 &nbsp;
   // Getting items total price by multiplying cartItem quantity times product price
   let totalPrice =
-<span class="cstat-no" title="statement not covered" >    Number(product.dataValues.price) * cartItems.dataValues.quantity;</span>
+    Number(product.dataValues.price) * cartItems.dataValues.quantity;
 &nbsp;
   // Getting discount dollar amount
-  const discountAmount = <span class="cstat-no" title="statement not covered" >totalPrice * product.dataValues.discount;</span>
+  const discountAmount = totalPrice * product.dataValues.discount;
 &nbsp;
   // Setting cartItem total to value of price
-  let total = <span class="cstat-no" title="statement not covered" >totalPrice - discountAmount;</span>
-<span class="cstat-no" title="statement not covered" >  cartItems.dataValues.total = Number(total).toFixed(2);</span>
+  let total = totalPrice - discountAmount;
+  cartItems.dataValues.total = Number(total).toFixed(2);
 &nbsp;
   // Setting cartItem discountTotal dollar amount
-<span class="cstat-no" title="statement not covered" >  cartItems.dataValues.discountTotal = Number(discountAmount).toFixed(2);</span>
+  cartItems.dataValues.discountTotal = Number(discountAmount).toFixed(2);
 &nbsp;
-  const getCartTotal = <span class="cstat-no" title="statement not covered" >await CartItems.findAll({</span>
+  const getCartTotal = await CartItems.findAll({
     attributes: [
       'cartId',
       [sequelize.fn('sum', sequelize.col('total')), 'newTotal'],
@@ -495,18 +495,18 @@ const getCartAndCartItemTotals = <span class="fstat-no" title="function not cove
   });
 &nbsp;
   // Setting cartTotal variable with conditional
-<span class="cstat-no" title="statement not covered" >  try {</span>
+  try {
     let cartTotal;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    cartTotal =</span>
+    cartTotal =
       (await getCartTotal.length) === 0 ? 0 : getCartTotal[0].newTotal;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!getCartTotal[0] &amp;&amp; req.type) {</span>
-<span class="cstat-no" title="statement not covered" >      cartTotal = 0;</span>
+    if (!getCartTotal[0] &amp;&amp; req.type) {
+      cartTotal = 0;
     }
 &nbsp;
     // Updating Cart models total field
-<span class="cstat-no" title="statement not covered" >    await sequelize</span>
+    await sequelize
       .model('Carts')
       .update(
         { total: Number(cartTotal).toFixed(2) },
@@ -532,7 +532,7 @@ module.exports = CartItems;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-09T17:04:18.382Z
+                at 2022-12-09T17:09:59.717Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -1,7 +1,11 @@
 const { Sequelize } = require('sequelize');
 const config = require('config');
 const configuration = config.get('database');
+const dotenv = require('dotenv');
+dotenv.config({ path: './config/config.env' });
 
+console.log('config ==>', configuration.db);
+console.log('node_env ==>', process.env.NODE_ENV);
 // SEQUELIZE CONNECTION
 let sequelize;
 if (
@@ -18,7 +22,7 @@ if (
       logging: false,
     }
   );
-} else if (configuration.db === 'defaultdb') {
+} else if (process.env.NODE_ENV === 'production') {
   // sequelize = new Sequelize(configuration.connectionString);
   sequelize = new Sequelize(
     configuration.db,
@@ -41,7 +45,7 @@ if (configuration.db === 'bridgecreek_dev') {
   console.log(configuration.db.red.underline.bold);
 }
 
-console.log(sequelize);
+// console.log(sequelize);
 
 const connectDB = async () => {
   try {

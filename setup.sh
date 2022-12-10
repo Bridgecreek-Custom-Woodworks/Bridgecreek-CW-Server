@@ -1,181 +1,185 @@
+Setup steps to deploy to AWS
 
-# SEE ENV FILE FOR SUPER USERNAME
-# Note: If you're not logged in as root then you will need to use sudo for some of these commands 
+1 # Login to AWS 
+2 # Navigate to ec2 section
+3 # Navigate to key pairs on the left side of the screen.
+4 # Create a key pair and name it the same as the app (This is to make it easy to indentify)
 
-# Youtube video https://www.youtube.com/watch?v=qp3YlqYu-ig
+OPTIONS FOR STEP 4
+
+# Select ED25519
+# Select .pem
+A certificate will be downloaded onto your local machine
+
+5 Launch EC2 instance 
+# Navigate back to ec2 and launch a new instance (upper left corner)
+
+OPTIONS FOR STEP 5 
+# Add Name and Tag (make sure to use Name as the key and the name of the app as value)
+
+# Select ubuntu
+
+# Select ubuntu server type (example 20.04)
+
+# Select instance type (example t2.micro) Note: This size may not work for production as you may need a bigger type
+
+# Select key pair that you just created under Key pair (login) This will download pem file to your local machine
+
+# Select (Under Netword Settings) Allow SSH, HTTPS, HTTP
+
+Note: If going to production you may need to a LARGER **confifured storage**
+
+# Select LAUNCH INSTANCE to start your instance
+
+6 Connect to your instance server
+# In your termainal type ssh -i <the path to the downloaded pem certificate> ubuntu@<ip address>
+
+example ssh -i Downloads/bridgecreek_cw_server.pem ubuntu@18.208.107.21
+
+Note: The ip address will be on the right side of the instance screen under public IPv4
+
+Important: If you get  WARNING: UNPROTECTED PRIVATE KEY FILE! you need to change the  permission in the command line for that file. 
+
+example (chmod 700  Downloads/bridgecreek_cw_server.pem)
+
+7 Update the packages for the ubuntu server
+
+# In terminal run => sudo apt update && sudo apt upgrade -y
+
+8 Install database
+
+# In terminal run => sudo apt install postgresql postgresql-contrib -y
+
+9 Create ubuntu role in postgres
+Note: Once postgresql is installed it creates a user in ubuntu named ubuntu. 
+
+# In the termainal run => cat /etc/passwd (You shuold get a long print out with one of the users named ubuntu which should look something like ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash)
+
+Log into postgres (postgres@<ip address>)
+# sudo -i -u postgres
+
+Creating role
+# createuser --interactive
+
+Add name to role
+# ubuntu (best to use the name of the server type) 
+Note: It is best practice to limit the role for security reasons and not grant superuser to this role
+Resources for creating and altering roles:  
+CREATING ROLE => https://ubiq.co/database-blog/how-to-limit-access-to-database-in-postgresql/
+ALTERING LOGIN => https://stackoverflow.com/questions/35254786/postgresql-role-is-not-permitted-to-log-in
+
+Note: To check psql connection info (from postgres prompt postgres=) type => /conninfo 
+
+Log into postgres database to verify ubuntu was created
+# In terminal run => psql (To log into postgres in order to make the changes)
+# In terminal run => \du (You should see the ubuntu role in the list or roles)
+
+Note: Now you can log into postgres form the ubuntu user by typing psql -d postgres from the ubuntu prompt example <ubuntu@<ip address>
+
+Note: To change peer authintication see resource at minute 29:30 => https://www.youtube.com/watch?v=NjYsXuSBZ5U&list=PLzwXI90aoBignHWA8IH4HjoZzzmIXZGGS&index=1
+
+Add password to ubuntu user
+# In terminal from the prompt (postgres=#) run => alter user <name of user> password 'admin1234'
+
+10 Move database shcema to file on local machine
+# Open another terminal and run => cd
+# In terminal run => pg_dump -U <name of postgres user asoc with database you want to dump> -f <name of the file you're about to create> -C <name of the database you want to dump>
+
+example: pg_dump -U postgres -f bridgecreek.pgsql -C bridgecreek_dev
+
+11 Copy file from local machine to remote server
+# In local terminal run => scp -i <path of pem file> <path to pg_dump file you just created> <remote username@ip address to remote server:/home/ubuntu>
+
+example: scp -i Downloads/bridgecreek_cw_server.pem desktop/bridgecreek.pgsql ubuntu@18.208.107.21:/home/ubuntu
+Note: This should return something like this => bridgecreek.pgsql            100%   42KB 771.5KB/s   00:00
+Make sure to check the file was uploaded in your remote terminal run => cd /home/ubuntu run => ls
+
+12 Create database
+# In terminal run => psql -d postgres
+# In terminal run => create database bridgecreek_dev
+Verify database was created
+# In terminal run => \l
+
+13 Import database
+# In terminal run => cd (return to home before running next command)
+# In terminal run => psql <name of the database in ubuntu> < <path to pg_dump file from step 11>
+
+example: psql bridgecreek_dev < /home/ubuntu/bridgecreek.pgsql
+
+Verify database has all data
+# In terminal run => psql -d <name of database you just imported>
 
 
-# Login into server ssh -i <name of digital ocean project> <root or other username>@<ip address>
-# Make sure you are in the same dir as the ssh file is (Most likely the root)
-########################
-# Start Setup
-########################
-# update & upgrade
+14 Create folder for all apps
+# In terminal run => mkdir apps
 
-apt update
-apt dist-upgrade
+15 Create folder for app inside of app
+# In terminal run => cd apps
+# In terminal run => mkdir <name of app-app> 
 
-#set your local timezone
-timedatectl list-timezones
-timedatectl set-timezone $TIMEZONE
+example mkdir bridgecreek-app
 
+16 Add apps code from github repo
+From you github repo copy HTTPS link under the green CODE button
+# In terminal run => cd <name of path to folder you just created in step 15>
 
-echo "creating a sudo user"
+example: cd bridgecreek-app
+# In terminal run => git clone <past link you just copied from your github repo> . <=== DON'T FORGET THE DOT TO COPY INTO THE CURRENT DIRECTORY
 
-#1 enable auto update
-dpkg-reconfigure --priority=low unattended-upgrades
+17 Install Node on Ubuntu
+Navigate to => https://github.com/nodesource/distributions/blob/master/README.md
+Copy version of node you want to install 
 
-#2 create a user
-option 1 adduser <username>
-option 2 useradd -m -p $(openssl passwd -1 "$PASSWORD") -s /bin/bash -G sudo "$USERNAME"
+example: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
 
- # Check if user was created
-cd/home
-ls # You should see the username you just created after you run this command
-ll # This should list all the users
-groups # This should show you the sudo userscd
+# In terminal run => curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\sudo apt-get install -y nodejs
+# In terminal run => npm install (This will get your node modules)
 
-# Make user you just created a super user
-usermod -aG sudo <username>
+Note: Make sure to setup postgres db configurations correctly. If postgres is installed on the same server then use localhost as the host otherwise use ip address to other server. 
 
-# Change to the new user you just created
-sudo su <username> # Username = totallyottojr
+18 Install pm2 
+First cd into the route of the app that was installed example(/apps/bridgecreek-app)
+# In termianl run => npm install pm2 -g
 
-#2.1 append sudo group
-# usermod -aG sudo "$USERNAME"
+19 Running pm2
+# In terminal run => pm2 start <path to server.js file> --name <name of app>
 
-#3 create .ssh and cp the pub.key for user you just created
+pm2 commands: 
+Stopping a process: pm2 stop <name of process or id>
+Check the status of process: pm2 status
+To delete a process: pm2 delete <name of process or id>
 
-# root@ cd into /home/<username> ** FROM THE ROOT USER **
-cd /home/<username> 
+19 Configuring pm2 to restart 
+# In terminal run => pm2 startup
+The terminal will print out a command that you need to copy, paste and running
+# In terminal run => <paste command from terminal>
 
-# Create dir .ssh (mkdir .ssh). Type ll to verify the dir was created
-mkdir .ssh 
+Next we want to take a snapshot of the current process so that when it starts it will load the same processes
+# In terminal run => pm2 save
 
-# Copy root ssh key to user you just created. cp /root/.ssh/authorized_keys /home/<username>/.ssh
-cp /root/.ssh/authorized_keys /home/<username>/.ssh
+20 Build client Note: This step is only if you have a mono repo
+# In terminal cd into client root
+# In terminal run => npm install
+# In terminal run => npm run build
 
-# cd into .ssh then type ll to verify that the authorized_keys shows up in the .ssh dir
-cd .ssh 
+21 Installing NGINX
+# In terminal run => sudo apt install nginx -y
+# In terminal run => sudo systemctl enable nginx (This command ensures that nginx powers on if the system reboots)
 
-# cd back into new users home dir. cd ..
-cd ..
+Check NGINX status 
+# In terminal run => systemctl status nginx 
+Check that the status is active and enabled
 
-# Change (chmod = change modifier  ) the permission of the authorized_keys file to new user from the root user chmod -R 700 /home/<username>/.ssh
-chmod -R 700 /home/<username>/.ssh
+# In terminal run => cd /etc/nginx
+# In terminal run => ls (sites-available)
+# In terminal run => cd sites-available
+# In terminal run => ls (default)
 
-# Change the the ownership of the .ssh dir (chown = change ownership)
-chown <username>:<username> .ssh
+Test nginx:
+Copy instance ip address into browser and enter. This should take you to a Welcome to NGINX web page
 
+Setting up NGINX server block
+# In terminal run => sudo cp default <domain name that will be used for the app> Here we are coping the default folder and creating another folder.
 
-# Change the the ownership of the authorized_keys file (chown = change ownership)
-# Note: cd into .ssh and then type ll to verify that the owenership has changed to new user... Remember to cd .. back after you're done.
-chown <username>:<username> .ssh/authorized_keys
-
-# Remove password login. You will need to use the arrow keys to navigate down to these two settings after exucuting this command. (control x to exit and yes to save)
-nano /etc/ssh/sshd_config
-# *. permitRootLogin yes -> no
-# *. passwordAuthentication yes->no
-systemctl restart ssh.service # **This is for Ubuntu or Debian**
-systemctl restart sshd.service # **This is for RHEL or CentOS**
-
-########################
-# Start Installation
-########################
-echo "start installing packages"
-
-#4 install node js (Go to https://github.com/nodesource/distributions then scroll down to Debian and Ubuntu based distributions / installation instructions )
-curl -fsSL https://deb.nodesource.com/setup_<Your version here>.x | sudo -E bash -
-apt-get install -y nodejs
-
-#5 install mysql-server
-sudo apt install mysql-server
-sudo mysql_secure_installation
-
-# To view Postgres pg_hba (From the postgres=#)
-postgres=# select * from pg_hba_file_rules;
-
-
-#5.1 edit mysql conf file
-echo "edit mysql conf file to change (change port to ramdom e.g. 5063+ )"
-sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
-#5.1.1 //change default port to something random (more than 1080)=5033
-
-#5.1.2 //change from where to access the database [127.0.0.1=localhost]
-# 	bind-address=0.0.0.0 (from anywhere)
-# 	mysqlx-bind-address=0.0.0.0 (from anywhere)
-
-sudo systemctl restart mysql
-
-
-#6. install pm2 (This will restart your server if it crashes)
-npm install pm2@latest -g # run pm2 status to check the status of the pm2 install
-pm2 startup ubuntu # This will start up the app when the server starts up or reboots.
-
-#7. install nginx
-apt install nginx # run systemctl status nginx to check the status of nginx
-# To check nginx settings run **sudo cat /etc/nginx/sites-available/default**
-ufw enable # enable firewall
-ufw allow ssh # allow ssh
-ufw allow http # allow port 80
-ufw allow https # allow port 443
-# To check status run ufw status
-
-# Configure reverse proxy for nginx
-nano /etc/nginx/sites-available/default
-
-# Remove everything in the server block and then paste
-server_name yourdomain.com www.yourdomain.com;
-location / {
-        proxy_pass http://localhost:5000;    # or which other port your app runs on
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-# Restart nginx 
-service nginx restart
-
-# Test nginx 
-nginx -t
-
-# Vist link for domain name https://www.udemy.com/course/nodejs-api-masterclass/learn/lecture/16582408#overview (BE SURE TO USE .com when setting custom dns regarless how your domain ends. example totallyboard.co should br totallyboard.com)
-
-# Add ssl with LetsEncrypt
-add-apt-repository ppa:certbot/certbot # Press [Enter]
-snap install certbot --classic
-apt-get update
-apt-get install python-certbot-nginx
-certbot --nginx -d totallyboard.co -d www.totallyboard.co
-
-#7.1 make /var/www/html public to upload using scp. (only needed when root login is disabled)
-chmod 777 /var/www/html
-
-#8. install ssl certbot & python3
-sudo apt install certbot python3-certbot-nginx
-
-# other things to do.
-  # - login with new non root user then do these task.
-  # - pm2 startup
-  # - to remove pm2 startup :  pm2 unstartup systemd
-  # - setup domain .
-  # - create sub domain if you want .
-  # - install ssl .
-  # - setup nginx
- 
-  # - create mmenv.txt file inside ~/applicaiton/mmenv.txt
-  # - ci/cid create action-runner inside ~/applicaiton/
-  # - api will run on port 2727, setup nginx to reverse proxy
-        # - proxy_pass http://localhost:2727;
-  # - turn off port 2727 from digital ocean firewall
-  # - - ------------------------------------- - -
-  # - - ---Transfer db from another droplet (optional)------ - -
-  # - - ------------------------------------- - -
-
-  # - setup react + gzip on nginx
-  # - upload react files in the /var/www/html folder
-  # - enable gzip in nginx[sudo nano /etc/nginx/nginx.conf] -> sudo systemctl restart nginx
-
-  # - add 3 cron tab. certbot, daily db backup, monthly db delete.[after sestup file.txt]
-  
+# In termainl sudo nano <name of the file you just created>

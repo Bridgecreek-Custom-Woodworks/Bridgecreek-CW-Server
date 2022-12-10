@@ -41,6 +41,8 @@ if (configuration.db === 'bridgecreek_dev') {
   console.log(configuration.db.red.underline.bold);
 }
 
+console.log(sequelize);
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();

@@ -152,6 +152,7 @@ Starting a process: pm2 start <path to server.js file> --name <name of app>
 Stopping a process: pm2 stop <name of process or id>
 Check the status of process: pm2 status
 To delete a process: pm2 delete <name of process or id>
+To check pm2 logs: pm2 logs
 
 19 Configuring pm2 to restart 
 # In terminal run => pm2 startup
@@ -284,6 +285,7 @@ To persist environment variables
 # In terminal run ls -la (.profile)
 # In terminal run => nano .profile
 # In nano editor paste this command at the bottom of the file => set -o allexports; source </home/ubuntu/.env <== name of file>; set +o allexport
+# In terminal run => pm2 restart <name of app or index number>
 
 Note: *** For env variables to show you must exit session and log back in to a new session ***
 
@@ -306,7 +308,7 @@ Navigate to home dir
 
 This next command is to place the word export in front of the key and set qoutes around the values.
 # In terminal run => set -o allexports; source <.env <== name of file>; set +o allexport
-
+# In terminal run => pm2 restart <name of app or index number>
 
 23 Setting up SSL with Certbot 
 Resource => https://certbot.eff.org/

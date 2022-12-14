@@ -130,7 +130,7 @@ example: cd bridgecreek-app
 
 17 Install Node on Ubuntu
 Navigate to => https://github.com/nodesource/distributions/blob/master/README.md
-Copy version of node you want to install 
+Copy command for version of node you want to install 
 
 example: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs

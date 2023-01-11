@@ -4,8 +4,6 @@ const configuration = config.get('database');
 const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 
-console.log('config ==>', configuration.db);
-console.log('node_env ==>', process.env.NODE_ENV);
 // SEQUELIZE CONNECTION
 let sequelize;
 if (
